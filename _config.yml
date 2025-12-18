@@ -1,1 +1,11 @@
 theme: minima
+# _config.yml
+title: 你的站点名称  # 站点全局标题
+description: 站点描述  # meta 描述，SEO 友好
+navigation:  # 自定义导航栏链接
+  - title: 首页
+    url: /README.md
+  - title: 关于Git
+    url: /关于Git/Git.1学习.md
+  - title: SQL
+    url: /SQL/0x3盲注.md
