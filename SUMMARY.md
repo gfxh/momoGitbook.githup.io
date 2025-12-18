@@ -1,3 +1,10 @@
+---
+layout: default  # 使用 minima 主题的默认布局
+title: 页面标题  # 页面在导航栏/标题栏显示的名称
+---
+# 这里是 Markdown 内容...
+
+
 * [介绍](README.md)
 
 * [markdown基础语法练习](markdown的练习.md)
@@ -82,3 +89,4 @@
         * [五]()
         * [五]()
         * [五]()
+
