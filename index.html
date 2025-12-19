@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>mo技术博客</title>
+   
     <link rel="stylesheet" href="assets/css/sidebar.css">
-    <script src="assets/js/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
     <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <style>
@@ -230,6 +230,30 @@
 
     
     <script>
+      // 侧边栏切换功能
+      document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        
+        if (sidebarToggle) {
+          sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            sidebarToggle.classList.toggle('active');
+          });
+        }
+        
+        // 响应式处理
+        function handleResize() {
+          if (window.innerWidth > 992) {
+            sidebar.classList.remove('active');
+            sidebarToggle.classList.remove('active');
+          }
+        }
+        
+        window.addEventListener('resize', handleResize);
+        handleResize();
+      });
+      
       // 初始化markdown-it
       const md = window.markdownit({
         html: true,
@@ -271,10 +295,71 @@
       // 设置PDF.js worker
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
       
-      // 加载PDF文件 - 使用PDF.js
-      async function loadPDF(filePath) {
+      // 加载PDF文件 - 使用iframe支持连续滚动
+      function loadPDF(filePath) {
         const content = document.getElementById('content');
         content.innerHTML = '<div class="loading">正在加载PDF...</div>';
+        
+        // 检测是否为移动设备
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // 移动设备使用PDF.js分页模式
+          loadPDFWithPDFJS(filePath);
+        } else {
+          // 桌面设备使用iframe连续滚动模式
+          const pdfContainer = `
+            <div class="pdf-container">
+              <div class="pdf-controls">
+                <span style="color: #666; padding: 10px; font-size: 14px;">
+                  📄 连续滚动查看 (可使用鼠标滚轮或触摸滑动)
+                </span>
+                <div style="margin-left: auto;">
+                  <button onclick="zoomInPDF()">放大</button>
+                  <button onclick="zoomOutPDF()">缩小</button>
+                  <button onclick="resetPDF()">重置</button>
+                </div>
+              </div>
+              <div style="height: calc(100% - 50px); background: #525659;">
+                <iframe id="pdfFrame" 
+                        src="${filePath}#view=FitH" 
+                        style="width: 100%; height: 100%; border: none; background: white;"
+                        frameborder="0">
+                </iframe>
+              </div>
+            </div>
+          `;
+          
+          content.innerHTML = pdfContainer;
+          
+          // 全局函数
+          window.zoomInPDF = function() {
+            const iframe = document.getElementById('pdfFrame');
+            const currentSrc = iframe.src;
+            const newScale = Math.min((currentSrc.match(/scale=(\d+)/) ? parseFloat(RegExp.$1) * 1.2 : 1.5), 3);
+            iframe.src = currentSrc.replace(/#.*$/, '') + `#view=FitH&zoom=${newScale}`;
+          };
+          
+          window.zoomOutPDF = function() {
+            const iframe = document.getElementById('pdfFrame');
+            const currentSrc = iframe.src;
+            const newScale = Math.max((currentSrc.match(/scale=(\d+)/) ? parseFloat(RegExp.$1) * 0.8 : 1), 0.5);
+            iframe.src = currentSrc.replace(/#.*$/, '') + `#view=FitH&zoom=${newScale}`;
+          };
+          
+          window.resetPDF = function() {
+            const iframe = document.getElementById('pdfFrame');
+            iframe.src = filePath + '#view=FitH';
+          };
+        }
+        
+        const title = filePath.split('/').pop().replace('.pdf', '');
+        document.title = title + ' - mo技术博客';
+      }
+      
+      // 移动端PDF加载函数
+      async function loadPDFWithPDFJS(filePath) {
+        const content = document.getElementById('content');
         
         try {
           const pdfContainer = `
@@ -285,8 +370,6 @@
                   页码: <input type="number" id="pageNum" value="1" min="1" style="width: 50px;"> / <span id="pageCount">0</span>
                 </span>
                 <button onclick="nextPage()">下一页</button>
-                <button onclick="zoomIn()">放大</button>
-                <button onclick="zoomOut()">缩小</button>
                 <button onclick="fitWidth()">适应宽度</button>
               </div>
               <div class="pdf-canvas-container" id="pdfCanvasContainer">
@@ -307,12 +390,7 @@
           
           // 渲染第一页
           let currentPage = 1;
-          let currentScale = 1.5;
-          
-          // 根据屏幕宽度设置合适的缩放比例
-          if (window.innerWidth <= 768) {
-            currentScale = Math.min(1.2, (window.innerWidth - 40) / 600);
-          }
+          let currentScale = Math.min(1.2, (window.innerWidth - 40) / 600);
           
           async function renderPage(pageNum) {
             const page = await pdf.getPage(pageNum);
@@ -331,9 +409,6 @@
             
             await page.render(renderContext).promise;
             document.getElementById('pageNum').value = pageNum;
-            
-            // 滚动到顶部
-            document.getElementById('pdfCanvasContainer').scrollTop = 0;
           }
           
           // 全局函数
@@ -349,16 +424,6 @@
               currentPage++;
               await renderPage(currentPage);
             }
-          };
-          
-          window.zoomIn = async function() {
-            currentScale = Math.min(currentScale * 1.2, 3);
-            await renderPage(currentPage);
-          };
-          
-          window.zoomOut = async function() {
-            currentScale = Math.max(currentScale / 1.2, 0.5);
-            await renderPage(currentPage);
           };
           
           window.fitWidth = async function() {
@@ -383,16 +448,13 @@
           // 初始渲染
           await renderPage(currentPage);
           
-          const title = filePath.split('/').pop().replace('.pdf', '');
-          document.title = title + ' - mo技术博客';
-          
         } catch (error) {
           console.error('PDF加载错误:', error);
           content.innerHTML = `
             <div class="loading">
               <h2>PDF加载失败</h2>
               <p>错误信息: ${error.message}</p>
-              <p>尝试直接下载: <a href="${filePath}" target="_blank">${filePath}</a></p>
+              <p><a href="${filePath}" download>下载PDF</a></p>
             </div>
           `;
         }
