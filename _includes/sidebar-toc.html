@@ -1,0 +1,24 @@
+<div class="toc">
+{% assign summary = site.pages | where: "name", "SUMMARY.md" | first %}
+{% if summary %}
+  {% assign summary_content = summary.content | split: newline %}
+  {% for line in summary_content %}
+    {% assign line = line | strip %}
+    {% if line contains "[" %}
+      {% assign level = line | split: "*" | size | minus: 1 %}
+      {% assign link = line | split: "](" | last | split: ")" | first %}
+      {% assign title = line | split: "[" | last | split: "]" | first %}
+      
+      {% if link != "" %}
+        <div class="toc-level-{{ level }}">
+          <a href="{{ link | relative_url }}">{{ title }}</a>
+        </div>
+      {% else %}
+        <div class="toc-level-{{ level }} toc-header">
+          {{ title }}
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+</div>

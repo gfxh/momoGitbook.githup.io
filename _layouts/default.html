@@ -7,7 +7,9 @@
 {% seo %}
 
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/sidebar.css' | relative_url }}">
     <script src="{{ '/assets/js/scale.fix.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/sidebar.js' | relative_url }}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <!--[if lt IE 9]>
@@ -17,26 +19,46 @@
     {% include head-custom.html %}
   </head>
   <body>
-    <div class="wrapper">
-      <header {% unless site.description or site.github.project_tagline %} class="without-description" {% endunless %}>
-        <h1>{{ site.title | default: site.github.repository_name }}</h1>
-        {% if site.description or site.github.project_tagline %}
-          <p>{{ site.description | default: site.github.project_tagline }}</p>
-        {% endif %}
-        <p class="view"><a href="{{ site.github.repository_url }}">View the Project on GitHub <small>{{ github_name }}</small></a></p>
-        <ul>
-        {% if site.show_downloads %}
-          <li><a href="{{ site.github.zip_url }}">Download <strong>ZIP File</strong></a></li>
-          <li><a href="{{ site.github.tar_url }}">Download <strong>TAR Ball</strong></a></li>
-        {% endif %}
-          <li><a href="{{ site.github.repository_url }}">View On <strong>GitHub</strong></a></li>
+    <div class="sidebar-toggle">
+      <span class="sidebar-toggle-line"></span>
+      <span class="sidebar-toggle-line"></span>
+      <span class="sidebar-toggle-line"></span>
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidebar-inner">
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-toc">
+            目录
+          </li>
+          <li class="sidebar-nav-overview">
+            概览
+          </li>
         </ul>
-      </header>
-      <section>
-
-      {{ content }}
-
-      </section>
+        
+        <div class="sidebar-post-container">
+          <div class="sidebar-post-author">
+            <div class="sidebar-post-author-avatar"></div>
+            <p class="sidebar-post-author-name">{{ site.title | default: site.github.repository_name }}</p>
+          </div>
+        </div>
+        
+        <div class="sidebar-toc">
+          <div class="sidebar-toc-content">
+            {% include sidebar-toc.html %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="main-container">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div class="content">
+            {{ content }}
+          </div>
+        </div>
+      </div>
     </div>
     <footer>
     {% if site.github.is_project_page %}
