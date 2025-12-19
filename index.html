@@ -10,6 +10,7 @@
     <script src="assets/js/scale.fix.js"></script>
     <script src="assets/js/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
       .content h1 { color: #2c3e50; font-size: 2em; margin-bottom: 0.5em; }
       .content h2 { color: #34495e; font-size: 1.5em; margin-top: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
@@ -69,19 +70,68 @@
         padding: 50px; 
         color: #666; 
       }
+      
+      /* PDF阅读器样式 */
+      .pdf-container {
+        width: 100%;
+        height: 800px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      
+      .pdf-controls {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .pdf-controls button {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        background-color: white;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      
+      .pdf-controls button:hover {
+        background-color: #f0f0f0;
+      }
+      
+      .pdf-controls input {
+        width: 60px;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+      }
+      
+      .pdf-canvas-container {
+        overflow: auto;
+        height: calc(100% - 50px);
+        background-color: #525659;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px 0;
+      }
+      
+      .pdf-page {
+        margin: 10px auto;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        background-color: white;
+      }
     </style>
   </head>
   <body>
-    <div class="sidebar-toggle">
-      <span class="sidebar-toggle-line"></span>
-      <span class="sidebar-toggle-line"></span>
-      <span class="sidebar-toggle-line"></span>
-    </div>
+    
     
     <div class="sidebar">
       <div class="sidebar-inner">
         <ul class="sidebar-nav">
-          <li class="sidebar-nav-toc">
+          <li class="sidebar-nav-toc active">
             目录
           </li>
         </ul>
@@ -139,7 +189,7 @@
                 Python
               </div>
               <div class="toc-level-2">
-                <a href="#" onclick="loadMarkdown('Python/Python编程从入门到实践第3版.pdf')">Python基础</a>
+                <a href="#" onclick="loadPDF('PythonBook/Python编程从入门到实践第3版.pdf')">Python基础</a>
               </div>
               <div class="toc-level-1 toc-header">
                 复习一下下
@@ -172,6 +222,44 @@
       </div>
     </div>
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     <script>
       // 初始化markdown-it
       const md = window.markdownit({
@@ -183,6 +271,9 @@
           return '<pre><code class="language-' + lang + '">' + str + '</code></pre>';
         }
       });
+      
+      // 设置PDF.js worker
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
       
       // 加载Markdown文件
       async function loadMarkdown(filePath) {
@@ -206,6 +297,148 @@
         } catch (error) {
           content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
         }
+      }
+      
+      // 加载PDF文件
+      async function loadPDF(filePath) {
+        const content = document.getElementById('content');
+        content.innerHTML = '<div class="loading">正在加载PDF...</div>';
+        
+        try {
+          const response = await fetch(filePath);
+          if (!response.ok) {
+            throw new Error('PDF文件不存在或无法访问');
+          }
+          
+          const arrayBuffer = await response.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+          
+          // 创建PDF容器
+          const pdfContainer = `
+            <div class="pdf-container">
+              <div class="pdf-controls">
+                <button onclick="previousPage()">上一页</button>
+                <input type="number" id="page-num" value="1" min="1" onchange="goToPage()">
+                <span>/ <span id="page-count">${pdf.numPages}</span></span>
+                <button onclick="nextPage()">下一页</button>
+                <button onclick="zoomIn()">放大</button>
+                <button onclick="zoomOut()">缩小</button>
+                <button onclick="resetZoom()">重置</button>
+              </div>
+              <div class="pdf-canvas-container" id="pdf-canvas-container">
+              </div>
+            </div>
+          `;
+          
+          content.innerHTML = pdfContainer;
+          
+          // 渲染PDF
+          window.currentPDF = pdf;
+          window.currentPage = 1;
+          window.currentScale = 1.5;
+          
+          await renderPage(1);
+          
+          // 添加滚轮事件监听
+          addWheelEventListener();
+          
+          // 更新页面标题
+          const title = filePath.split('/').pop().replace('.pdf', '');
+          document.title = title + ' - mo技术博客';
+          
+        } catch (error) {
+          content.innerHTML = '<div class="loading"><h2>PDF加载失败</h2><p>' + error.message + '</p></div>';
+        }
+      }
+      
+      // 渲染PDF页面
+      async function renderPage(pageNum) {
+        const pdf = window.currentPDF;
+        const page = await pdf.getPage(pageNum);
+        const scale = window.currentScale;
+        const viewport = page.getViewport({ scale });
+        
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        canvas.className = 'pdf-page';
+        
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+        
+        await page.render(renderContext).promise;
+        
+        const container = document.getElementById('pdf-canvas-container');
+        container.innerHTML = '';
+        container.appendChild(canvas);
+        
+        // 更新页码显示
+        document.getElementById('page-num').value = pageNum;
+      }
+      
+      // 添加滚轮事件监听 - 简单上下翻页
+      function addWheelEventListener() {
+        const pdfContainer = document.querySelector('.pdf-canvas-container');
+        if (pdfContainer) {
+          pdfContainer.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            
+            if (e.deltaY < 0) {
+              // 向上滚动 - 上一页
+              if (window.currentPage > 1) {
+                window.currentPage--;
+                renderPage(window.currentPage);
+              }
+            } else {
+              // 向下滚动 - 下一页
+              if (window.currentPage < window.currentPDF.numPages) {
+                window.currentPage++;
+                renderPage(window.currentPage);
+              }
+            }
+          }, { passive: false });
+        }
+      }
+      
+      // PDF控制函数
+      function previousPage() {
+        if (window.currentPage > 1) {
+          window.currentPage--;
+          renderPage(window.currentPage);
+        }
+      }
+      
+      function nextPage() {
+        if (window.currentPage < window.currentPDF.numPages) {
+          window.currentPage++;
+          renderPage(window.currentPage);
+        }
+      }
+      
+      function goToPage() {
+        const pageNum = parseInt(document.getElementById('page-num').value);
+        if (pageNum >= 1 && pageNum <= window.currentPDF.numPages) {
+          window.currentPage = pageNum;
+          renderPage(window.currentPage);
+        }
+      }
+      
+      function zoomIn() {
+        window.currentScale *= 1.2;
+        renderPage(window.currentPage);
+      }
+      
+      function zoomOut() {
+        window.currentScale /= 1.2;
+        renderPage(window.currentPage);
+      }
+      
+      function resetZoom() {
+        window.currentScale = 1.5;
+        renderPage(window.currentPage);
       }
       
       // 页面加载时显示欢迎信息
