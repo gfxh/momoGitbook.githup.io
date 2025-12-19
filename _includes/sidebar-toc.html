@@ -1,24 +1,43 @@
 <div class="toc">
-{% assign summary = site.pages | where: "name", "SUMMARY.md" | first %}
-{% if summary %}
-  {% assign summary_content = summary.content | split: newline %}
-  {% for line in summary_content %}
-    {% assign line = line | strip %}
-    {% if line contains "[" %}
-      {% assign level = line | split: "*" | size | minus: 1 %}
-      {% assign link = line | split: "](" | last | split: ")" | first %}
-      {% assign title = line | split: "[" | last | split: "]" | first %}
-      
-      {% if link != "" %}
-        <div class="toc-level-{{ level }}">
-          <a href="{{ link | relative_url }}">{{ title }}</a>
-        </div>
-      {% else %}
-        <div class="toc-level-{{ level }} toc-header">
-          {{ title }}
-        </div>
-      {% endif %}
+  {% for page in site.pages %}
+    {% if page.name == "SUMMARY.md" %}
+      {% assign summary_content = page.content | strip | split: newline %}
+      {% for line in summary_content %}
+        {% assign line = line | strip %}
+        {% if line contains "[" and line contains "]" %}
+          {% comment %}计算缩进级别{% endcomment %}
+          {% assign level = 0 %}
+          {% for char in line %}
+            {% if char == "*" %}
+              {% assign level = level | plus: 1 %}
+            {% elsif char != " " and char != "*" %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+          
+          {% comment %}提取链接和标题{% endcomment %}
+          {% assign link_parts = line | split: "](" %}
+          {% if link_parts.size == 2 %}
+            {% assign title_part = link_parts[0] | split: "[" %}
+            {% if title_part.size == 2 %}
+              {% assign title = title_part[1] %}
+              {% assign link_with_paren = link_parts[1] | split: ")" %}
+              {% assign link = link_with_paren[0] %}
+              
+              {% if link != "" and link != nil %}
+                <div class="toc-level-{{ level }}">
+                  <a href="{{ link | relative_url }}">{{ title }}</a>
+                </div>
+              {% else %}
+                <div class="toc-level-{{ level }} toc-header">
+                  {{ title }}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% break %}
     {% endif %}
   {% endfor %}
-{% endif %}
 </div>
