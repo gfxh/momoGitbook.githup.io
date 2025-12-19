@@ -1,43 +1,135 @@
 <div class="toc">
-  {% for page in site.pages %}
-    {% if page.name == "SUMMARY.md" %}
-      {% assign summary_content = page.content | strip | split: newline %}
-      {% for line in summary_content %}
-        {% assign line = line | strip %}
-        {% if line contains "[" and line contains "]" %}
-          {% comment %}计算缩进级别{% endcomment %}
-          {% assign level = 0 %}
-          {% for char in line %}
-            {% if char == "*" %}
-              {% assign level = level | plus: 1 %}
-            {% elsif char != " " and char != "*" %}
-              {% break %}
-            {% endif %}
-          {% endfor %}
-          
-          {% comment %}提取链接和标题{% endcomment %}
-          {% assign link_parts = line | split: "](" %}
-          {% if link_parts.size == 2 %}
-            {% assign title_part = link_parts[0] | split: "[" %}
-            {% if title_part.size == 2 %}
-              {% assign title = title_part[1] %}
-              {% assign link_with_paren = link_parts[1] | split: ")" %}
-              {% assign link = link_with_paren[0] %}
-              
-              {% if link != "" and link != nil %}
-                <div class="toc-level-{{ level }}">
-                  <a href="{{ link | relative_url }}">{{ title }}</a>
-                </div>
-              {% else %}
-                <div class="toc-level-{{ level }} toc-header">
-                  {{ title }}
-                </div>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
+  <div class="toc-level-1 toc-header">
+    介绍
+  </div>
+  <div class="toc-level-2">
+    <a href="README.md">介绍</a>
+  </div>
+  
+  <div class="toc-level-1 toc-header">
+    markdown基础语法练习
+  </div>
+  <div class="toc-level-2">
+    <a href="markdown的练习.md">markdown的练习</a>
+  </div>
+  
+  <div class="toc-level-1 toc-header">
+    Git
+  </div>
+  <div class="toc-level-2">
+    <a href="关于Git/Git.1学习.md">Git的学习</a>
+  </div>
+  <div class="toc-level-2">
+    <a href="关于Git/Git.2代码推送.md">Git的代码推送</a>
+  </div>
+  
+  <div class="toc-level-1 toc-header">
+    CTF
+  </div>
+  <div class="toc-level-2 toc-header">
+    一·Web
+  </div>
+  <div class="toc-level-3 toc-header">
+    1.敏感信息泄露
+  </div>
+  <div class="toc-level-3 toc-header">
+    2.PHP
+  </div>
+  <div class="toc-level-4">
+    <a href="">PHP基础学习</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="">PHP反序列化基础</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="">PHP代码审计</a>
+  </div>
+  <div class="toc-level-3 toc-header">
+    3.注入类
+  </div>
+  <div class="toc-level-4">
+    <a href="SQL/0x0.md">SQL注入的学习</a>
+  </div>
+  <div class="toc-level-5">
+    <a href="SQL/0x3盲注.md">SQL盲注</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="">SSTI注入</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="">XXE注入</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="">SSRF注入</a>
+  </div>
+  <div class="toc-level-3 toc-header">
+    4.RCE
+  </div>
+  <div class="toc-level-3 toc-header">
+    5.文件上传
+  </div>
+  <div class="toc-level-3 toc-header">
+    6.文件包含
+  </div>
+  <div class="toc-level-3 toc-header">
+    7.目录穿越
+  </div>
+  <div class="toc-level-3 toc-header">
+    8.逻辑漏洞SRC
+  </div>
+  <div class="toc-level-3 toc-header">
+    9.任意文件读取
+  </div>
+  <div class="toc-level-3 toc-header">
+    10.XSS攻击
+  </div>
+  <div class="toc-level-3 toc-header">
+    11.文件包含
+  </div>
+  <div class="toc-level-2 toc-header">
+    二·MISC杂项
+  </div>
+  <div class="toc-level-2 toc-header">
+    三·Pwn
+  </div>
+  <div class="toc-level-2 toc-header">
+    四·Crypto密码
+  </div>
+  <div class="toc-level-2 toc-header">
+    五·Reverse逆向
+  </div>
+  <div class="toc-level-2 toc-header">
+    六·AWD攻防
+  </div>
+  <div class="toc-level-2 toc-header">
+    七·AI
+  </div>
+  
+  <div class="toc-level-1 toc-header">
+    复习一下下
+  </div>
+  <div class="toc-level-2 toc-header">
+    Java的学习
+  </div>
+  <div class="toc-level-3 toc-header">
+    一 Java入门
+  </div>
+  <div class="toc-level-4">
+    <a href="Java的复习/Java 入门.md">1.Java 的运行</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="Java的复习/Java 入门_1.md">2.什么是"对象"</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="Java的复习/Java 入门_2.md">3."方法"进阶</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="Java的复习/Java 入门_3.md">4.面向"对象"</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="Java的复习/Java 入门_4.md">5.什么是文件IO</a>
+  </div>
+  <div class="toc-level-4">
+    <a href="Java的复习/Java 入门_5.md">6.项目实战</a>
+  </div>
 </div>
