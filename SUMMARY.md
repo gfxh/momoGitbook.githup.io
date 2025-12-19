@@ -1,4 +1,7 @@
-
+---
+layout: default  # 使用 minima 主题的默认布局
+title: 目录  # 页面在导航栏/标题栏显示的名称
+---
 * [介绍](README.md)
 
 * [markdown基础语法练习](markdown的练习.md)
