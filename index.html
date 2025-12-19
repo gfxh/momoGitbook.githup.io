@@ -5,58 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>mo技术博客</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/sidebar.css">
+    <script src="assets/js/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <style>
-      .content h1 { color: #2c3e50; font-size: 2em; margin-bottom: 0.5em; }
-      .content h2 { color: #34495e; font-size: 1.5em; margin-top: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
-      .content h3 { color: #34495e; font-size: 1.3em; margin-top: 1.2em; }
-      .content h4 { color: #34495e; font-size: 1.1em; margin-top: 1em; }
-      .content h5 { color: #34495e; font-size: 1em; margin-top: 0.8em; }
-      .content p { line-height: 1.8; margin-bottom: 1.2em; }
+      /* 补充sidebar.css中没有的样式 */
+      .content h1 { font-size: 2em; margin-bottom: 0.5em; }
+      .content h2 { font-size: 1.5em; margin-top: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+      .content h3 { font-size: 1.3em; margin-top: 1.2em; }
+      .content h4 { font-size: 1.1em; margin-top: 1em; }
+      .content h5 { font-size: 1em; margin-top: 0.8em; }
       .content ul, .content ol { margin: 1em 0; padding-left: 2em; }
       .content li { margin: 0.5em 0; }
-      .content blockquote { 
-        background-color: #f8f9fa; 
-        border-left: 4px solid #007bff; 
-        padding: 1em 1.5em; 
-        margin: 1.5em 0; 
-        color: #495057; 
-      }
-      .content code { 
-        background-color: #f8f9fa; 
-        color: #e83e8c; 
-        padding: 0.2em 0.4em; 
-        border-radius: 3px; 
-        font-family: 'Courier New', monospace;
-      }
-      .content pre { 
-        background-color: #f8f9fa; 
-        border: 1px solid #e9ecef; 
-        border-radius: 4px; 
-        padding: 1em; 
-        overflow-x: auto; 
-        margin: 1em 0;
-      }
       .content pre code { 
         background-color: transparent; 
         color: inherit; 
         padding: 0; 
-      }
-      .content table { 
-        border-collapse: collapse; 
-        width: 100%; 
-        margin: 1.5em 0; 
-      }
-      .content th, .content td { 
-        border: 1px solid #dee2e6; 
-        padding: 0.75em; 
-        text-align: left; 
-      }
-      .content th { 
-        background-color: #f8f9fa; 
-        font-weight: bold; 
       }
       .content img { 
         max-width: 100%; 
@@ -206,6 +171,13 @@
       </div>
     </div>
     
+    <!-- 侧边栏切换按钮 -->
+    <div class="sidebar-toggle" id="sidebarToggle">
+      <div class="sidebar-toggle-line"></div>
+      <div class="sidebar-toggle-line"></div>
+      <div class="sidebar-toggle-line"></div>
+    </div>
+    
     <div class="main-container">
       <div class="main-inner">
         <div class="content-wrap">
@@ -296,31 +268,134 @@
         }
       }
       
-      // 加载PDF文件 - 直接使用iframe嵌入
-      function loadPDF(filePath) {
+      // 设置PDF.js worker
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+      
+      // 加载PDF文件 - 使用PDF.js
+      async function loadPDF(filePath) {
         const content = document.getElementById('content');
         content.innerHTML = '<div class="loading">正在加载PDF...</div>';
         
-        const pdfContainer = `
-          <div class="pdf-container">
-            <div class="pdf-controls">
-              <span style="color: #666; padding: 10px; font-size: 14px;">
-                📄 浏览器PDF查看器 (可缩放、翻页)
-              </span>
+        try {
+          const pdfContainer = `
+            <div class="pdf-container">
+              <div class="pdf-controls">
+                <button onclick="prevPage()">上一页</button>
+                <span style="margin: 0 10px;">
+                  页码: <input type="number" id="pageNum" value="1" min="1" style="width: 50px;"> / <span id="pageCount">0</span>
+                </span>
+                <button onclick="nextPage()">下一页</button>
+                <button onclick="zoomIn()">放大</button>
+                <button onclick="zoomOut()">缩小</button>
+                <button onclick="fitWidth()">适应宽度</button>
+              </div>
+              <div class="pdf-canvas-container" id="pdfCanvasContainer">
+                <canvas id="pdfCanvas" class="pdf-page"></canvas>
+              </div>
             </div>
-            <div style="height: calc(100% - 50px); background-color: #525659;">
-              <iframe src="${filePath}" 
-                      style="width: 100%; height: 100%; border: none; background: white;"
-                      frameborder="0">
-              </iframe>
+          `;
+          
+          content.innerHTML = pdfContainer;
+          
+          // 加载PDF文档
+          const url = filePath;
+          const loadingTask = pdfjsLib.getDocument(url);
+          const pdf = await loadingTask.promise;
+          
+          // 更新页码总数
+          document.getElementById('pageCount').textContent = pdf.numPages;
+          
+          // 渲染第一页
+          let currentPage = 1;
+          let currentScale = 1.5;
+          
+          // 根据屏幕宽度设置合适的缩放比例
+          if (window.innerWidth <= 768) {
+            currentScale = Math.min(1.2, (window.innerWidth - 40) / 600);
+          }
+          
+          async function renderPage(pageNum) {
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: currentScale });
+            
+            const canvas = document.getElementById('pdfCanvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport
+            };
+            
+            await page.render(renderContext).promise;
+            document.getElementById('pageNum').value = pageNum;
+            
+            // 滚动到顶部
+            document.getElementById('pdfCanvasContainer').scrollTop = 0;
+          }
+          
+          // 全局函数
+          window.prevPage = async function() {
+            if (currentPage > 1) {
+              currentPage--;
+              await renderPage(currentPage);
+            }
+          };
+          
+          window.nextPage = async function() {
+            if (currentPage < pdf.numPages) {
+              currentPage++;
+              await renderPage(currentPage);
+            }
+          };
+          
+          window.zoomIn = async function() {
+            currentScale = Math.min(currentScale * 1.2, 3);
+            await renderPage(currentPage);
+          };
+          
+          window.zoomOut = async function() {
+            currentScale = Math.max(currentScale / 1.2, 0.5);
+            await renderPage(currentPage);
+          };
+          
+          window.fitWidth = async function() {
+            const containerWidth = document.getElementById('pdfCanvasContainer').clientWidth - 40;
+            const page = await pdf.getPage(currentPage);
+            const viewport = page.getViewport({ scale: 1 });
+            currentScale = containerWidth / viewport.width;
+            await renderPage(currentPage);
+          };
+          
+          // 页码输入监听
+          document.getElementById('pageNum').addEventListener('change', async function(e) {
+            const pageNum = parseInt(e.target.value);
+            if (pageNum >= 1 && pageNum <= pdf.numPages) {
+              currentPage = pageNum;
+              await renderPage(currentPage);
+            } else {
+              e.target.value = currentPage;
+            }
+          });
+          
+          // 初始渲染
+          await renderPage(currentPage);
+          
+          const title = filePath.split('/').pop().replace('.pdf', '');
+          document.title = title + ' - mo技术博客';
+          
+        } catch (error) {
+          console.error('PDF加载错误:', error);
+          content.innerHTML = `
+            <div class="loading">
+              <h2>PDF加载失败</h2>
+              <p>错误信息: ${error.message}</p>
+              <p>尝试直接下载: <a href="${filePath}" target="_blank">${filePath}</a></p>
             </div>
-          </div>
-        `;
-        
-        content.innerHTML = pdfContainer;
-        
-        const title = filePath.split('/').pop().replace('.pdf', '');
-        document.title = title + ' - mo技术博客';
+          `;
+        }
       }
       
       // 页面加载时显示欢迎信息
