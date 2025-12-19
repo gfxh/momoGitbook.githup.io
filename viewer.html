@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>文档查看器 - mo技术博客</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <style>
+      .content h1 { color: #2c3e50; font-size: 2em; margin-bottom: 0.5em; }
+      .content h2 { color: #34495e; font-size: 1.5em; margin-top: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+      .content h3 { color: #34495e; font-size: 1.3em; margin-top: 1.2em; }
+      .content h4 { color: #34495e; font-size: 1.1em; margin-top: 1em; }
+      .content h5 { color: #34495e; font-size: 1em; margin-top: 0.8em; }
+      .content p { line-height: 1.8; margin-bottom: 1.2em; }
+      .content ul, .content ol { margin: 1em 0; padding-left: 2em; }
+      .content li { margin: 0.5em 0; }
+      .content blockquote { 
+        background-color: #f8f9fa; 
+        border-left: 4px solid #007bff; 
+        padding: 1em 1.5em; 
+        margin: 1.5em 0; 
+        color: #495057; 
+      }
+      .content code { 
+        background-color: #f8f9fa; 
+        color: #e83e8c; 
+        padding: 0.2em 0.4em; 
+        border-radius: 3px; 
+        font-family: 'Courier New', monospace;
+      }
+      .content pre { 
+        background-color: #f8f9fa; 
+        border: 1px solid #e9ecef; 
+        border-radius: 4px; 
+        padding: 1em; 
+        overflow-x: auto; 
+        margin: 1em 0;
+      }
+      .content pre code { 
+        background-color: transparent; 
+        color: inherit; 
+        padding: 0; 
+      }
+      .content table { 
+        border-collapse: collapse; 
+        width: 100%; 
+        margin: 1.5em 0; 
+      }
+      .content th, .content td { 
+        border: 1px solid #dee2e6; 
+        padding: 0.75em; 
+        text-align: left; 
+      }
+      .content th { 
+        background-color: #f8f9fa; 
+        font-weight: bold; 
+      }
+      .content img { 
+        max-width: 100%; 
+        height: auto; 
+      }
+      .loading { 
+        text-align: center; 
+        padding: 50px; 
+        color: #666; 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar-toggle">
+      <span class="sidebar-toggle-line"></span>
+      <span class="sidebar-toggle-line"></span>
+      <span class="sidebar-toggle-line"></span>
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidebar-inner">
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-toc">
+            目录
+          </li>
+          <li class="sidebar-nav-overview">
+            概览
+          </li>
+        </ul>
+        
+        <div class="sidebar-post-container">
+          <div class="sidebar-post-author">
+            <div class="sidebar-post-author-avatar"></div>
+            <p class="sidebar-post-author-name">mo技术博客</p>
+          </div>
+        </div>
+        
+        <div class="sidebar-toc">
+          <div class="sidebar-toc-content">
+            <div class="toc">
+              <div class="toc-level-1 toc-header">
+                介绍
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadMarkdown('README.md')">介绍</a>
+              </div>
+              
+              <div class="toc-level-1 toc-header">
+                markdown基础语法练习
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadMarkdown('markdown的练习.md')">markdown的练习</a>
+              </div>
+              
+              <div class="toc-level-1 toc-header">
+                Git
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadMarkdown('关于Git/Git.1学习.md')">Git的学习</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadMarkdown('关于Git/Git.2代码推送.md')">Git的代码推送</a>
+              </div>
+              
+              <div class="toc-level-1 toc-header">
+                CTF
+              </div>
+              <div class="toc-level-2 toc-header">
+                一·Web
+              </div>
+              <div class="toc-level-3 toc-header">
+                3.注入类
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('SQL/0x0.md')">SQL注入的学习</a>
+              </div>
+              <div class="toc-level-5">
+                <a href="#" onclick="loadMarkdown('SQL/0x3盲注.md')">SQL盲注</a>
+              </div>
+              
+              <div class="toc-level-1 toc-header">
+                复习一下下
+              </div>
+              <div class="toc-level-2 toc-header">
+                Java的学习
+              </div>
+              <div class="toc-level-3 toc-header">
+                一 Java入门
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">1.Java 的运行</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="main-container">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div class="content" id="content">
+            <div class="loading">
+              <h1>欢迎使用文档查看器</h1>
+              <p>请从左侧目录选择要查看的文档</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      // 初始化markdown-it
+      const md = window.markdownit({
+        html: true,
+        linkify: true,
+        typographer: true,
+        breaks: true,
+        highlight: function (str, lang) {
+          return '<pre><code class="language-' + lang + '">' + str + '</code></pre>';
+        }
+      });
+      
+      // 加载Markdown文件
+      async function loadMarkdown(filePath) {
+        const content = document.getElementById('content');
+        content.innerHTML = '<div class="loading">正在加载文档...</div>';
+        
+        try {
+          const response = await fetch(filePath);
+          if (!response.ok) {
+            throw new Error('文件不存在或无法访问');
+          }
+          
+          const markdownText = await response.text();
+          const html = md.render(markdownText);
+          content.innerHTML = html;
+          
+          // 更新页面标题
+          const title = filePath.split('/').pop().replace('.md', '');
+          document.title = title + ' - mo技术博客';
+          
+        } catch (error) {
+          content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
+        }
+      }
+      
+      // 页面加载时显示欢迎信息
+      document.addEventListener('DOMContentLoaded', function() {
+        // 可以在这里设置默认加载的文档
+        // loadMarkdown('README.md');
+      });
+    </script>
+  </body>
+</html>
