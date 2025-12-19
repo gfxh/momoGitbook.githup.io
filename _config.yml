@@ -1,12 +1,13 @@
-theme: minima
 # _config.yml
-title: mo博客
-
+title: mo技术博客
+theme: minima
 
 description: 一个记录学习的站点
 navigation:  # 自定义导航栏链接
   - title: 首页
     url: /README.md
+  - title: Python编程
+    url: /PythoBook/py书.md
   - title: 关于Git
     url: /关于Git/Git.1学习.md
   - title: SQL
