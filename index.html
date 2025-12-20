@@ -8,7 +8,8 @@
    
     <link rel="stylesheet" href="assets/css/sidebar.css">
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
-    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
     <style>
       /* 补充sidebar.css中没有的样式 */
       .content h1 { font-size: 2em; margin-bottom: 0.5em; }
@@ -32,63 +33,66 @@
         padding: 50px; 
         color: #666; 
       }
-      
-      /* PDF阅读器样式 */
       .pdf-container {
         width: 100%;
-        height: 800px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        overflow: hidden;
-      }
-      
-      .pdf-controls {
-        background-color: #f8f9fa;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      
-      .pdf-controls button {
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        background-color: white;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-      
-      .pdf-controls button:hover {
-        background-color: #f0f0f0;
-      }
-      
-      .pdf-controls input {
-        width: 60px;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
-      }
-      
-      .pdf-canvas-container {
-        overflow: auto;
-        height: calc(100% - 50px);
-        background-color: #525659;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
+        min-height: 100vh;
+        background: #f5f5f5;
         padding: 20px 0;
+        overflow-y: auto;
       }
-      
       .pdf-page {
-        margin: 10px auto;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        background-color: white;
+        margin: 0 auto 20px auto;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 4px;
+        padding: 10px;
+        max-width: 900px;
+      }
+      .pdf-canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .pdf-controls {
+        background: #333;
+        color: white;
+        padding: 10px;
+        position: fixed;
+        top: 60px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      }
+      .pdf-controls button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .pdf-controls button:hover {
+        background: #45a049;
+      }
+      .pdf-loading {
+        text-align: center;
+        padding: 50px;
+        color: #666;
+        background: white;
+        margin: 20px auto;
+        max-width: 900px;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       }
     </style>
   </head>
   <body>
-    
     
     <div class="sidebar">
       <div class="sidebar-inner">
@@ -151,7 +155,10 @@
                 Python
               </div>
               <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('PythonBook/Python编程从入门到实践第3版.pdf')">Python基础</a>
+                <a href="#" onclick="loadMarkdown('PythonBook/Python学习笔记.md')">Python基础</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('PythonBook/Python编程从入门到实践第3版.pdf')">Python编程从入门到实践（PDF）</a>
               </div>
               <div class="toc-level-1 toc-header">
                 复习一下下
@@ -191,44 +198,6 @@
       </div>
     </div>
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     <script>
       // 侧边栏切换功能
       document.addEventListener('DOMContentLoaded', function() {
@@ -265,9 +234,6 @@
         }
       });
       
-      // 设置PDF.js worker
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-      
       // 加载Markdown文件
       async function loadMarkdown(filePath) {
         const content = document.getElementById('content');
@@ -292,552 +258,129 @@
         }
       }
       
-      // 设置PDF.js worker
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+      // 设置PDF.js的worker
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
       
-      // 检测是否为移动设备或特殊浏览器
-      function isMobileDevice() {
-        // 检测用户代理
-        const userAgent = navigator.userAgent.toLowerCase();
-        const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-        const isWeChat = /micromessenger/i.test(userAgent);
-        const isSmallScreen = window.innerWidth <= 768;
-        
-        return isMobile || isWeChat || isSmallScreen;
-      }
+      // PDF阅读相关变量
+      let pdfDoc = null;
+      let scale = 1.2;
+      let renderedPages = new Set();
       
-      // 加载PDF文件 - 专门优化移动端，提供多种方案
-      function loadPDF(filePath) {
+      // 加载PDF文件
+      async function loadPDF(filePath) {
         const content = document.getElementById('content');
-        content.innerHTML = '<div class="loading">正在加载PDF...</div>';
-        
-        // 检测网络状态和设备类型
-        const isSlowNetwork = navigator.connection ? 
-          (navigator.connection.effectiveType === 'slow-2g' || 
-           navigator.connection.effectiveType === '2g' ||
-           navigator.connection.effectiveType === '3g') : false;
-        
-        const isLowEndDevice = navigator.hardwareConcurrency ? 
-          navigator.hardwareConcurrency <= 2 : false;
-        
-        console.log('网络状况:', isSlowNetwork ? '慢速网络' : '正常网络');
-        console.log('设备性能:', isLowEndDevice ? '低端设备' : '正常设备');
-        
-        // 根据网络和设备选择加载方案
-        if (isSlowNetwork || isLowEndDevice) {
-          console.log('使用简化加载方案');
-          showSimplePDFOptions(filePath);
-        } else {
-          console.log('使用PDF.js完整加载，确保移动端兼容');
-          loadPDFWithPDFJS(filePath);
-        }
-        
-        const title = filePath.split('/').pop().replace('.pdf', '');
-        document.title = title + ' - mo技术博客';
-      }
-      
-      // 简化的PDF选项界面
-      function showSimplePDFOptions(filePath) {
-        const content = document.getElementById('content');
-        content.innerHTML = `
-          <div class="loading" style="padding: 20px; text-align: center;">
-            <h2 style="margin-bottom: 15px;">📄 PDF查看选项</h2>
-            <p style="margin-bottom: 20px; color: #666;">检测到网络较慢或设备性能有限，请选择查看方式：</p>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <button onclick="loadPDFWithPDFJS('${filePath}')" style="padding: 15px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
-                📖 在线查看 (推荐)
-                <div style="font-size: 12px; margin-top: 5px; opacity: 0.9;">完整功能，但加载较慢</div>
-              </button>
-              <a href="${filePath}" target="_blank" style="display: block; padding: 15px; background: #28a745; color: white; text-decoration: none; text-align: center; border-radius: 6px; font-size: 16px;">
-                🔗 新窗口打开
-                <div style="font-size: 12px; margin-top: 5px; opacity: 0.9;">使用浏览器默认PDF查看器</div>
-              </a>
-              <a href="${filePath}" download style="display: block; padding: 15px; background: #6c757d; color: white; text-decoration: none; text-align: center; border-radius: 6px; font-size: 16px;">
-                📥 下载PDF
-                <div style="font-size: 12px; margin-top: 5px; opacity: 0.9;">下载到本地查看</div>
-              </a>
-            </div>
-            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ffc107; color: black; border: none; border-radius: 4px; cursor: pointer;">
-              🔄 重新检测网络
-            </button>
-          </div>
-        `;
-      }
-      
-      // iframe加载PDF（适用于支持良好桌面浏览器）
-      function loadPDFWithIframe(filePath) {
-        const content = document.getElementById('content');
-        
-        const pdfContainer = `
-          <div class="pdf-container">
-            <div class="pdf-controls">
-              <span style="color: #666; padding: 10px; font-size: 14px;">
-                📄 连续滚动查看
-              </span>
-              <div style="margin-left: auto;">
-                <button onclick="zoomInPDF()">放大</button>
-                <button onclick="zoomOutPDF()">缩小</button>
-                <button onclick="resetPDF()">重置</button>
-                <button onclick="fallbackToPDFJS()">切换模式</button>
-              </div>
-            </div>
-            <div style="height: calc(100% - 50px); background: #525659;">
-              <iframe id="pdfFrame" 
-                      src="${filePath}#view=FitH" 
-                      style="width: 100%; height: 100%; border: none; background: white;"
-                      frameborder="0"
-                      onload="console.log('PDF iframe加载成功')"
-                      onerror="console.log('PDF iframe加载失败，切换到PDF.js'); fallbackToPDFJS();">
-              </iframe>
-            </div>
-          </div>
-        `;
-        
-        content.innerHTML = pdfContainer;
-        
-        // 检测iframe是否成功加载
-        setTimeout(() => {
-          const iframe = document.getElementById('pdfFrame');
-          try {
-            // 尝试访问iframe内容来检测是否成功
-            if (iframe.contentDocument || iframe.contentWindow) {
-              console.log('PDF iframe加载检测成功');
-            }
-          } catch (e) {
-            console.log('PDF iframe访问失败，可能是跨域或不支持，切换到PDF.js');
-            fallbackToPDFJS();
-          }
-        }, 3000);
-        
-        // 全局函数
-        window.zoomInPDF = function() {
-          const iframe = document.getElementById('pdfFrame');
-          if (iframe) {
-            const currentSrc = iframe.src;
-            const newScale = Math.min((currentSrc.match(/zoom=([\d.]+)/) ? parseFloat(RegExp.$1) * 1.2 : 1.5), 3);
-            iframe.src = currentSrc.replace(/#.*$/, '') + `#view=FitH&zoom=${newScale}`;
-          }
-        };
-        
-        window.zoomOutPDF = function() {
-          const iframe = document.getElementById('pdfFrame');
-          if (iframe) {
-            const currentSrc = iframe.src;
-            const newScale = Math.max((currentSrc.match(/zoom=([\d.]+)/) ? parseFloat(RegExp.$1) * 0.8 : 1), 0.5);
-            iframe.src = currentSrc.replace(/#.*$/, '') + `#view=FitH&zoom=${newScale}`;
-          }
-        };
-        
-        window.resetPDF = function() {
-          const iframe = document.getElementById('pdfFrame');
-          if (iframe) {
-            iframe.src = filePath + '#view=FitH';
-          }
-        };
-        
-        window.fallbackToPDFJS = function() {
-          console.log('回退到PDF.js模式');
-          loadPDFWithPDFJS(filePath);
-        };
-      }
-      
- // 移动端专用PDF加载函数 - 超级兼容版
-      async function loadPDFWithPDFJS(filePath) {
-        const content = document.getElementById('content');
+        content.innerHTML = '<div class="pdf-loading">正在加载PDF...</div>';
         
         try {
-          // 移动端优化的容器布局
-          const pdfContainer = `
-            <div class="pdf-container" style="height: 100vh; display: flex; flex-direction: column;">
-              <div class="pdf-controls" style="flex-shrink: 0; padding: 8px; background: #f8f9fa; border-bottom: 1px solid #ddd; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; justify-content: center;">
-                <button onclick="prevPage()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">上一页</button>
-                <span style="margin: 0 5px; font-size: 12px;">
-                  <input type="number" id="pageNum" value="1" min="1" style="width: 45px; font-size: 14px; text-align: center;"> / <span id="pageCount">0</span>
-                </span>
-                <button onclick="nextPage()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">下一页</button>
-                <button onclick="fitWidth()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">适应</button>
-                <button onclick="zoomInPDFJS()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">放大</button>
-                <button onclick="zoomOutPDFJS()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">缩小</button>
-                <button onclick="downloadPDF()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">下载</button>
-                <button onclick="switchToIframe()" style="padding: 6px 10px; font-size: 14px; margin: 2px;">切换模式</button>
-              </div>
-              <div class="pdf-canvas-container" id="pdfCanvasContainer" style="flex: 1; overflow: auto; background: #525659; display: flex; justify-content: center; align-items: flex-start; padding: 10px;">
-                <canvas id="pdfCanvas" style="background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); max-width: 100%; height: auto;"></canvas>
-                <div id="pdfError" style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; color: white; font-size: 14px;"></div>
-              </div>
-            </div>
+          // 移除已存在的PDF控制器
+          const existingControls = document.querySelector('.pdf-controls');
+          if (existingControls) {
+            existingControls.remove();
+          }
+          
+          // 加载PDF文档
+          const loadingTask = pdfjsLib.getDocument(filePath);
+          pdfDoc = await loadingTask.promise;
+          
+          // 重置渲染页面记录
+          renderedPages.clear();
+          
+          // 创建PDF查看器界面
+          content.innerHTML = '<div class="pdf-container" id="pdf-container"></div>';
+          
+          // 创建PDF控制面板
+          const controls = document.createElement('div');
+          controls.className = 'pdf-controls';
+          controls.innerHTML = `
+            <button onclick="zoomIn()">放大</button>
+            <button onclick="zoomOut()">缩小</button>
+            <button onclick="fitToWidth()">适应宽度</button>
+            <button onclick="resetZoom()">重置</button>
           `;
+          document.body.appendChild(controls);
           
-          content.innerHTML = pdfContainer;
+          // 渲染所有页面
+          await renderAllPages();
           
-          // 显示加载状态
-          const errorDiv = document.getElementById('pdfError');
-          errorDiv.innerHTML = `
-            <div style="font-size: 18px; margin-bottom: 10px;">📄</div>
-            <div id="loadingText">正在加载PDF文档...</div>
-            <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;" id="loadingSubtext">请稍候，首次加载可能较慢</div>
-            <div style="margin-top: 10px; width: 200px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px;">
-              <div id="progressBar" style="width: 0%; height: 100%; background: #007bff; border-radius: 2px; transition: width 0.3s;"></div>
-            </div>
-            <div style="margin-top: 15px;">
-              <button onclick="cancelLoad()" style="padding: 8px 15px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                取消加载
-              </button>
-            </div>
-          `;
-          errorDiv.style.display = 'flex';
-          
-          // 模拟加载进度 - 平滑进度条
-          let progress = 0;
-          const progressInterval = setInterval(() => {
-            progress += Math.random() * 5 + 2; // 2-7的随机增量，更平滑
-            if (progress > 90) progress = 90;
-            const progressBar = document.getElementById('progressBar');
-            if (progressBar) {
-              progressBar.style.width = progress + '%';
-            }
-          }, 800); // 稍微加快更新频率
-          
-          // 添加取消加载函数
-          window.cancelLoad = function() {
-            throw new Error('用户取消了PDF加载');
-          };
-          
-          // 强制重新加载PDF.js库（解决缓存问题）
-          console.log('检查PDF.js库状态...');
-          
-          // 检查网络连接
-          if (!navigator.onLine) {
-            throw new Error('网络连接不可用，请检查网络设置');
-          }
-          
-          // 确保PDF.js库已加载 - 增强检查
-          let retryCount = 0;
-          while (typeof pdfjsLib === 'undefined' && retryCount < 20) {
-            console.log(`等待PDF.js库加载... (${retryCount + 1}/20)`);
-            await new Promise(resolve => setTimeout(resolve, 500));
-            retryCount++;
-          }
-          
-          if (typeof pdfjsLib === 'undefined') {
-            // 尝试动态加载PDF.js
-            console.log('PDF.js库未加载，尝试动态加载...');
-            try {
-              const script = document.createElement('script');
-              script.src = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js';
-              script.onload = async function() {
-                console.log('PDF.js库动态加载成功');
-                await new Promise(resolve => setTimeout(resolve, 1000));
-              };
-              document.head.appendChild(script);
-              
-              // 等待动态加载完成
-              let dynamicRetry = 0;
-              while (typeof pdfjsLib === 'undefined' && dynamicRetry < 10) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                dynamicRetry++;
-              }
-              
-              if (typeof pdfjsLib === 'undefined') {
-                throw new Error('PDF.js库动态加载失败');
-              }
-            } catch (loadError) {
-              throw new Error('无法加载PDF.js库，请检查网络或刷新页面重试');
-            }
-          }
-          
-          // 配置PDF.js worker
-          if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-          }
-          
-          // 加载PDF文档 - 增强配置 + 超时处理
-          const url = filePath;
-          
-          // 添加超时控制 - 增加到60秒
-          const loadingTimeout = setTimeout(() => {
-            errorDiv.innerHTML = `
-              <div style="font-size: 18px; margin-bottom: 10px;">⏰</div>
-              <div>PDF加载超时</div>
-              <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">文件可能过大或网络较慢</div>
-              <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                <button onclick="retryLoad()" style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                  🔄 重试加载
-                </button>
-                <button onclick="fallbackToOtherMethod()" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                  📂 其他方式
-                </button>
-              </div>
-            `;
-          }, 60000); // 60秒超时
-          
-          // 添加重试和其他方式函数
-          window.retryLoad = function() {
-            clearTimeout(loadingTimeout);
-            loadPDFWithPDFJS(filePath);
-          };
-          
-          window.fallbackToOtherMethod = function() {
-            clearTimeout(loadingTimeout);
-            content.innerHTML = `
-              <div class="loading" style="padding: 20px; text-align: center;">
-                <h2 style="margin-bottom: 15px;">😔 PDF加载超时</h2>
-                <p style="margin-bottom: 20px;">文件过大或网络较慢，请尝试其他方式</p>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                  <a href="${filePath}" target="_blank" style="display: block; padding: 12px; background: #007bff; color: white; text-decoration: none; text-align: center; border-radius: 6px;">
-                    🔗 在新窗口打开
-                  </a>
-                  <a href="${filePath}" download style="display: block; padding: 12px; background: #28a745; color: white; text-decoration: none; text-align: center; border-radius: 6px;">
-                    📥 下载PDF文件
-                  </a>
-                </div>
-              </div>
-            `;
-          };
-          
-          // 更新加载状态 - 多阶段提示
-          setTimeout(() => {
-            document.getElementById('loadingText').textContent = '正在解析PDF文件...';
-            document.getElementById('loadingSubtext').textContent = '文件较大时需要更多时间';
-          }, 2000);
-          
-          setTimeout(() => {
-            document.getElementById('loadingText').textContent = '正在准备页面...';
-            document.getElementById('loadingSubtext').textContent = '即将完成，请稍候';
-          }, 10000);
-          
-          console.log('开始加载PDF:', filePath);
-          
-          const loadingTask = pdfjsLib.getDocument({
-            url: url,
-            cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
-            cMapPacked: true,
-            disableAutoFetch: false,
-            disableStream: false,
-            // 针对移动端的优化配置
-            maxImageSize: 1024 * 1024, // 限制图片大小
-            isEvalSupported: false // 禁用eval提升安全性
-          });
-          
-          // 添加进度监听 - 平滑过渡
-          let lastRealProgress = 0;
-          loadingTask.onProgress = function(progressData) {
-            if (progressData.total > 0) {
-              const realProgress = Math.round((progressData.loaded / progressData.total) * 75); // 最多75%，留25%给渲染
-              const progressBar = document.getElementById('progressBar');
-              if (progressBar && realProgress > lastRealProgress) {
-                // 平滑过渡到真实进度
-                const currentProgress = parseFloat(progressBar.style.width);
-                const targetProgress = Math.max(currentProgress, realProgress);
-                progressBar.style.width = targetProgress + '%';
-                lastRealProgress = realProgress;
-              }
-            }
-          };
-          
-          let pdf;
-          try {
-            pdf = await loadingTask.promise;
-            clearTimeout(loadingTimeout);
-            clearInterval(progressInterval);
-            
-            // 更新进度条到100%
-            const progressBar = document.getElementById('progressBar');
-            if (progressBar) {
-              progressBar.style.width = '100%';
-            }
-            
-            document.getElementById('loadingText').textContent = 'PDF加载成功！';
-            document.getElementById('loadingSubtext').textContent = `共${pdf.numPages}页，正在渲染...`;
-            
-            console.log('PDF加载成功，共', pdf.numPages, '页');
-          } catch (loadError) {
-            clearTimeout(loadingTimeout);
-            clearInterval(progressInterval);
-            throw new Error(`PDF加载失败: ${loadError.message}`);
-          }
-          
-          // 隐藏加载信息，显示canvas
-          errorDiv.style.display = 'none';
-          const canvas = document.getElementById('pdfCanvas');
-          canvas.style.display = 'block';
-          
-          // 更新页码总数
-          document.getElementById('pageCount').textContent = pdf.numPages;
-          
-          // 移动端智能缩放计算
-          let currentPage = 1;
-          const screenWidth = window.innerWidth;
-          const screenHeight = window.innerHeight - 80; // 减去控制栏高度
-          
-          let currentScale = 1.0;
-          if (screenWidth <= 380) {
-            currentScale = 0.8;
-          } else if (screenWidth <= 480) {
-            currentScale = 1.0;
-          } else {
-            currentScale = 1.2;
-          }
-          
-          // 渲染页面函数
-          async function renderPage(pageNum) {
-            try {
-              console.log('渲染页面:', pageNum);
-              
-              const page = await pdf.getPage(pageNum);
-              const viewport = page.getViewport({ scale: currentScale });
-              
-              // 设置canvas尺寸 - 移动端优化
-              const maxWidth = screenWidth - 20;
-              const maxHeight = screenHeight - 20;
-              
-              let finalScale = currentScale;
-              if (viewport.width > maxWidth) {
-                finalScale = maxWidth / viewport.width;
-              }
-              
-              const finalViewport = page.getViewport({ scale: finalScale });
-              
-              canvas.width = finalViewport.width;
-              canvas.height = finalViewport.height;
-              
-              canvas.style.width = finalViewport.width + 'px';
-              canvas.style.height = finalViewport.height + 'px';
-              
-              const renderContext = {
-                canvasContext: canvas.getContext('2d'),
-                viewport: finalViewport
-              };
-              
-              await page.render(renderContext).promise;
-              document.getElementById('pageNum').value = pageNum;
-              
-              // 滚动到合适位置
-              const container = document.getElementById('pdfCanvasContainer');
-              container.scrollTop = 0;
-              
-              console.log('页面渲染完成:', pageNum);
-            } catch (error) {
-              console.error('页面渲染错误:', error);
-              throw new Error(`第${pageNum}页渲染失败: ${error.message}`);
-            }
-          }
-          
-          // 全局函数 - 移动端优化
-          window.prevPage = async function() {
-            if (currentPage > 1) {
-              currentPage--;
-              await renderPage(currentPage);
-            }
-          };
-          
-          window.nextPage = async function() {
-            if (currentPage < pdf.numPages) {
-              currentPage++;
-              await renderPage(currentPage);
-            }
-          };
-          
-          window.fitWidth = async function() {
-            try {
-              const containerWidth = screenWidth - 20;
-              const page = await pdf.getPage(currentPage);
-              const viewport = page.getViewport({ scale: 1 });
-              currentScale = containerWidth / viewport.width;
-              await renderPage(currentPage);
-            } catch (error) {
-              console.error('适应宽度错误:', error);
-            }
-          };
-          
-          window.zoomInPDFJS = async function() {
-            currentScale = Math.min(currentScale * 1.2, 3);
-            await renderPage(currentPage);
-          };
-          
-          window.zoomOutPDFJS = async function() {
-            currentScale = Math.max(currentScale / 1.2, 0.5);
-            await renderPage(currentPage);
-          };
-          
-          window.downloadPDF = function() {
-            try {
-              const link = document.createElement('a');
-              link.href = filePath;
-              link.download = filePath.split('/').pop();
-              link.click();
-            } catch (error) {
-              console.error('下载错误:', error);
-              window.open(filePath, '_blank');
-            }
-          };
-          
-          window.switchToIframe = function() {
-            console.log('切换到iframe模式');
-            loadPDFWithIframe(filePath);
-          };
-          
-          // 页码输入监听 - 移动端优化
-          document.getElementById('pageNum').addEventListener('change', async function(e) {
-            const pageNum = parseInt(e.target.value);
-            if (pageNum >= 1 && pageNum <= pdf.numPages) {
-              currentPage = pageNum;
-              await renderPage(currentPage);
-            } else {
-              e.target.value = currentPage;
-            }
-          });
-          
-          // 触摸滑动翻页（可选）
-          let touchStartY = 0;
-          canvas.addEventListener('touchstart', function(e) {
-            touchStartY = e.touches[0].clientY;
-          });
-          
-          canvas.addEventListener('touchend', function(e) {
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY - touchEndY;
-            
-            if (Math.abs(diff) > 50) { // 滑动距离大于50px
-              if (diff > 0 && currentPage < pdf.numPages) {
-                // 向上滑动，下一页
-                window.nextPage();
-              } else if (diff < 0 && currentPage > 1) {
-                // 向下滑动，上一页
-                window.prevPage();
-              }
-            }
-          });
-          
-          // 初始渲染
-          await renderPage(currentPage);
+          // 更新页面标题
+          const title = filePath.split('/').pop().replace('.pdf', '');
+          document.title = title + ' - mo技术博客';
           
         } catch (error) {
-          console.error('PDF加载错误:', error);
-          
-          // 移动端友好的错误处理
-          const errorHtml = `
-            <div class="loading" style="padding: 20px; text-align: center;">
-              <h2 style="color: #dc3545; margin-bottom: 15px;">😔 PDF加载失败</h2>
-              <p style="margin-bottom: 20px;">${error.message}</p>
-              <div style="display: flex; flex-direction: column; gap: 10px;">
-                <a href="${filePath}" target="_blank" style="display: block; padding: 12px; background: #007bff; color: white; text-decoration: none; text-align: center; border-radius: 6px; font-size: 16px;">
-                  🔗 在新窗口打开
-                </a>
-                <a href="${filePath}" download style="display: block; padding: 12px; background: #28a745; color: white; text-decoration: none; text-align: center; border-radius: 6px; font-size: 16px;">
-                  📥 下载PDF文件
-                </a>
-                <button onclick="location.reload()" style="padding: 12px; background: #ffc107; color: black; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
-                  🔄 重新加载
-                </button>
-              </div>
-              <p style="margin-top: 20px; font-size: 12px; color: #666;">
-                如果仍然无法查看，请尝试使用其他浏览器（如Chrome、Safari）
-              </p>
-            </div>
-          `;
-          content.innerHTML = errorHtml;
+          content.innerHTML = '<div class="pdf-loading"><h2>PDF加载失败</h2><p>' + error.message + '</p></div>';
         }
+      }
+      
+      // 渲染所有PDF页面
+      async function renderAllPages() {
+        const container = document.getElementById('pdf-container');
+        container.innerHTML = '';
+        
+        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+          try {
+            const page = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({scale: scale});
+            
+            // 创建页面容器
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'pdf-page';
+            pageDiv.setAttribute('data-page', pageNum);
+            
+            // 创建canvas
+            const canvas = document.createElement('canvas');
+            canvas.className = 'pdf-canvas';
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // 渲染页面
+            const renderContext = {
+              canvasContext: ctx,
+              viewport: viewport
+            };
+            
+            await page.render(renderContext).promise;
+            
+            pageDiv.appendChild(canvas);
+            container.appendChild(pageDiv);
+            renderedPages.add(pageNum);
+            
+          } catch (error) {
+            console.error(`渲染第${pageNum}页时出错:`, error);
+          }
+        }
+      }
+      
+      // 重新渲染所有页面
+      async function reRenderAllPages() {
+        if (!pdfDoc || renderedPages.size === 0) return;
+        await renderAllPages();
+      }
+      
+      // 放大
+      function zoomIn() {
+        scale = scale * 1.2;
+        reRenderAllPages();
+      }
+      
+      // 缩小
+      function zoomOut() {
+        scale = scale / 1.2;
+        reRenderAllPages();
+      }
+      
+      // 适应宽度
+      function fitToWidth() {
+        const containerWidth = 900; // 最大宽度
+        scale = containerWidth / 600; // 假设A4页面宽度约为600px
+        reRenderAllPages();
+      }
+      
+      // 重置缩放
+      function resetZoom() {
+        scale = 1.2;
+        reRenderAllPages();
       }
       
       // 页面加载时显示欢迎信息
