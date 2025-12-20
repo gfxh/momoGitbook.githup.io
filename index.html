@@ -64,21 +64,16 @@
         border-radius: 4px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       }
+      
     </style>
   </head>
   <body>
     
     <div class="sidebar">
       <div class="sidebar-inner">
-        <ul class="sidebar-nav">
-          <li class="sidebar-nav-toc active">
-            目录
-          </li>
-        </ul>
-        
         <div class="sidebar-post-container">
           <div class="sidebar-post-author">
-            <div class="sidebar-post-author-avatar"></div>
+            <img src="./杂/头像.png"  class="touxiang"  height="150px">
             <p class="sidebar-post-author-name">mo技术博客</p>
           </div>
         </div>
@@ -115,7 +110,26 @@
               </div>
               <div class="toc-level-2 toc-header">
                 一·Web
+              </div >
+              <div class="toc-level-3 toc-header">
+                1.敏感信息泄露
               </div>
+              <div class="toc-level-3 toc-header">
+                2.PHP
+              </div>
+              <div class="toc-level-4 toc-header">
+                
+                <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">PHP基础学习</a>
+              </div>
+              <div class="toc-level-4 toc-header">
+                <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">PHP反序列化基础</a>
+              </div>
+              <div class="toc-level-4 toc-header">
+                <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">PHP代码审计</a>
+                
+              </div>
+
+
               <div class="toc-level-3 toc-header">
                 3.注入类
               </div>
@@ -125,17 +139,63 @@
               <div class="toc-level-5">
                 <a href="#" onclick="loadMarkdown('SQL/0x3盲注.md')">SQL盲注</a>
               </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('')">SSTI注入</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('')">XXE注入</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('')">SSRF注入</a>
+              </div>
+              <div class="toc-level-3 toc-header">
+                4.RCE
+              </div>
+              <div class="toc-level-3 toc-header">
+                5.文件上传
+              </div>
+              <div class="toc-level-3 toc-header">
+                6.文件包含
+              </div>
+              <div class="toc-level-3 toc-header">
+                7.目录穿越
+              </div>
+              <div class="toc-level-3 toc-header">
+                8.逻辑漏洞SRC
+              </div>
+              <div class="toc-level-3 toc-header">
+                9.任意文件读取
+              </div>
+              <div class="toc-level-3 toc-header">
+                10.XSS攻击
+              </div>
+              <div class="toc-level-3 toc-header">
+                11.文件包含
+              </div>
+
+
+
+
+
+
+
+
               <div class="toc-level-1 toc-header">
                 Python
               </div>
+              
               <div class="toc-level-2">
-                <a href="#" onclick="loadMarkdown('PythonBook/Python学习笔记.md')">Python基础</a>
+                <a href="#" onclick="loadPDF('PythonBook/Python编程从入门到实践第3版.pdf')">Python编程从入门到实践(PDF)</a>
               </div>
               <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('PythonBook/Python编程从入门到实践第3版.pdf')">Python编程从入门到实践（PDF）</a>
+                <a href="#" onclick="loadMarkdown('./PythonBook/Python编程快速上手让繁琐工作自动化第2版.pdf')">Python编程快速上手让繁琐工作自动化第2版(PDF)</a>
               </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadMarkdown('./PythonBook/Python极客项目编程第2版.pdf')">Python极客项目编程第2版(PDF)</a>
+              </div>
+
               <div class="toc-level-1 toc-header">
-                复习一下下
+                复习一下下Java
               </div>
               <div class="toc-level-2 toc-header">
                 Java的学习
@@ -146,6 +206,22 @@
               <div class="toc-level-4">
                 <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">1.Java 的运行</a>
               </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">2.什么是“对象”</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">3.“方法”进阶</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">4.面向“对象”</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">5.什么是文件IO</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门.md')">6.项目实战</a>
+              </div>
+
             </div>
           </div>
         </div>
@@ -164,16 +240,28 @@
         <div class="content-wrap">
           <div class="content" id="content">
             <div class="loading">
-              <h1>🐻欢迎使用文档查看器🐻</h1>
-              <p>🐻请从左侧目录选择要查看的文档🐻</p>
+              <h1>🐻欢迎来到mo博客🐻</h1>
+              <p>🐻请从左侧目录阅读🐻</p>
             </div>
           </div>
         </div>
       </div>
     </div>
+ 
     
-    <script>
-      // 侧边栏切换功能
+
+
+
+
+
+
+
+
+
+
+
+<script>
+      // 侧边栏切换功能------------------------------------------------------------------------------
       document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.querySelector('.sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
