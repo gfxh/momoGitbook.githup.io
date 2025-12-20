@@ -487,16 +487,16 @@
           `;
           errorDiv.style.display = 'flex';
           
-          // 模拟加载进度
+          // 模拟加载进度 - 平滑进度条
           let progress = 0;
           const progressInterval = setInterval(() => {
-            progress += Math.random() * 15;
+            progress += Math.random() * 5 + 2; // 2-7的随机增量，更平滑
             if (progress > 90) progress = 90;
             const progressBar = document.getElementById('progressBar');
             if (progressBar) {
               progressBar.style.width = progress + '%';
             }
-          }, 1000);
+          }, 800); // 稍微加快更新频率
           
           // 添加取消加载函数
           window.cancelLoad = function() {
@@ -554,7 +554,7 @@
           // 加载PDF文档 - 增强配置 + 超时处理
           const url = filePath;
           
-          // 添加超时控制
+          // 添加超时控制 - 增加到60秒
           const loadingTimeout = setTimeout(() => {
             errorDiv.innerHTML = `
               <div style="font-size: 18px; margin-bottom: 10px;">⏰</div>
@@ -569,7 +569,7 @@
                 </button>
               </div>
             `;
-          }, 30000); // 30秒超时
+          }, 60000); // 60秒超时
           
           // 添加重试和其他方式函数
           window.retryLoad = function() {
@@ -595,9 +595,16 @@
             `;
           };
           
-          // 更新加载状态
-          document.getElementById('loadingText').textContent = '正在解析PDF文件...';
-          document.getElementById('loadingSubtext').textContent = '文件较大时需要更多时间';
+          // 更新加载状态 - 多阶段提示
+          setTimeout(() => {
+            document.getElementById('loadingText').textContent = '正在解析PDF文件...';
+            document.getElementById('loadingSubtext').textContent = '文件较大时需要更多时间';
+          }, 2000);
+          
+          setTimeout(() => {
+            document.getElementById('loadingText').textContent = '正在准备页面...';
+            document.getElementById('loadingSubtext').textContent = '即将完成，请稍候';
+          }, 10000);
           
           console.log('开始加载PDF:', filePath);
           
@@ -612,13 +619,18 @@
             isEvalSupported: false // 禁用eval提升安全性
           });
           
-          // 添加进度监听
+          // 添加进度监听 - 平滑过渡
+          let lastRealProgress = 0;
           loadingTask.onProgress = function(progressData) {
             if (progressData.total > 0) {
-              const percent = Math.round((progressData.loaded / progressData.total) * 80); // 最多80%，留20%给渲染
+              const realProgress = Math.round((progressData.loaded / progressData.total) * 75); // 最多75%，留25%给渲染
               const progressBar = document.getElementById('progressBar');
-              if (progressBar) {
-                progressBar.style.width = percent + '%';
+              if (progressBar && realProgress > lastRealProgress) {
+                // 平滑过渡到真实进度
+                const currentProgress = parseFloat(progressBar.style.width);
+                const targetProgress = Math.max(currentProgress, realProgress);
+                progressBar.style.width = targetProgress + '%';
+                lastRealProgress = realProgress;
               }
             }
           };
