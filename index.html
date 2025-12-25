@@ -1,152 +1,190 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>mo技术博客</title>
-   
-    <link rel="stylesheet" href="assets/css/sidebar.css">
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
-    <style>
-      /* 补充sidebar.css中没有的样式 */
-      .content h1 { font-size: 2em; margin-bottom: 0.5em; }
-      .content h2 { font-size: 1.5em; margin-top: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
-      .content h3 { font-size: 1.3em; margin-top: 1.2em; }
-      .content h4 { font-size: 1.1em; margin-top: 1em; }
-      .content h5 { font-size: 1em; margin-top: 0.8em; }
-      .content ul, .content ol { margin: 1em 0; padding-left: 2em; }
-      .content li { margin: 0.5em 0; }
-      .content pre code { 
-        background-color: transparent; 
-        color: inherit; 
-        padding: 0; 
-      }
-      .content img { 
-        max-width: 100%; 
-        height: auto; 
-      }
-      .loading { 
-        text-align: center; 
-        padding: 50px; 
-        color: #666; 
-      }
-      .pdf-container {
-        width: 100%;
-        min-height: 100vh;
-        background: #f5f5f5;
-        padding: 20px 0;
-        overflow-y: auto;
-      }
-      .pdf-page {
-        margin: 0 auto 20px auto;
-        background: white;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        border-radius: 4px;
-        padding: 10px;
-        max-width: 900px;
-      }
-      .pdf-canvas {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
 
-      .pdf-loading {
-        text-align: center;
-        padding: 50px;
-        color: #666;
-        background: white;
-        margin: 20px auto;
-        max-width: 900px;
-        border-radius: 4px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      }
-      
-    </style>
-  </head>
-  <body>
-    
-    <div class="sidebar">
-      <div class="sidebar-inner">
-        <div class="sidebar-post-container">
-          <div class="sidebar-post-author">
-            <img src="./杂/头像.png"  class="touxiang"  height="150px">
-            <p class="sidebar-post-author-name">mo技术博客</p>
-          </div>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>mo技术博客</title>
+
+  <link rel="stylesheet" href="assets/css/sidebar.css">
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+  <style>
+    /* 补充sidebar.css中没有的样式 */
+    .content h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+
+    .content h2 {
+      font-size: 1.5em;
+      margin-top: 1.5em;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.3em;
+    }
+
+    .content h3 {
+      font-size: 1.3em;
+      margin-top: 1.2em;
+    }
+
+    .content h4 {
+      font-size: 1.1em;
+      margin-top: 1em;
+    }
+
+    .content h5 {
+      font-size: 1em;
+      margin-top: 0.8em;
+    }
+
+    .content ul,
+    .content ol {
+      margin: 1em 0;
+      padding-left: 2em;
+    }
+
+    .content li {
+      margin: 0.5em 0;
+    }
+
+    .content pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    .content img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 50px;
+      color: #666;
+    }
+
+    .pdf-container {
+      width: 100%;
+      min-height: 100vh;
+      background: #f5f5f5;
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+
+    .pdf-page {
+      margin: 0 auto 20px auto;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      padding: 10px;
+      max-width: 900px;
+    }
+
+    .pdf-canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .pdf-loading {
+      text-align: center;
+      padding: 50px;
+      color: #666;
+      background: white;
+      margin: 20px auto;
+      max-width: 900px;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-post-container">
+        <div class="sidebar-post-author">
+          <img src="./杂/头像.png" class="touxiang" height="150px">
+          <p class="sidebar-post-author-name">mo技术博客</p>
         </div>
-        
-        <div class="sidebar-toc">
-          <div class="sidebar-toc-content">
-            <div class="toc">
-              <div class="toc-level-1 toc-header">
-                介绍
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadMarkdown('README.md')">介绍</a>
-              </div>
-              
-              <div class="toc-level-1 toc-header">
-                markdown基础语法练习
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadMarkdown('markdown的练习.md')">markdown的练习</a>
-              </div>
-              
-              <div class="toc-level-1 toc-header">
-                Git
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadMarkdown('关于Git/Git.1学习.md')">Git的学习</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadMarkdown('关于Git/Git.2代码推送.md')">Git的代码推送</a>
-              </div>
-              
-              <div class="toc-level-1 toc-header">
-                CTF
-              </div>
+      </div>
+
+      <div class="sidebar-toc">
+        <div class="sidebar-toc-content">
+          <div class="toc">
+            <div class="toc-level-1 toc-header">
+              介绍
+            </div>
+            <div class="toc-level-2">
+              <a href="#" onclick="loadMarkdown('README.md')">介绍</a>
+            </div>
+
+            <div class="toc-level-1 toc-header">
+              markdown基础语法练习
+            </div>
+            <div class="toc-level-2">
+              <a href="#" onclick="loadMarkdown('markdown的练习.md')">markdown的练习</a>
+            </div>
+
+            <div class="toc-level-1 toc-header">
+              Git
+            </div>
+            <div class="toc-level-2">
+              <a href="#" onclick="loadMarkdown('关于Git/Git.1学习.md')">Git的学习</a>
+            </div>
+            <div class="toc-level-2">
+              <a href="#" onclick="loadMarkdown('关于Git/Git.2代码推送.md')">Git的代码推送</a>
+            </div>
+
+            <div class="toc-level-1 toc-header">
+              CTF
+
               <div class="toc-level-2 toc-header">
                 一·Web
-              </div >
+              </div>
               <div class="toc-level-3 toc-header">
                 1.敏感信息泄露
               </div>
               <div class="toc-level-3 toc-header">
                 2.PHP
-              </div>
-              <div class="toc-level-4 toc-header">
-                
-                <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">PHP基础学习</a>
-              </div>
-              <div class="toc-level-4 toc-header">
-                <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">PHP反序列化基础</a>
-              </div>
-              <div class="toc-level-4 toc-header">
-                <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">PHP代码审计</a>
-                
+
+                <div class="toc-level-4 toc-header">
+
+                  <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">PHP基础学习</a>
+                </div>
+                <div class="toc-level-4 toc-header">
+                  <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">PHP反序列化基础</a>
+                </div>
+                <div class="toc-level-4 toc-header">
+                  <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">PHP代码审计</a>
+
+                </div>
               </div>
 
 
               <div class="toc-level-3 toc-header">
                 3.注入类
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">SQL注入的学习</a>
-              </div>
-              <div class="toc-level-5">
-                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">SQL盲注</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('')">SSTI注入</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('')">XXE注入</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('')">SSRF注入</a>
+
+                <div class="toc-level-4">
+                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">SQL注入的学习</a>
+                </div>
+                <div class="toc-level-5">
+                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">SQL盲注</a>
+                </div>
+                <div class="toc-level-4">
+                  <a href="#" onclick="loadMarkdown('')">SSTI注入</a>
+                </div>
+                <div class="toc-level-4">
+                  <a href="#" onclick="loadMarkdown('')">XXE注入</a>
+                </div>
+                <div class="toc-level-4">
+                  <a href="#" onclick="loadMarkdown('')">SSRF注入</a>
+                </div>
               </div>
               <div class="toc-level-3 toc-header">
                 4.RCE
@@ -172,18 +210,47 @@
               <div class="toc-level-3 toc-header">
                 11.文件包含
               </div>
-
-
-
-
-
-
-
-
-              <div class="toc-level-1 toc-header">
-                Python
+            </div>
+            <div class="toc-level-1 toc-header">
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('伏特台风”Ⅲ—揭密美国政府机构实施的网络间谍和虚假信息行动.pdf')">伏特台风”Ⅲ—揭密美国政府机构实施的网络间谍和虚假信息行动(PDF)</a>
               </div>
-              
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('2024中国实战化白帽人才能力白皮书.pdf')">2024中国实战化白帽人才能力白皮书(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('高级渗透测试：黑客攻击世界上最安全的网络.pdf')">高级渗透测试：黑客攻击世界上最安全的网络(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('汇编语言命令.pdf')">汇编语言命令(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('逆向工程教程.pdf')">逆向工程教程(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('网络安全CTF学习资源整理.pdf')">网络安全CTF学习资源整理(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('一本介绍红队攻击的电子书（英文）.pdf')">一本介绍红队攻击的电子书（英文）(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('CTF竞赛入门指南.pdf')">CTF 竞赛入门指南.pdf(PDF)</a>
+              </div>
+              <div class="toc-level-2">
+                <a href="#" onclick="loadPDF('PWN：二进制漏洞挖掘与利用.pdf')">PWN：二进制漏洞挖掘与利用.pdf(PDF)</a>
+              </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="toc-level-1 toc-header">
+              Python
+
               <div class="toc-level-2">
                 <a href="#" onclick="loadPDF('PythonBook/从入门到实践.pdf')">Python编程从入门到实践(PDF)</a>
               </div>
@@ -192,63 +259,62 @@
               </div>
               <div class="toc-level-2">
                 <a href="#" onclick="loadPDF('PythonBook/极客项目编程.pdf')">Python极客项目编程第2版(PDF)</a>
-              </div>
-
-              <div class="toc-level-1 toc-header">
-                复习一下下Java
-              </div>
-              <div class="toc-level-2 toc-header">
-                Java的学习
-              </div>
-              <div class="toc-level-3 toc-header">
-                一 Java入门
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_1.md')">1.Java 的运行</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_2.md')">2.什么是“对象”</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_3.md')">3.“方法”进阶</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_4.md')">4.面向“对象”</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_5.md')">5.什么是文件IO</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_6.md')">6.项目实战</a>
-              </div>
-
+              </div>6
             </div>
+
+            <div class="toc-level-1 toc-header">
+              复习一下下Java
+            </div>
+            <div class="toc-level-2 toc-header">
+              Java的学习
+            </div>
+            <div class="toc-level-3 toc-header">
+              一 Java入门
+            </div>
+            <div class="toc-level-4">
+              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_1.md')">1.Java 的运行</a>
+            </div>
+            <div class="toc-level-4">
+              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_2.md')">2.什么是“对象”</a>
+            </div>
+            <div class="toc-level-4">
+              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_3.md')">3.“方法”进阶</a>
+            </div>
+            <div class="toc-level-4">
+              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_4.md')">4.面向“对象”</a>
+            </div>
+            <div class="toc-level-4">
+              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_5.md')">5.什么是文件IO</a>
+            </div>
+            <div class="toc-level-4">
+              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_6.md')">6.项目实战</a>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- 侧边栏切换按钮 -->
-    <div class="sidebar-toggle" id="sidebarToggle">
-      <div class="sidebar-toggle-line"></div>
-      <div class="sidebar-toggle-line"></div>
-      <div class="sidebar-toggle-line"></div>
-    </div>
-    
-    <div class="main-container">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div class="content" id="content">
-            <div class="loading">
-              <h1>🐻欢迎来到mo博客🐻</h1>
-              <p>🐻请从左侧目录阅读🐻</p>
-            </div>
+  </div>
+
+  <!-- 侧边栏切换按钮 -->
+  <div class="sidebar-toggle" id="sidebarToggle">
+    <div class="sidebar-toggle-line"></div>
+    <div class="sidebar-toggle-line"></div>
+    <div class="sidebar-toggle-line"></div>
+  </div>
+
+  <div class="main-container">
+    <div class="main-inner">
+      <div class="content-wrap">
+        <div class="content" id="content">
+          <div class="loading">
+            <h1>🐻欢迎来到mo博客🐻</h1>
+            <p>🐻请从左侧目录阅读🐻</p>
           </div>
         </div>
       </div>
     </div>
- 
-    
+  </div>
 
 
 
@@ -260,154 +326,157 @@
 
 
 
-<script>
-      // 侧边栏切换功能------------------------------------------------------------------------------
-      document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.querySelector('.sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        
-        if (sidebarToggle) {
-          sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-            sidebarToggle.classList.toggle('active');
-          });
+
+
+  <script>
+    // 侧边栏切换功能------------------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function () {
+          sidebar.classList.toggle('active');
+          sidebarToggle.classList.toggle('active');
+        });
+      }
+
+      // 响应式处理
+      function handleResize() {
+        if (window.innerWidth > 992) {
+          sidebar.classList.remove('active');
+          sidebarToggle.classList.remove('active');
         }
-        
-        // 响应式处理
-        function handleResize() {
-          if (window.innerWidth > 992) {
-            sidebar.classList.remove('active');
-            sidebarToggle.classList.remove('active');
-          }
+      }
+
+      window.addEventListener('resize', handleResize);
+      handleResize();
+    });
+
+    // 初始化markdown-it
+    const md = window.markdownit({
+      html: true,
+      linkify: true,
+      typographer: true,
+      breaks: true,
+      highlight: function (str, lang) {
+        return '<pre><code class="language-' + lang + '">' + str + '</code></pre>';
+      }
+    });
+
+    // 加载Markdown文件
+    async function loadMarkdown(filePath) {
+      const content = document.getElementById('content');
+      content.innerHTML = '<div class="loading">正在加载文档...</div>';
+
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+          throw new Error('文件不存在或无法访问');
         }
-        
-        window.addEventListener('resize', handleResize);
-        handleResize();
-      });
-      
-      // 初始化markdown-it
-      const md = window.markdownit({
-        html: true,
-        linkify: true,
-        typographer: true,
-        breaks: true,
-        highlight: function (str, lang) {
-          return '<pre><code class="language-' + lang + '">' + str + '</code></pre>';
-        }
-      });
-      
-      // 加载Markdown文件
-      async function loadMarkdown(filePath) {
-        const content = document.getElementById('content');
-        content.innerHTML = '<div class="loading">正在加载文档...</div>';
-        
+
+        const markdownText = await response.text();
+        const html = md.render(markdownText);
+        content.innerHTML = html;
+
+        // 更新页面标题
+        const title = filePath.split('/').pop().replace('.md', '');
+        document.title = title + ' - mo技术博客';
+
+      } catch (error) {
+        content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
+      }
+    }
+
+    // 设置PDF.js的worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // PDF阅读相关变量
+    let pdfDoc = null;
+    const scale = 1.2;
+    let renderedPages = new Set();
+
+    // 加载PDF文件
+    async function loadPDF(filePath) {
+      const content = document.getElementById('content');
+      content.innerHTML = '<div class="pdf-loading">正在加载PDF...</div>';
+
+      try {
+
+
+        // 加载PDF文档
+        const loadingTask = pdfjsLib.getDocument(filePath);
+        pdfDoc = await loadingTask.promise;
+
+        // 重置渲染页面记录
+        renderedPages.clear();
+
+        // 创建PDF查看器界面
+        content.innerHTML = '<div class="pdf-container" id="pdf-container"></div>';
+
+
+
+        // 渲染所有页面
+        await renderAllPages();
+
+        // 更新页面标题
+        const title = filePath.split('/').pop().replace('.pdf', '');
+        document.title = title + ' - mo技术博客';
+
+      } catch (error) {
+        content.innerHTML = '<div class="pdf-loading"><h2>PDF加载失败</h2><p>' + error.message + '</p></div>';
+      }
+    }
+
+    // 渲染所有PDF页面
+    async function renderAllPages() {
+      const container = document.getElementById('pdf-container');
+      container.innerHTML = '';
+
+      for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
         try {
-          const response = await fetch(filePath);
-          if (!response.ok) {
-            throw new Error('文件不存在或无法访问');
-          }
-          
-          const markdownText = await response.text();
-          const html = md.render(markdownText);
-          content.innerHTML = html;
-          
-          // 更新页面标题
-          const title = filePath.split('/').pop().replace('.md', '');
-          document.title = title + ' - mo技术博客';
-          
+          const page = await pdfDoc.getPage(pageNum);
+          const viewport = page.getViewport({ scale: scale });
+
+          // 创建页面容器
+          const pageDiv = document.createElement('div');
+          pageDiv.className = 'pdf-page';
+          pageDiv.setAttribute('data-page', pageNum);
+
+          // 创建canvas
+          const canvas = document.createElement('canvas');
+          canvas.className = 'pdf-canvas';
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const ctx = canvas.getContext('2d');
+
+          // 渲染页面
+          const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+          };
+
+          await page.render(renderContext).promise;
+
+          pageDiv.appendChild(canvas);
+          container.appendChild(pageDiv);
+          renderedPages.add(pageNum);
+
         } catch (error) {
-          content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
+          console.error(`渲染第${pageNum}页时出错:`, error);
         }
       }
-      
-      // 设置PDF.js的worker
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      
-      // PDF阅读相关变量
-      let pdfDoc = null;
-      const scale = 1.2;
-      let renderedPages = new Set();
-      
-      // 加载PDF文件
-      async function loadPDF(filePath) {
-        const content = document.getElementById('content');
-        content.innerHTML = '<div class="pdf-loading">正在加载PDF...</div>';
-        
-        try {
+    }
 
-          
-          // 加载PDF文档
-          const loadingTask = pdfjsLib.getDocument(filePath);
-          pdfDoc = await loadingTask.promise;
-          
-          // 重置渲染页面记录
-          renderedPages.clear();
-          
-          // 创建PDF查看器界面
-          content.innerHTML = '<div class="pdf-container" id="pdf-container"></div>';
-          
 
-          
-          // 渲染所有页面
-          await renderAllPages();
-          
-          // 更新页面标题
-          const title = filePath.split('/').pop().replace('.pdf', '');
-          document.title = title + ' - mo技术博客';
-          
-        } catch (error) {
-          content.innerHTML = '<div class="pdf-loading"><h2>PDF加载失败</h2><p>' + error.message + '</p></div>';
-        }
-      }
-      
-      // 渲染所有PDF页面
-      async function renderAllPages() {
-        const container = document.getElementById('pdf-container');
-        container.innerHTML = '';
-        
-        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-          try {
-            const page = await pdfDoc.getPage(pageNum);
-            const viewport = page.getViewport({scale: scale});
-            
-            // 创建页面容器
-            const pageDiv = document.createElement('div');
-            pageDiv.className = 'pdf-page';
-            pageDiv.setAttribute('data-page', pageNum);
-            
-            // 创建canvas
-            const canvas = document.createElement('canvas');
-            canvas.className = 'pdf-canvas';
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            
-            const ctx = canvas.getContext('2d');
-            
-            // 渲染页面
-            const renderContext = {
-              canvasContext: ctx,
-              viewport: viewport
-            };
-            
-            await page.render(renderContext).promise;
-            
-            pageDiv.appendChild(canvas);
-            container.appendChild(pageDiv);
-            renderedPages.add(pageNum);
-            
-          } catch (error) {
-            console.error(`渲染第${pageNum}页时出错:`, error);
-          }
-        }
-      }
-      
 
-      
-      // 页面加载时显示欢迎信息
-      document.addEventListener('DOMContentLoaded', function() {
-        // 可以在这里设置默认加载的文档
-        // loadMarkdown('README.md');
-      });
-    </script>
-  </body>
+    // 页面加载时显示欢迎信息
+    document.addEventListener('DOMContentLoaded', function () {
+      // 可以在这里设置默认加载的文档
+      // loadMarkdown('README.md');
+    });
+  </script>
+</body>
+
 </html>
