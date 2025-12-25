@@ -1,0 +1,143 @@
+/* 自定义光标 - 动态效果恢复版 */
+
+/* 隐藏系统光标 */
+* { cursor: none !important; }
+
+/* 光标主体 */
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #667eea;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  animation: cursorPulse 2s ease-in-out infinite;
+}
+
+.cursor-core {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: coreGlow 1.5s ease-in-out infinite alternate;
+}
+
+/* 轨迹效果 */
+.cursor-trail {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  animation: trailFade 0.8s forwards;
+}
+
+/* 发光效果 */
+.cursor-glow {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  filter: blur(8px);
+  animation: glowFade 1s forwards;
+}
+
+/* 粒子效果 */
+.cursor-particle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9997;
+  animation: particleFly 1s forwards;
+}
+
+/* 点击效果 */
+.cursor-click {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #ff9800;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10001;
+  transform: translate(-50%, -50%);
+  animation: clickRipple 0.6s forwards;
+}
+
+/* 动画定义 */
+@keyframes cursorPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+}
+
+@keyframes coreGlow {
+  0% { 
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.8);
+  }
+  100% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 1);
+  }
+}
+
+@keyframes trailFade {
+  0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+
+@keyframes glowFade {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+@keyframes particleFly {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+@keyframes clickRipple {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+/* 链接悬停效果 */
+a:hover ~ .custom-cursor,
+button:hover ~ .custom-cursor,
+[onclick]:hover ~ .custom-cursor {
+  transform: translate(-50%, -50%) scale(1.5);
+  border-color: #ff9800;
+  animation: none;
+}
+
+a:hover ~ .custom-cursor .cursor-core,
+button:hover ~ .custom-cursor .cursor-core,
+[onclick]:hover ~ .custom-cursor .cursor-core {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  animation: none;
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+/* 移动设备隐藏 */
+@media (max-width: 768px) {
+  .custom-cursor, .cursor-trail, .cursor-glow, .cursor-particle, .cursor-click {
+    display: none;
+  }
+  * { cursor: auto !important; }
+}

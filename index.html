@@ -8,99 +8,11 @@
   <title>mo技术博客</title>
 
   <link rel="stylesheet" href="assets/css/sidebar.css">
+  <link rel="stylesheet" href="assets/css/custom-cursor.css">
   <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
-  <style>
-    /* 补充sidebar.css中没有的样式 */
-    .content h1 {
-      font-size: 2em;
-      margin-bottom: 0.5em;
-    }
 
-    .content h2 {
-      font-size: 1.5em;
-      margin-top: 1.5em;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 0.3em;
-    }
-
-    .content h3 {
-      font-size: 1.3em;
-      margin-top: 1.2em;
-    }
-
-    .content h4 {
-      font-size: 1.1em;
-      margin-top: 1em;
-    }
-
-    .content h5 {
-      font-size: 1em;
-      margin-top: 0.8em;
-    }
-
-    .content ul,
-    .content ol {
-      margin: 1em 0;
-      padding-left: 2em;
-    }
-
-    .content li {
-      margin: 0.5em 0;
-    }
-
-    .content pre code {
-      background-color: transparent;
-      color: inherit;
-      padding: 0;
-    }
-
-    .content img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 50px;
-      color: #666;
-    }
-
-    .pdf-container {
-      width: 100%;
-      min-height: 100vh;
-      background: #f5f5f5;
-      padding: 20px 0;
-      overflow-y: auto;
-    }
-
-    .pdf-page {
-      margin: 0 auto 20px auto;
-      background: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-      padding: 10px;
-      max-width: 900px;
-    }
-
-    .pdf-canvas {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .pdf-loading {
-      text-align: center;
-      padding: 50px;
-      color: #666;
-      background: white;
-      margin: 20px auto;
-      max-width: 900px;
-      border-radius: 4px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-  </style>
 </head>
 
 <body>
@@ -109,7 +21,7 @@
     <div class="sidebar-inner">
       <div class="sidebar-post-container">
         <div class="sidebar-post-author">
-          <img src="./杂/头像.png" class="touxiang" height="150px">
+          <img src="./杂/头像.png" class="touxiang" height="150px" style="line-height: 20px;">
           <p class="sidebar-post-author-name">mo技术博客</p>
         </div>
       </div>
@@ -174,8 +86,12 @@
                   <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">SQL注入的学习</a>
                 </div>
                 <div class="toc-level-5">
-                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">SQL盲注</a>
+                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">SQL盲注时间注入</a>
                 </div>
+                <div class="toc-level-5">
+                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x4OrderBY.md')">SQL盲注之报错注入</a>
+                </div>
+
                 <div class="toc-level-4">
                   <a href="#" onclick="loadMarkdown('')">SSTI注入</a>
                 </div>
@@ -310,10 +226,10 @@
     <div class="main-inner">
       <div class="content-wrap">
         <div class="content" id="content">
-          <div class="loading">
-            <h1>🐻欢迎来到mo博客🐻</h1>
-            <p>🐻请从左侧目录阅读🐻</p>
-          </div>
+            <div class="loading">
+              <h1>🐻欢迎来到mo博客🐻</h1>
+              <p style="height: 29px; padding: 0px; width: 591.5px; font-size: 30px; line-height: 29px; color: #666666; text-align: center; font-family: 'Noto Sans SC'; font-weight: 300;">🐻请从左侧目录阅读🐻</p>
+            </div>
         </div>
       </div>
     </div>
@@ -473,6 +389,107 @@
     }
 
 
+
+
+
+    // 自定义光标效果 - 动态效果恢复
+    !function() {
+      if (window.innerWidth <= 768) return;
+      
+      const cursor = document.createElement('div');
+      cursor.className = 'custom-cursor';
+      cursor.innerHTML = '<div class="cursor-core"></div>';
+      document.body.appendChild(cursor);
+      
+      let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+      let isMoving = false, moveTimer;
+      let lastTrailTime = 0, lastGlowTime = 0;
+      
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        isMoving = true;
+        
+        clearTimeout(moveTimer);
+        moveTimer = setTimeout(() => isMoving = false, 100);
+      });
+      
+      document.addEventListener('click', e => {
+        const click = document.createElement('div');
+        click.className = 'cursor-click';
+        click.style.left = e.clientX + 'px';
+        click.style.top = e.clientY + 'px';
+        document.body.appendChild(click);
+        
+        for (let i = 0; i < 8; i++) {
+          setTimeout(() => createParticle(e.clientX, e.clientY, i), i * 20);
+        }
+        
+        setTimeout(() => click.remove(), 600);
+      });
+      
+      function createParticle(x, y, index) {
+        const particle = document.createElement('div');
+        particle.className = 'cursor-particle';
+        
+        const angle = (index / 8) * Math.PI * 2;
+        const distance = 50 + Math.random() * 50;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+      }
+      
+      function createTrail(x, y) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        document.body.appendChild(trail);
+        setTimeout(() => trail.remove(), 800);
+      }
+      
+      function createGlow(x, y) {
+        const glow = document.createElement('div');
+        glow.className = 'cursor-glow';
+        glow.style.left = x + 'px';
+        glow.style.top = y + 'px';
+        document.body.appendChild(glow);
+        setTimeout(() => glow.remove(), 1000);
+      }
+      
+      function animate() {
+        const now = Date.now();
+        
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+        
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        
+        if (isMoving) {
+          if (now - lastTrailTime > 40) {
+            createTrail(mouseX, mouseY);
+            lastTrailTime = now;
+          }
+          
+          if (now - lastGlowTime > 150) {
+            createGlow(mouseX, mouseY);
+            lastGlowTime = now;
+          }
+        }
+        
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+    }();
 
     // 页面加载时显示欢迎信息
     document.addEventListener('DOMContentLoaded', function () {
