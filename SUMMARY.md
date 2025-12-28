@@ -1,4 +1,4 @@
-
+# 学习的第一性原理是自学
 * [介绍](README.md)
 
 * [markdown基础语法练习](markdown的练习.md)
