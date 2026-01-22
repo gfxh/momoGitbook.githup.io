@@ -290,6 +290,29 @@
       }
     });
 
+    // 修复图片路径
+    md.renderer.rules.image = function (tokens, idx, options, env, self) {
+      const token = tokens[idx];
+      const srcIndex = token.attrIndex('src');
+      
+      if (srcIndex >= 0) {
+        const src = token.attrs[srcIndex][1];
+        
+        // 处理相对路径图片
+        if (src && !src.startsWith('http') && !src.startsWith('data:')) {
+          const currentPath = window.location.pathname;
+          const lastSlash = currentPath.lastIndexOf('/');
+          const basePath = lastSlash !== -1 ? currentPath.substring(0, lastSlash) : '';
+          
+          // 计算图片的完整路径
+          const fullSrc = basePath + '/' + src.replace(/^\.\//, '');
+          token.attrs[srcIndex][1] = fullSrc;
+        }
+      }
+      
+      return self.renderToken(tokens, idx, options);
+    };
+
     // 加载Markdown文件
     async function loadMarkdown(filePath) {
       const content = document.getElementById('content');
