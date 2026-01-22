@@ -290,26 +290,55 @@
       }
     });
 
-    // 修复图片路径
+    // 修复图片路径为 GitHub raw 链接
     md.renderer.rules.image = function (tokens, idx, options, env, self) {
       const token = tokens[idx];
       const srcIndex = token.attrIndex('src');
-      
+
       if (srcIndex >= 0) {
         const src = token.attrs[srcIndex][1];
-        
-        // 处理相对路径图片
+
+        // 处理相对路径图片，转换为 GitHub raw 链接
         if (src && !src.startsWith('http') && !src.startsWith('data:')) {
+          // GitHub raw 链接基础地址
+          const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/refs/heads/main/';
+
+          // 计算当前 Markdown 文件所在目录的相对路径
           const currentPath = window.location.pathname;
-          const lastSlash = currentPath.lastIndexOf('/');
-          const basePath = lastSlash !== -1 ? currentPath.substring(0, lastSlash) : '';
-          
-          // 计算图片的完整路径
-          const fullSrc = basePath + '/' + src.replace(/^\.\//, '');
+
+          // 移除末尾的斜杠和文件名
+          let basePath = currentPath;
+          if (basePath.endsWith('/')) {
+            basePath = basePath.slice(0, -1);
+          }
+
+          // 从路径中获取目录部分（例如从 /momoGitbook.githup.io/CTF/Web/信息收集/ 获取 /CTF/Web/信息收集/）
+          const match = basePath.match(/\/momoGitbook\.githup\.io\/(.*)/);
+          let directoryPath = '';
+          if (match && match[1]) {
+            directoryPath = match[1] + '/';
+          }
+
+          // 处理相对路径中的 ./ 和 ../
+          let relativePath = src.replace(/^\.\//, '');
+          if (relativePath.startsWith('../')) {
+            // 处理上级目录引用
+            const upLevels = (relativePath.match(/\.\.\//g) || []).length;
+            let pathParts = directoryPath.split('/').filter(p => p);
+
+            for (let i = 0; i < upLevels && pathParts.length > 0; i++) {
+              pathParts.pop();
+            }
+
+            directoryPath = pathParts.join('/') + (pathParts.length > 0 ? '/' : '');
+            relativePath = relativePath.replace(/^(\.\.\/)+/, '');
+          }
+
+          const fullSrc = rawBaseUrl + directoryPath + relativePath;
           token.attrs[srcIndex][1] = fullSrc;
         }
       }
-      
+
       return self.renderToken(tokens, idx, options);
     };
 
