@@ -61,52 +61,38 @@
               </div>
               <div class="toc-level-3 toc-header">
                 1.敏感信息泄露信息收集
-                <div class="toc-level-4">
-                  <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集.md')">x1:信息收集</a>
-                </div>
-                <div class="toc-level-5">
-                  <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集2.md')">x2:where_is_flag</a>
-                </div>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集.md')">x1:信息收集</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集2.md')">x2:where_is_flag</a>
               </div>
               <div class="toc-level-3 toc-header">
                 2.PHP
-
-                <div class="toc-level-4 toc-header">
-
-                  <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">x1:PHP基础学习</a>
-                </div>
-                <div class="toc-level-4 toc-header">
-                  <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">x2:PHP反序列化基础</a>
-                </div>
-                <div class="toc-level-4 toc-header">
-                  <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">x3:PHP代码审计</a>
-
-                </div>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">x1:PHP基础学习</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">x2:PHP反序列化基础</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">x3:PHP代码审计</a>
               </div>
 
 
               <div class="toc-level-3 toc-header">
                 3.注入类
-
-                <div class="toc-level-4">
-                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">x1:SQL注入基础</a>
-                </div>
-                <div class="toc-level-5">
-                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">x2:SQL盲注时间注入</a>
-                </div>
-                <div class="toc-level-5">
-                  <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x4OrderBY.md')">x3:SQL盲注之报错注入</a>
-                </div>
-
-                <div class="toc-level-4">
-                  <a href="#" onclick="loadMarkdown('')">x1:SSTI注入</a>
-                </div>
-                <div class="toc-level-4">
-                  <a href="#" onclick="loadMarkdown('')">x1:XXE注入</a>
-                </div>
-                <div class="toc-level-4">
-                  <a href="#" onclick="loadMarkdown('')">x1:SSRF注入</a>
-                </div>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">x1:SQL注入基础</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">x2:SQL盲注时间注入</a>
+              </div>
+              <div class="toc-level-4">
+                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x4OrderBY.md')">x3:SQL盲注之报错注入</a>
               </div>
               <div class="toc-level-3 toc-header">
                 4.RCE
@@ -128,9 +114,6 @@
               </div>
               <div class="toc-level-3 toc-header">
                 10.XSS攻击
-              </div>
-              <div class="toc-level-3 toc-header">
-                11.文件包含
               </div>
             </div>
 
@@ -184,7 +167,7 @@
               </div>
               <div class="toc-level-2">
                 <a href="#" onclick="loadPDF('PythonBook/极客项目编程.pdf')">Python极客项目编程第2版(PDF)</a>
-              </div>6
+              </div>
             </div>
 
             <div class="toc-level-1 toc-header">
@@ -369,7 +352,6 @@
     // PDF阅读相关变量
     let pdfDoc = null;
     const scale = 1.2;
-    let renderedPages = new Set();
 
     // 加载PDF文件
     async function loadPDF(filePath) {
@@ -377,19 +359,12 @@
       content.innerHTML = '<div class="pdf-loading">正在加载PDF...</div>';
 
       try {
-
-
         // 加载PDF文档
         const loadingTask = pdfjsLib.getDocument(filePath);
         pdfDoc = await loadingTask.promise;
 
-        // 重置渲染页面记录
-        renderedPages.clear();
-
         // 创建PDF查看器界面
         content.innerHTML = '<div class="pdf-container" id="pdf-container"></div>';
-
-
 
         // 渲染所有页面
         await renderAllPages();
@@ -427,16 +402,10 @@
           const ctx = canvas.getContext('2d');
 
           // 渲染页面
-          const renderContext = {
-            canvasContext: ctx,
-            viewport: viewport
-          };
-
-          await page.render(renderContext).promise;
+          await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
           pageDiv.appendChild(canvas);
           container.appendChild(pageDiv);
-          renderedPages.add(pageNum);
 
         } catch (error) {
           console.error(`渲染第${pageNum}页时出错:`, error);
@@ -547,11 +516,7 @@
       animate();
     }();
 
-    // 页面加载时显示欢迎信息
-    document.addEventListener('DOMContentLoaded', function () {
-      // 可以在这里设置默认加载的文档
-      // loadMarkdown('README.md');
-    });
+
   </script>
 </body>
 
