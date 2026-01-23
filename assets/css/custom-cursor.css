@@ -1,6 +1,7 @@
 /* 自定义光标 - 动态效果恢复版 */
 
 /* 隐藏系统光标 */
+body { cursor: none !important; }
 * { cursor: none !important; }
 
 /* 光标主体 */
@@ -11,9 +12,11 @@
   border: 2px solid #667eea;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 10000;
+  z-index: 999999;
   transform: translate(-50%, -50%);
   animation: cursorPulse 2s ease-in-out infinite;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .cursor-core {
@@ -36,9 +39,11 @@
   border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 999998;
   transform: translate(-50%, -50%);
   animation: trailFade 0.8s forwards;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 发光效果 */
@@ -49,10 +54,12 @@
   background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 999997;
   transform: translate(-50%, -50%);
   filter: blur(8px);
   animation: glowFade 1s forwards;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 粒子效果 */
@@ -63,8 +70,10 @@
   background: linear-gradient(135deg, #667eea, #764ba2);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9997;
+  z-index: 999996;
   animation: particleFly 1s forwards;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 点击效果 */
@@ -75,9 +84,11 @@
   border: 3px solid #ff9800;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 10001;
+  z-index: 999995;
   transform: translate(-50%, -50%);
   animation: clickRipple 0.6s forwards;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 动画定义 */
