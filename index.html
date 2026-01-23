@@ -238,7 +238,7 @@
 
 
   <script>
-    // 侧边栏切换功能------------------------------------------------------------------------------
+    // 侧边栏切换功能
     document.addEventListener('DOMContentLoaded', function () {
       const sidebar = document.querySelector('.sidebar');
       const sidebarToggle = document.getElementById('sidebarToggle');
@@ -249,20 +249,9 @@
           sidebarToggle.classList.toggle('active');
         });
       }
-
-      // 响应式处理
-      function handleResize() {
-        if (window.innerWidth > 992) {
-          sidebar.classList.remove('active');
-          sidebarToggle.classList.remove('active');
-        }
-      }
-
-      window.addEventListener('resize', handleResize);
-      handleResize();
     });
 
-    // 初始化markdown-it
+    // 初始化markdown-it----------------------------------------------------------------
     const md = window.markdownit({
       html: true,
       linkify: true,

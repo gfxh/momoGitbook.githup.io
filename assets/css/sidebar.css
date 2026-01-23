@@ -167,39 +167,64 @@
   transition: transform 0.3s ease;
 }
 
+/* 侧边栏收放状态 */
+.sidebar.active {
+  transform: translateX(-100%);
+}
+
+.main-container {
+  margin-left: 300px;
+}
+
+.sidebar.active ~ .main-container {
+  margin-left: 0;
+}
+
+.sidebar-toggle {
+  left: 300px;
+  border-radius: 0 4px 4px 0;
+}
+
+.sidebar.active ~ .sidebar-toggle {
+  left: 0;
+}
+
+.sidebar-toggle.active .sidebar-toggle-line:first-child {
+  transform: rotate(45deg) translate(3px, 3px);
+}
+
+.sidebar-toggle.active .sidebar-toggle-line:nth-child(2) {
+  opacity: 0;
+}
+
+.sidebar-toggle.active .sidebar-toggle-line:last-child {
+  transform: rotate(-45deg) translate(3px, -3px);
+}
+
 /* 响应式设计 */
 @media screen and (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
   }
-  
+
   .main-container {
     margin-left: 0;
   }
-  
+
   .sidebar-toggle {
     left: 0;
-    border-radius: 0 4px 4px 0;
   }
-  
+
   .sidebar.active {
     transform: translateX(0);
   }
-  
-  .sidebar-toggle.active {
+
+  .sidebar.active ~ .main-container {
+    margin-left: 0;
+  }
+
+  .sidebar.active ~ .sidebar-toggle {
     left: 300px;
-  }
-  
-  .sidebar-toggle.active .sidebar-toggle-line:first-child {
-    transform: rotate(45deg) translate(3px, 3px);
-  }
-  
-  .sidebar-toggle.active .sidebar-toggle-line:nth-child(2) {
-    opacity: 0;
-  }
-  
-  .sidebar-toggle.active .sidebar-toggle-line:last-child {
-    transform: rotate(-45deg) translate(3px, -3px);
   }
 }
 
