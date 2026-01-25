@@ -12,9 +12,10 @@
 
 /* 页面整体 */
 body {
-  background: linear-gradient(to bottom, #000000 0%, #0a0a1a 40%, #1a1a3a 100%);
+  background: transparent;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 /* 侧边栏 */
@@ -24,11 +25,34 @@ body {
   top: 0;
   bottom: 0;
   width: 300px;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  z-index: 100;
+  z-index: 10;
   transform: translateX(0);
+  padding: 20px;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 头像 */
+.sidebar .touxiang {
+  display: block;
+  margin: 0 auto 20px auto;
+  border-radius: 50%;
+  max-width: 150px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-post-author-name {
+  font-weight: bold;
+  margin: 10px 0 30px 0;
+  color: white;
+  font-size: 18px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 /* 侧边栏滚动条 */
@@ -74,8 +98,13 @@ body {
   overflow-y: auto;
 }
 
-.toc {
-  font-size: 14px;
+/* 主内容区域 */
+.main-container {
+  margin-left: 300px;
+  min-height: 100vh;
+  background-color: transparent;
+  padding: 40px 30px;
+  box-sizing: border-box;
 }
 
 .toc-header {
@@ -109,21 +138,10 @@ body {
   color: white;
 }
 
-/* 主内容区域 */
-.main-container {
-  margin-left: 300px;
-  min-height: 100vh;
-  background-color: transparent;
-}
-
-.main-inner {
-  padding: 40px 30px;
-}
-
 .content-wrap {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 16px;
@@ -131,18 +149,18 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
-  z-index: 10;
+  z-index: 30;
 }
 
 /* Markdown 内容样式 */
 .content {
-  color: #2d3748;
+  color: #0f0;
   line-height: 1.8;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
-  color: #2d3748;
+  color: #0f0;
   margin-top: 2em;
   margin-bottom: 1em;
   font-weight: 700;
@@ -152,10 +170,7 @@ body {
 
 .content h1 {
   font-size: 2.2em;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #0f0;
   margin-top: 0.5em;
 }
 
@@ -166,7 +181,7 @@ body {
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f0;
   border-radius: 2px;
 }
 
@@ -182,7 +197,7 @@ body {
   left: 0;
   width: 40px;
   height: 3px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f0;
   border-radius: 2px;
 }
 
@@ -192,8 +207,8 @@ body {
 .content p { margin-bottom: 1.2em; }
 
 .content code {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #1a1a2e;
+  color: #e94560;
   padding: 0.2em 0.6em;
   border-radius: 4px;
   font-weight: 500;
@@ -207,7 +222,6 @@ body {
   overflow-x: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
 .content pre code {
   background: transparent;
   color: #e94560;
@@ -215,13 +229,12 @@ body {
 }
 
 .content blockquote {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-left: 4px solid #667eea;
+  background: rgba(0, 20, 0, 0.15);
+  border-left: 4px solid #0f0;
   padding: 1em 1.5em;
   margin: 1.5em 0;
-  color: #4a5568;
+  color: #0f0;
   border-radius: 0 12px 12px 0;
-  backdrop-filter: blur(5px);
 }
 
 .content table {
@@ -234,34 +247,35 @@ body {
 }
 
 .content th, .content td {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid #0f0;
   padding: 12px 16px;
   text-align: left;
+  color: #0f0;
 }
 
 .content th {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: rgba(0, 20, 0, 0.15);
+  color: #0f0;
   font-weight: 600;
 }
 
 .content tr:nth-child(even) {
-  background-color: rgba(102, 126, 234, 0.03);
+  background-color: rgba(0, 20, 0, 0.15);
 }
 
 .content tr:hover {
-  background-color: rgba(102, 126, 234, 0.08);
+  background-color: rgba(0, 20, 0, 0.15);
 }
 
 .content a {
-  color: #667eea;
+  color: #0f0;
   text-decoration: none;
   font-weight: 500;
 }
 
 .content a:hover {
   text-decoration: none;
-  color: #764ba2;
+  color: #0f0;
 }
 
 .content img {
@@ -293,7 +307,7 @@ body {
   border: none;
   border-radius: 0 12px 12px 0;
   cursor: pointer;
-  z-index: 101;
+  z-index: 11;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -391,7 +405,7 @@ body {
 
 .pdf-page {
   margin: 0 auto 30px auto;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -414,7 +428,7 @@ body {
   margin: 20px auto;
   max-width: 900px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -432,7 +446,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -999;
+  z-index: 3;
   overflow: hidden;
   background-color: #000;
 }
@@ -444,17 +458,12 @@ body {
   opacity: 0.9;
 }
 
-/* 覆盖基础布局为黑客帝国主题 */
-body {
-  background-color: #000 !important;
-  background-image: none !important;
-}
-
 /* 侧边栏主题 */
 .sidebar {
-  background: linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 100%) !important;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(15, 15, 15, 0) 100%) !important;
   box-shadow: 2px 0 15px rgba(0, 255, 0, 0.2) !important;
   border-right: 1px solid #0f0 !important;
+  
 }
 
 /* 侧边栏文字 */
@@ -487,80 +496,18 @@ body {
 
 /* 主内容区域 */
 .main-container {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.15) !important;
   position: relative;
-  z-index: 5;
+  z-index: 20;
 }
 
 .content-wrap {
-  background-color: rgba(0, 0, 0, 0.85) !important;
+  background-color: rgba(0, 0, 0, 0.15) !important;
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #0f0;
   box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-}
-
-/* 文本颜色 */
-.content {
-  color: #0f0 !important;
-}
-
-.content h1,
-.content h2,
-.content h3,
-.content h4,
-.content h5,
-.content h6 {
-  color: #0f0 !important;
-  text-shadow: 0 0 5px #0f0 !important;
-}
-
-.content p,
-.content li,
-.content div,
-.content span,
-.content td,
-.content th {
-  color: #0f0 !important;
-}
-
-.content a {
-  color: #0f0 !important;
-  text-shadow: 0 0 3px #0f0 !important;
-}
-
-.content a:hover {
-  color: #0f0 !important;
-  text-shadow: 0 0 8px #0f0 !important;
-}
-
-/* 代码块和表格样式 */
-.content pre,
-.content code {
-  background-color: rgba(0, 0, 0, 0.8) !important;
-  color: #0f0 !important;
-  border: 1px solid #0f0 !important;
-  border-radius: 4px;
-  padding: 10px;
-  font-family: monospace;
-}
-
-.content table {
-  border-collapse: collapse;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.content table,
-.content th,
-.content td {
-  border: 1px solid #0f0 !important;
-}
-
-.content th,
-.content td {
-  padding: 8px 12px;
-  text-align: left;
+  position: relative;
 }
 
 /* ========================================
@@ -659,43 +606,7 @@ body { cursor: none !important; }
 }
 
 /* ========================================
- * 第四部分：Markdown 美化样式
- * ======================================== */
-
-/* 列表美化 */
-.content ul li::marker {
-  color: #667eea;
-}
-
-.content ol li::marker {
-  color: #667eea;
-  font-weight: bold;
-}
-
-/* 强调文字 */
-.content strong {
-  color: #667eea;
-  font-weight: 600;
-}
-
-/* 分隔线 */
-.content hr {
-  border: none;
-  height: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  margin: 2em 0;
-  border-radius: 2px;
-  opacity: 0.3;
-}
-
-/* 选中文字样式 */
-.content ::selection {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
-  color: #2d3748;
-}
-
-/* ========================================
- * 第五部分：光标动画定义
+ * 第四部分：光标动画定义
  * ======================================== */
 
 @keyframes cursorPulse {
