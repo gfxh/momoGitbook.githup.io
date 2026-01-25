@@ -22,10 +22,10 @@
 
   // 配置参数
   const config = {
-    characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,.<>?',
-    fontSize: 14,
-    animationSpeed: 35,
-    resetProbability: 0.975
+    characters: '01',
+    fontSize: 16,
+    animationSpeed: 30,
+    resetProbability: 0.985
   };
 
   let drops = [];

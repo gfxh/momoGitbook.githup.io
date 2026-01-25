@@ -27,7 +27,7 @@ body {
   background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 100;
   transform: translateX(0);
 }
 
@@ -293,7 +293,7 @@ body {
   border: none;
   border-radius: 0 12px 12px 0;
   cursor: pointer;
-  z-index: 1001;
+  z-index: 101;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -432,7 +432,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -999;
   overflow: hidden;
   background-color: #000;
 }
@@ -441,7 +441,7 @@ body {
   display: block;
   width: 100%;
   height: 100%;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 /* 覆盖基础布局为黑客帝国主题 */
@@ -489,15 +489,15 @@ body {
 .main-container {
   background-color: rgba(0, 0, 0, 0.7) !important;
   position: relative;
-  z-index: 1;
+  z-index: 5;
 }
 
 .content-wrap {
-  background-color: rgba(0, 0, 0, 0.8) !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #0f0;
-  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
 }
 
 /* 文本颜色 */
@@ -662,36 +662,6 @@ body { cursor: none !important; }
  * 第四部分：Markdown 美化样式
  * ======================================== */
 
-/* 标题装饰 */
-.content h1::before,
-.content h2::before,
-.content h3::before {
-  content: '';
-  position: absolute;
-  left: -20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 70%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 2px;
-}
-
-.content h1 {
-  position: relative;
-  padding-left: 25px;
-}
-
-.content h2 {
-  position: relative;
-  padding-left: 20px;
-}
-
-.content h3 {
-  position: relative;
-  padding-left: 20px;
-}
-
 /* 列表美化 */
 .content ul li::marker {
   color: #667eea;
@@ -716,14 +686,6 @@ body { cursor: none !important; }
   margin: 2em 0;
   border-radius: 2px;
   opacity: 0.3;
-}
-
-/* 列表项悬停效果 */
-.content li:hover {
-  background: rgba(102, 126, 234, 0.05);
-  padding: 2px 8px;
-  margin-left: -8px;
-  border-radius: 4px;
 }
 
 /* 选中文字样式 */
