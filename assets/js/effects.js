@@ -1,5 +1,85 @@
-// 自定义光标效果
-document.addEventListener('DOMContentLoaded', function () {
+/**
+ * ========================================
+ * 背景特效模块
+ * ========================================
+ * 包含：黑客帝国数字雨背景、自定义光标效果
+ * ========================================
+ */
+
+// ========================================
+// 第一部分：黑客帝国数字雨背景
+// ========================================
+(function initMatrixBackground() {
+  'use strict';
+
+  const canvasElement = document.getElementById('matrix-canvas');
+  if (!canvasElement) {
+    console.error('Matrix canvas element not found');
+    return;
+  }
+
+  const ctx = canvasElement.getContext('2d');
+
+  // 配置参数
+  const config = {
+    characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,.<>?',
+    fontSize: 14,
+    animationSpeed: 35,
+    resetProbability: 0.975
+  };
+
+  let drops = [];
+  let columns = 0;
+
+  // 设置画布大小
+  function resizeCanvas() {
+    canvasElement.width = window.innerWidth;
+    canvasElement.height = window.innerHeight;
+
+    const newColumns = Math.floor(canvasElement.width / config.fontSize);
+
+    if (newColumns !== columns) {
+      columns = newColumns;
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100;
+      }
+    }
+  }
+
+  // 绘制数字雨
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+    ctx.fillStyle = '#0f0';
+    ctx.font = config.fontSize + 'px monospace';
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = config.characters.charAt(Math.floor(Math.random() * config.characters.length));
+      ctx.fillText(text, i * config.fontSize, drops[i] * config.fontSize);
+
+      if (drops[i] * config.fontSize > canvasElement.height && Math.random() > config.resetProbability) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  // 初始化
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  setInterval(drawMatrix, config.animationSpeed);
+
+})();
+
+// ========================================
+// 第二部分：自定义光标效果
+// ========================================
+(function initCustomCursor() {
+  'use strict';
+
+  // 移动端不启用自定义光标
   if (window.innerWidth <= 768) return;
 
   const cursor = document.createElement('div');
@@ -12,15 +92,16 @@ document.addEventListener('DOMContentLoaded', function () {
   let isMoving = false, moveTimer;
   let lastTrailTime = 0, lastGlowTime = 0;
 
+  // 鼠标移动事件
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
     isMoving = true;
-
     clearTimeout(moveTimer);
     moveTimer = setTimeout(() => isMoving = false, 100);
   });
 
+  // 鼠标点击事件
   document.addEventListener('click', e => {
     const click = document.createElement('div');
     click.className = 'cursor-click';
@@ -35,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => click.remove(), 600);
   });
 
+  // 创建粒子效果
   function createParticle(x, y, index) {
     const particle = document.createElement('div');
     particle.className = 'cursor-particle';
@@ -53,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => particle.remove(), 1000);
   }
 
+  // 创建拖尾效果
   function createTrail(x, y) {
     const trail = document.createElement('div');
     trail.className = 'cursor-trail';
@@ -62,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => trail.remove(), 800);
   }
 
+  // 创建光晕效果
   function createGlow(x, y) {
     const glow = document.createElement('div');
     glow.className = 'cursor-glow';
@@ -71,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => glow.remove(), 1000);
   }
 
+  // 动画循环
   function animate() {
     const now = Date.now();
 
@@ -96,4 +181,4 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   animate();
-});
+})();

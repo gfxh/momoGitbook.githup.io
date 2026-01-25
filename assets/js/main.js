@@ -1,3 +1,15 @@
+/**
+ * ========================================
+ * 主业务逻辑模块
+ * ========================================
+ * 包含：Markdown渲染、PDF阅读、侧边栏切换
+ * ========================================
+ */
+
+// ========================================
+// 第一部分：Markdown配置与渲染
+// ========================================
+
 // 初始化markdown-it
 const md = window.markdownit({
   html: true,
@@ -10,7 +22,7 @@ const md = window.markdownit({
 });
 
 // 修复图片路径为 GitHub raw 链接
-md.renderer.rules.image = function (tokens, idx, options, env, self) {
+md.renderer.rules.image = function (tokens, idx, options, _env, self) {
   const token = tokens[idx];
   const srcIndex = token.attrIndex('src');
 
@@ -19,14 +31,12 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
 
     // 处理相对路径图片，转换为 GitHub raw 链接
     if (src && !src.startsWith('http') && !src.startsWith('data:')) {
-      // GitHub raw 链接基础地址
       const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/refs/heads/main/';
+      let directoryPath = '';
 
       // 获取当前 Markdown 文件的目录路径
-      let directoryPath = '';
       if (window.currentMarkdownPath) {
         const pathParts = window.currentMarkdownPath.split('/');
-        // 移除文件名，保留目录
         pathParts.pop();
         directoryPath = pathParts.join('/') + '/';
       }
@@ -34,7 +44,6 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
       // 处理相对路径中的 ./ 和 ../
       let relativePath = src.replace(/^\.\//, '');
       if (relativePath.startsWith('../')) {
-        // 处理上级目录引用
         const upLevels = (relativePath.match(/\.\.\//g) || []).length;
         let pathParts = directoryPath.split('/').filter(p => p);
 
@@ -54,7 +63,10 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options);
 };
 
-// 加载Markdown文件
+/**
+ * 加载Markdown文件
+ * @param {string} filePath - Markdown文件路径
+ */
 async function loadMarkdown(filePath) {
   const content = document.getElementById('content');
   content.innerHTML = '<div class="loading">正在加载文档...</div>';
@@ -67,9 +79,10 @@ async function loadMarkdown(filePath) {
 
     const markdownText = await response.text();
 
-    // 在渲染前保存当前文件路径，用于图片路径解析
+    // 保存当前文件路径，用于图片路径解析
     window.currentMarkdownPath = filePath;
 
+    // 渲染Markdown
     const html = md.render(markdownText);
     content.innerHTML = html;
 
@@ -82,14 +95,21 @@ async function loadMarkdown(filePath) {
   }
 }
 
+// ========================================
+// 第二部分：PDF阅读器
+// ========================================
+
 // 设置PDF.js的worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 // PDF阅读相关变量
 let pdfDoc = null;
-const scale = 1.2;
+const PDF_SCALE = 1.2;
 
-// 加载PDF文件
+/**
+ * 加载PDF文件
+ * @param {string} filePath - PDF文件路径
+ */
 async function loadPDF(filePath) {
   const content = document.getElementById('content');
   content.innerHTML = '<div class="pdf-loading">正在加载PDF...</div>';
@@ -114,7 +134,9 @@ async function loadPDF(filePath) {
   }
 }
 
-// 渲染所有PDF页面
+/**
+ * 渲染所有PDF页面
+ */
 async function renderAllPages() {
   const container = document.getElementById('pdf-container');
   container.innerHTML = '';
@@ -122,7 +144,7 @@ async function renderAllPages() {
   for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
     try {
       const page = await pdfDoc.getPage(pageNum);
-      const viewport = page.getViewport({ scale: scale });
+      const viewport = page.getViewport({ scale: PDF_SCALE });
 
       // 创建页面容器
       const pageDiv = document.createElement('div');
@@ -149,15 +171,36 @@ async function renderAllPages() {
   }
 }
 
-// 侧边栏切换功能
-document.addEventListener('DOMContentLoaded', function () {
+// ========================================
+// 第三部分：侧边栏切换功能
+// ========================================
+
+/**
+ * 初始化侧边栏切换功能
+ */
+function initSidebarToggle() {
   const sidebar = document.querySelector('.sidebar');
   const sidebarToggle = document.getElementById('sidebarToggle');
 
-  if (sidebarToggle) {
-    sidebarToggle.addEventListener('click', function () {
-      sidebar.classList.toggle('active');
-      sidebarToggle.classList.toggle('active');
-    });
-  }
+  if (!sidebarToggle) return;
+
+  sidebarToggle.addEventListener('click', function () {
+    sidebar.classList.toggle('active');
+    sidebarToggle.classList.toggle('active');
+  });
+}
+
+// ========================================
+// 第四部分：页面初始化
+// ========================================
+
+/**
+ * 页面加载完成后初始化
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  // 初始化侧边栏
+  initSidebarToggle();
+
+  // 加载默认内容
+  loadMarkdown('README.md');
 });
