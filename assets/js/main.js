@@ -180,13 +180,18 @@ async function renderAllPages() {
  */
 function initSidebarToggle() {
   const sidebar = document.querySelector('.sidebar');
-  const sidebarToggle = document.getElementById('sidebarToggle');
-
-  if (!sidebarToggle) return;
-
-  sidebarToggle.addEventListener('click', function () {
+  const toggleBtn = document.getElementById('sidebarToggle');
+  
+  // 按钮点击切换侧边栏
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
+      sidebar.classList.toggle('active');
+    });
+  }
+  
+  // 双击侧边栏也可以切换
+  sidebar.addEventListener('dblclick', function () {
     sidebar.classList.toggle('active');
-    sidebarToggle.classList.toggle('active');
   });
 }
 

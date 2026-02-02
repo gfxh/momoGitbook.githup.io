@@ -296,38 +296,79 @@ body {
   line-height: 1.8;
 }
 
-/* 侧边栏切换按钮 */
+/* ========================================
+ * 侧边栏切换按钮
+ * ======================================== */
+
 .sidebar-toggle {
   position: fixed;
   left: 300px;
   top: 20px;
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 0 12px 12px 0;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #0f0;
+  border-radius: 8px;
   cursor: pointer;
-  z-index: 11;
+  z-index: 100;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  box-shadow: 4px 4px 12px rgba(102, 126, 234, 0.3);
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: #0f0;
+  position: relative;
+}
+
+.sidebar-toggle span::before,
+.sidebar-toggle span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background-color: #0f0;
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle span::before {
+  top: -7px;
+}
+
+.sidebar-toggle span::after {
+  top: 7px;
 }
 
 .sidebar-toggle:hover {
-  box-shadow: 4px 4px 16px rgba(102, 126, 234, 0.4);
+  background-color: rgba(0, 255, 0, 0.9);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
 }
 
-.sidebar-toggle-line {
-  width: 16px;
-  height: 2px;
-  background-color: white;
-  margin: 3px 0;
-  border-radius: 2px;
+/* 侧边栏激活状态 */
+.sidebar.active ~ .sidebar-toggle {
+  left: 0;
 }
 
-/* 侧边栏收放状态 */
+.sidebar.active ~ .sidebar-toggle span {
+  background-color: transparent;
+}
+
+.sidebar.active ~ .sidebar-toggle span::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.sidebar.active ~ .sidebar-toggle span::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* 侧边栏收放状态 - 双击侧边栏切换 */
 .sidebar.active {
   transform: translateX(-100%);
 }
@@ -336,46 +377,30 @@ body {
   margin-left: 0;
 }
 
-.sidebar.active ~ .sidebar-toggle {
-  left: 0;
-}
-
-.sidebar-toggle.active .sidebar-toggle-line:first-child {
-  transform: rotate(45deg) translate(3px, 3px);
-}
-
-.sidebar-toggle.active .sidebar-toggle-line:nth-child(2) {
-  opacity: 0;
-}
-
-.sidebar-toggle.active .sidebar-toggle-line:last-child {
-  transform: rotate(-45deg) translate(3px, -3px);
-}
-
 /* 响应式设计 */
 @media screen and (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
   }
 
-  .main-container {
-    margin-left: 0;
-  }
-
   .sidebar-toggle {
     left: 0;
+  }
+
+  .main-container {
+    margin-left: 0;
   }
 
   .sidebar.active {
     transform: translateX(0);
   }
 
-  .sidebar.active ~ .main-container {
-    margin-left: 0;
-  }
-
   .sidebar.active ~ .sidebar-toggle {
     left: 300px;
+  }
+
+  .sidebar.active ~ .main-container {
+    margin-left: 0;
   }
 }
 
@@ -481,30 +506,6 @@ body {
 .toc a:hover {
   color: #0f0 !important;
   text-shadow: 0 0 6px #0f0 !important;
-}
-
-/* 侧边栏切换按钮 */
-.sidebar-toggle {
-  position: fixed !important;
-  left: 300px !important;
-  top: 20px !important;
-  width: 44px !important;
-  height: 44px !important;
-  background-color: rgba(0, 0, 0, 0.8) !important;
-  border: 1px solid #0f0 !important;
-  border-left: none !important;
-  border-radius: 0 12px 12px 0 !important;
-  cursor: pointer !important;
-  z-index: 1001 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3) !important;
-}
-
-.sidebar-toggle-line {
-  background-color: #0f0 !important;
 }
 
 /* 主内容区域 */
