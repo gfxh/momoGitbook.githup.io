@@ -141,7 +141,7 @@ body {
 .content-wrap {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 16px;
@@ -229,7 +229,7 @@ body {
 }
 
 .content blockquote {
-  background: rgba(0, 20, 0, 0.15);
+  background: rgba(0, 20, 0, 0.02);
   border-left: 4px solid #0f0;
   padding: 1em 1.5em;
   margin: 1.5em 0;
@@ -254,17 +254,17 @@ body {
 }
 
 .content th {
-  background: rgba(0, 20, 0, 0.15);
+  background: rgba(0, 20, 0, 0.02);
   color: #0f0;
   font-weight: 600;
 }
 
 .content tr:nth-child(even) {
-  background-color: rgba(0, 20, 0, 0.15);
+  background-color: rgba(0, 20, 0, 0.02);
 }
 
 .content tr:hover {
-  background-color: rgba(0, 20, 0, 0.15);
+  background-color: rgba(0, 20, 0, 0.02);
 }
 
 .content a {
@@ -429,7 +429,7 @@ body {
 
 .pdf-page {
   margin: 0 auto 30px auto;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -452,7 +452,7 @@ body {
   margin: 20px auto;
   max-width: 900px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -508,13 +508,13 @@ body {
 
 /* 主内容区域 */
 .main-container {
-  background-color: rgba(0, 0, 0, 0.15) !important;
+  background-color: rgba(0, 0, 0, 0.02) !important;
   position: relative;
   z-index: 20;
 }
 
 .content-wrap {
-  background-color: rgba(0, 0, 0, 0.15) !important;
+  background-color: rgba(0, 0, 0, 0.02) !important;
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #0f0;
