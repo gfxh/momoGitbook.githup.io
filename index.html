@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>mo技术博客</title>
 
-  <!-- 样式表（整合版） -->
+  <!-- 样式表 -->
   <link rel="stylesheet" href="assets/css/main.css">
 
   <!-- 外部库 -->
@@ -22,220 +22,163 @@
 
 <body>
 
-  <!-- 侧边栏目录 -->
-  <div class="sidebar">
-    <img src="./杂/头像.png" class="touxiang" height="150px" style="line-height: 20px;">
-    <p class="sidebar-post-author-name">mo技术博客</p>
-
-    <div class="toc">
-            <div class="toc-level-1 toc-header">
-              介绍
-            </div>
-            <div class="toc-level-2">
-              <a href="#" onclick="loadMarkdown('README.md')">介绍</a>
-            </div>
-
-            <div class="toc-level-1 toc-header">
-              markdown基础语法练习
-            </div>
-            <div class="toc-level-2">
-              <a href="#" onclick="loadMarkdown('markdown的练习.md')">markdown的练习</a>
-            </div>
-
-            <div class="toc-level-1 toc-header">
-              Git
-            </div>
-            <div class="toc-level-2">
-              <a href="#" onclick="loadMarkdown('关于Git/Git.1学习.md')">Git的学习</a>
-            </div>
-            <div class="toc-level-2">
-              <a href="#" onclick="loadMarkdown('关于Git/Git.2代码推送.md')">Git的代码推送</a>
-            </div>
-            
-
-            <div class="toc-level-1 toc-header">
-              西提艾弗
-
-              <div class="toc-level-2 toc-header">
-                一·Web
-              </div>
-              <div class="toc-level-3 toc-header">
-                爆破类
-              </div>
-              <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('CTF/Web/baopo/wifi破.md')">airmon/airodump</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/baopo/爆破登录.md')">登录</a>
-              </div>
-
-              
-              <div class="toc-level-3 toc-header">
-                1.敏感信息泄露信息收集
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集.md')">x1:信息收集</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集2.md')">x2:where_is_flag</a>
-              </div>
-              <div class="toc-level-3 toc-header">
-                2.PHP
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">x1:PHP基础学习</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">x2:PHP反序列化基础</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">x3:PHP代码审计</a>
-              </div>
-
-
-              <div class="toc-level-3 toc-header">
-                3.注入类
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">x1:SQL注入基础</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">x2:SQL盲注时间注入</a>
-              </div>
-              <div class="toc-level-4">
-                <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x4OrderBY.md')">x3:SQL盲注之报错注入</a>
-              </div>
-              <div class="toc-level-3 toc-header">
-                4.RCE
-              </div>
-              <div class="toc-level-3 toc-header">
-                5.文件上传
-              </div>
-              <div class="toc-level-3 toc-header">
-                6.文件包含
-              </div>
-              <div class="toc-level-3 toc-header">
-                7.目录穿越
-              </div>
-              <div class="toc-level-3 toc-header">
-                8.逻辑漏洞SRC
-              </div>
-              <div class="toc-level-3 toc-header">
-                9.任意文件读取
-              </div>
-              <div class="toc-level-3 toc-header">
-                10.XSS攻击
-              </div>
-            </div>
-
-            <div class="toc-level-1 toc-header">
-              网络空间安全书籍
-              <div class="toc-level-2">
-                <a href="#"
-                  onclick="loadPDF('网络空间安全Book/伏特台风Ⅲ—揭密美国政府机构实施的网络间谍和虚假信息行动.pdf')">伏特台风"Ⅲ—揭密美国政府机构实施的网络间谍和虚假信息行动(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/2024中国实战化白帽人才能力白皮书.pdf')">2024中国实战化白帽人才能力白皮书(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/高级渗透测试黑客攻击世界上最安全的网络.pdf')">高级渗透测试：黑客攻击世界上最安全的网络(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/汇编语言命令.pdf')">汇编语言命令(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/逆向工程教程.pdf')">逆向工程教程(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/网络安全CTF学习.pdf')">网络安全CTF学习资源整理(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/一本介绍红队攻击的电子书英文.pdf')">一本介绍红队攻击的电子书（英文）(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/CTF竞赛入门指南.pdf')">CTF 竞赛入门指南.pdf(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('网络空间安全Book/PWN二进制漏洞挖掘与利用.pdf')">PWN：二进制漏洞挖掘与利用.pdf(PDF)</a>
-              </div>
-
-
-            </div>
-
-
-
-
-
-
-
-            <div class="toc-level-1 toc-header">
-              Python
-
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('PythonBook/从入门到实践.pdf')">Python编程从入门到实践(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('PythonBook/快速上手让繁琐工作自动化.pdf')">Python编程快速上手让繁琐工作自动化第2版(PDF)</a>
-              </div>
-              <div class="toc-level-2">
-                <a href="#" onclick="loadPDF('PythonBook/极客项目编程.pdf')">Python极客项目编程第2版(PDF)</a>
-              </div>
-            </div>
-
-            <div class="toc-level-1 toc-header">
-              复习一下下Java
-            </div>
-            <div class="toc-level-2 toc-header">
-              Java的学习
-            </div>
-            <div class="toc-level-3 toc-header">
-              一 Java入门
-            </div>
-            <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_1.md')">1.Java 的运行</a>
-            </div>
-            <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_2.md')">2.什么是"对象"</a>
-            </div>
-            <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_3.md')">3."方法"进阶</a>
-            </div>
-            <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_4.md')">4.面向"对象"</a>
-            </div>
-            <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_5.md')">5.什么是文件IO</a>
-            </div>
-            <div class="toc-level-4">
-              <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_6.md')">6.项目实战</a>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 侧边栏切换按钮 -->
-  <button id="sidebarToggle" class="sidebar-toggle" title="切换侧边栏">
-    <span></span>
-  </button>
-
+  <!-- 主内容区域 -->
   <div class="main-container">
     <div class="content-wrap">
       <div class="content" id="content">
-          <div class="loading">
-            <h1>学习的第一性原理是自学</h1>
-            <h1>🐻欢迎来到mo博客🐻</h1>
-            <p>🐻请从左侧目录阅读🐻</p>
-          </div>
+        <div class="loading">
+          <h1>学习的第一性原理是自学</h1>
+          <h1>🐻欢迎来到mo博客🐻</h1>
+          <p>🐻请从下方目录阅读🐻</p>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 底部目录区域 -->
+  <div class="sidebar">
+    <div class="sidebar-toc">
+      <div class="toc">
 
+        <!-- 介绍 -->
+        <div class="toc-level-1">
+          <div class="toc-header">介绍</div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('README.md')">介绍</a>
+          </div>
+        </div>
 
+        <!-- markdown练习 -->
+        <div class="toc-level-1">
+          <div class="toc-header">Markdown</div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('markdown的练习.md')">基础语法练习</a>
+          </div>
+        </div>
+
+        <!-- Git -->
+        <div class="toc-level-1">
+          <div class="toc-header">Git</div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('关于Git/Git.1学习.md')">Git的学习</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('关于Git/Git.2代码推送.md')">Git的代码推送</a>
+          </div>
+        </div>
+
+        <!-- CTF -->
+        <div class="toc-level-1">
+          <div class="toc-header">CTF</div>
+
+          <!-- Web -->
+          <div class="toc-level-2">
+            <div class="toc-header">Web</div>
+            <div class="toc-level-3">
+              <a href="#" onclick="loadMarkdown('CTF/Web/baopo/wifi破.md')">airmon/airodump</a>
+              <a href="#" onclick="loadMarkdown('CTF/Web/baopo/爆破登录.md')">登录爆破</a>
+              <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集.md')">信息收集</a>
+              <a href="#" onclick="loadMarkdown('CTF/Web/信息收集/信息收集2.md')">where_is_flag</a>
+            </div>
+          </div>
+
+          <!-- SQL -->
+          <div class="toc-level-2">
+            <div class="toc-header">SQL</div>
+            <div class="toc-level-3">
+              <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x0.md')">SQL注入基础</a>
+              <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md')">SQL盲注</a>
+              <a href="#" onclick="loadMarkdown('CTF/Web/SQL/0x4OrderBY.md')">SQL报错注入</a>
+            </div>
+          </div>
+
+          <!-- PHP -->
+          <div class="toc-level-2">
+            <div class="toc-header">PHP</div>
+            <div class="toc-level-3">
+              <a href="#" onclick="loadMarkdown('PHP/PHP基础学习.md')">PHP基础</a>
+              <a href="#" onclick="loadMarkdown('PHP/PHP反序列化基础.md')">PHP反序列化</a>
+              <a href="#" onclick="loadMarkdown('PHP/PHP代码审计.md')">PHP代码审计</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 网络安全书籍 -->
+        <div class="toc-level-1">
+          <div class="toc-header">安全书籍</div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/伏特台风Ⅲ—揭密美国政府机构实施的网络间谍和虚假信息行动.pdf')">伏特台风Ⅲ</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/2024中国实战化白帽人才能力白皮书.pdf')">白帽能力白皮书</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/高级渗透测试黑客攻击世界上最安全的网络.pdf')">高级渗透测试</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/汇编语言命令.pdf')">汇编语言命令</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/逆向工程教程.pdf')">逆向工程教程</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/网络安全CTF学习.pdf')">CTF学习</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/一本介绍红队攻击的电子书英文.pdf')">红队攻击</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/CTF竞赛入门指南.pdf')">CTF入门指南</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('网络空间安全Book/PWN二进制漏洞挖掘与利用.pdf')">PWN漏洞挖掘</a>
+          </div>
+        </div>
+
+        <!-- Python -->
+        <div class="toc-level-1">
+          <div class="toc-header">Python</div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('PythonBook/从入门到实践.pdf')">从入门到实践</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('PythonBook/快速上手让繁琐工作自动化.pdf')">快速上手</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadPDF('PythonBook/极客项目编程.pdf')">极客项目编程</a>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="toc-level-1">
+          <div class="toc-header">Java</div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_1.md')">Java的运行</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_2.md')">什么是对象</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_3.md')">方法进阶</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_4.md')">面向对象</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_5.md')">文件IO</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="#" onclick="loadMarkdown('Java的复习/Java 入门_6.md')">项目实战</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 跳到目录按钮 -->
+  <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
 
 </body>
 

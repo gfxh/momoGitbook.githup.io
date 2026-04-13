@@ -2,7 +2,7 @@
  * ========================================
  * 主样式表
  * ========================================
- * 包含：基础布局、主题样式、特效样式
+ * 包含：基础布局、底部目录、内容样式
  * ========================================
  */
 
@@ -18,122 +18,15 @@ body {
   min-height: 100vh;
 }
 
-/* 侧边栏 */
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 300px;
-  overflow-y: auto;
-  z-index: 10;
-  transform: translateX(0);
-  padding: 20px;
-  box-sizing: border-box;
-  background: #2d2d2d;
-  border-right: 1px solid #404040;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-}
+/* ========================================
+ * 第二部分：主内容区域
+ * ======================================== */
 
-/* 头像 */
-.sidebar .touxiang {
-  display: block;
-  margin: 0 auto 20px auto;
-  border-radius: 50%;
-  max-width: 150px;
-  border: 4px solid #555;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.sidebar-post-author-name {
-  font-weight: bold;
-  margin: 10px 0 30px 0;
-  color: #e0e0e0;
-  font-size: 18px;
-  text-align: center;
-}
-
-/* 侧边栏滚动条 */
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: #1a1a1a;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: #555;
-  border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: #777;
-}
-
-/* 侧边栏内部容器 */
-.sidebar-inner {
-  padding: 20px;
-}
-
-.sidebar-post-container {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #404040;
-  text-align: center;
-}
-
-.sidebar-post-author-name {
-  font-weight: bold;
-  margin: 10px 0 0 0;
-  color: #e0e0e0;
-  font-size: 18px;
-}
-
-/* 目录样式 */
-.sidebar-toc {
-  overflow-y: auto;
-}
-
-/* 主内容区域 */
 .main-container {
-  margin-left: 300px;
   min-height: 100vh;
   background-color: #1a1a1a;
-  padding: 40px 30px;
+  padding: 40px 30px 20px;
   box-sizing: border-box;
-}
-
-.toc-header {
-  color: #e0e0e0;
-  font-weight: 600;
-  margin: 16px 0 10px 0;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.toc-level-1 { margin: 12px 0 8px 0; }
-.toc-level-2 { margin: 8px 0 6px 15px; }
-.toc-level-3 { margin: 6px 0 4px 30px; }
-.toc-level-4 { margin: 4px 0 3px 45px; font-size: 13px; }
-.toc-level-5 { margin: 4px 0 3px 60px; font-size: 13px; }
-.toc-level-6 { margin: 4px 0 3px 75px; font-size: 13px; }
-
-.toc a {
-  color: #a0a0a0;
-  text-decoration: none;
-  display: block;
-  padding: 8px 15px;
-  margin: 2px 0;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.toc a:hover {
-  background: #404040;
-  text-decoration: none;
-  color: #e0e0e0;
 }
 
 .content-wrap {
@@ -145,10 +38,140 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border: 1px solid #404040;
   position: relative;
-  z-index: 30;
 }
 
-/* Markdown 内容样式 */
+/* ========================================
+ * 第三部分：底部目录区域
+ * ======================================== */
+
+.sidebar {
+  width: 100%;
+  background: #252525;
+  border-top: 1px solid #404040;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+  padding: 24px 20px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sidebar-toc {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 目录整体 - 横向排列分类 */
+.toc {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+  padding: 4px 0;
+  align-items: flex-start;
+}
+
+/* 一级分类 - 横向排列的卡片 */
+.toc-level-1 {
+  display: inline-block;
+  flex-shrink: 0;
+  background: #2d2d2d;
+  border: 1px solid #404040;
+  border-radius: 12px;
+  padding: 14px 18px;
+  vertical-align: top;
+}
+
+/* 分类标题 */
+.toc-header {
+  color: #c8c8c8;
+  font-weight: 700;
+  font-size: 14px;
+  margin: 0 0 10px 0;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid #404040;
+  letter-spacing: 0.5px;
+}
+
+/* 子分类标题（如"Web"、"Python"等） */
+.toc-level-1 > .toc-level-2 > .toc-header,
+.toc-level-1 > .toc-level-3 > .toc-header {
+  color: #a0a0a0;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 8px 0 6px 0;
+  padding: 0;
+  border-bottom: none;
+}
+
+/* 子项容器 - 竖向排列 */
+.toc-level-2,
+.toc-level-3,
+.toc-level-4,
+.toc-level-5,
+.toc-level-6 {
+  display: block;
+  margin: 0;
+}
+
+/* 目录链接 */
+.toc a {
+  color: #a0a0a0;
+  text-decoration: none;
+  display: block;
+  padding: 4px 10px;
+  margin: 2px 0;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.toc a:hover {
+  background: #404040;
+  color: #e0e0e0;
+}
+
+/* 隐藏头像和名称 */
+.sidebar .touxiang { display: none; }
+.sidebar-post-author-name { display: none; }
+.sidebar-post-container { display: none; }
+
+/* ========================================
+ * 跳到目录按钮（右侧悬浮）
+ * ======================================== */
+
+.jump-to-toc-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 50%;
+  transform: translateY(50%);
+  z-index: 999;
+  width: 48px;
+  height: 48px;
+  background: #2d2d2d;
+  border: 1px solid #555;
+  border-radius: 50%;
+  color: #c8c8c8;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.jump-to-toc-btn:hover {
+  background: #404040;
+  border-color: #8ab4f8;
+  color: #e0e0e0;
+  transform: translateY(50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+/* ========================================
+ * 第四部分：Markdown 内容样式
+ * ======================================== */
+
 .content {
   color: #e0e0e0;
   line-height: 1.8;
@@ -293,122 +316,9 @@ body {
 }
 
 /* ========================================
- * 侧边栏切换按钮
+ * 第五部分：加载和PDF样式
  * ======================================== */
 
-.sidebar-toggle {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  width: 40px;
-  height: 40px;
-  background: #2d2d2d;
-  border: 2px solid #404040;
-  border-radius: 8px;
-  cursor: pointer;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.sidebar-toggle span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background-color: #e0e0e0;
-  position: relative;
-}
-
-.sidebar-toggle span::before,
-.sidebar-toggle span::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 20px;
-  height: 2px;
-  background-color: #e0e0e0;
-  transition: all 0.3s ease;
-}
-
-.sidebar-toggle span::before {
-  top: -7px;
-}
-
-.sidebar-toggle span::after {
-  top: 7px;
-}
-
-.sidebar-toggle:hover {
-  background-color: #404040;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* 侧边栏激活状态 */
-.sidebar.active ~ .sidebar-toggle {
-  right: 20px;
-}
-
-.sidebar.active ~ .sidebar-toggle span {
-  background-color: transparent;
-}
-
-.sidebar.active ~ .sidebar-toggle span::before {
-  top: 0;
-  transform: rotate(45deg);
-}
-
-.sidebar.active ~ .sidebar-toggle span::after {
-  top: 0;
-  transform: rotate(-45deg);
-}
-
-/* 侧边栏收放状态 - 双击侧边栏切换 */
-.sidebar.active {
-  transform: translateX(-100%);
-}
-
-.sidebar.active ~ .main-container {
-  margin-left: 0;
-}
-
-/* 响应式设计 */
-@media screen and (max-width: 992px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar-toggle {
-    right: 10px;
-    top: 10px;
-    width: 35px;
-    height: 35px;
-  }
-
-  .main-container {
-    margin-left: 0;
-  }
-
-  .sidebar.active {
-    transform: translateX(0);
-  }
-
-  .sidebar.active ~ .main-container {
-    margin-left: 0;
-  }
-}
-
-/* 头像样式 */
-.touxiang {
-  border-radius: 50%;
-  max-width: 150px;
-  border: 4px solid #555;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* 加载和PDF样式 */
 .loading {
   text-align: center;
   padding: 80px 50px;
@@ -450,7 +360,3 @@ body {
   border: 1px solid #404040;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
-
-/* ========================================
- * 简洁博客样式
- * ======================================== */

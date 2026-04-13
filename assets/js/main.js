@@ -2,7 +2,7 @@
  * ========================================
  * 主业务逻辑模块
  * ========================================
- * 包含：Markdown渲染、PDF阅读、侧边栏切换
+ * 包含：Markdown渲染、PDF阅读
  * ========================================
  */
 
@@ -172,40 +172,13 @@ async function renderAllPages() {
 }
 
 // ========================================
-// 第三部分：侧边栏切换功能
-// ========================================
-
-/**
- * 初始化侧边栏切换功能
- */
-function initSidebarToggle() {
-  const sidebar = document.querySelector('.sidebar');
-  const toggleBtn = document.getElementById('sidebarToggle');
-  
-  // 按钮点击切换侧边栏
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function () {
-      sidebar.classList.toggle('active');
-    });
-  }
-  
-  // 双击侧边栏也可以切换
-  sidebar.addEventListener('dblclick', function () {
-    sidebar.classList.toggle('active');
-  });
-}
-
-// ========================================
-// 第四部分：页面初始化
+// 第三部分：页面初始化
 // ========================================
 
 /**
  * 页面加载完成后初始化
  */
 document.addEventListener('DOMContentLoaded', function () {
-  // 初始化侧边栏
-  initSidebarToggle();
-
   // 加载默认内容
   loadMarkdown('README.md');
 });
