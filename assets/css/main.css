@@ -12,7 +12,7 @@
 
 /* 页面整体 */
 body {
-  background: #f5f7fa;
+  background: #1a1a1a;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -30,9 +30,9 @@ body {
   transform: translateX(0);
   padding: 20px;
   box-sizing: border-box;
-  background: #ffffff;
-  border-right: 1px solid #e1e4e8;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  background: #2d2d2d;
+  border-right: 1px solid #404040;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
 }
 
 /* 头像 */
@@ -48,7 +48,7 @@ body {
 .sidebar-post-author-name {
   font-weight: bold;
   margin: 10px 0 30px 0;
-  color: #24292e;
+  color: #e0e0e0;
   font-size: 18px;
   text-align: center;
 }
@@ -59,16 +59,16 @@ body {
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: #f1f3f5;
+  background: #1a1a1a;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: #d1d5da;
+  background: #555;
   border-radius: 3px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: #959da5;
+  background: #777;
 }
 
 /* 侧边栏内部容器 */
@@ -79,14 +79,14 @@ body {
 .sidebar-post-container {
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #e1e4e8;
+  border-bottom: 1px solid #404040;
   text-align: center;
 }
 
 .sidebar-post-author-name {
   font-weight: bold;
   margin: 10px 0 0 0;
-  color: #24292e;
+  color: #e0e0e0;
   font-size: 18px;
 }
 
@@ -99,13 +99,13 @@ body {
 .main-container {
   margin-left: 300px;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: #1a1a1a;
   padding: 40px 30px;
   box-sizing: border-box;
 }
 
 .toc-header {
-  color: #24292e;
+  color: #e0e0e0;
   font-weight: 600;
   margin: 16px 0 10px 0;
   font-size: 15px;
@@ -121,7 +121,7 @@ body {
 .toc-level-6 { margin: 4px 0 3px 75px; font-size: 13px; }
 
 .toc a {
-  color: #0366d6;
+  color: #a0a0a0;
   text-decoration: none;
   display: block;
   padding: 8px 15px;
@@ -131,32 +131,32 @@ body {
 }
 
 .toc a:hover {
-  background: #f1f8ff;
+  background: #404040;
   text-decoration: none;
-  color: #0366d6;
+  color: #e0e0e0;
 }
 
 .content-wrap {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: #2d2d2d;
   border-radius: 8px;
   padding: 40px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e1e4e8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #404040;
   position: relative;
   z-index: 30;
 }
 
 /* Markdown 内容样式 */
 .content {
-  color: #24292e;
+  color: #e0e0e0;
   line-height: 1.8;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
-  color: #24292e;
+  color: #ffffff;
   margin-top: 2em;
   margin-bottom: 1em;
   font-weight: 700;
@@ -166,7 +166,7 @@ body {
 
 .content h1 {
   font-size: 2.2em;
-  color: #24292e;
+  color: #ffffff;
   margin-top: 0.5em;
 }
 
@@ -177,7 +177,7 @@ body {
   left: 0;
   width: 60px;
   height: 4px;
-  background: #0366d6;
+  background: #4a9eff;
   border-radius: 2px;
 }
 
@@ -193,7 +193,7 @@ body {
   left: 0;
   width: 40px;
   height: 3px;
-  background: #0366d6;
+  background: #4a9eff;
   border-radius: 2px;
 }
 
@@ -203,33 +203,33 @@ body {
 .content p { margin-bottom: 1.2em; }
 
 .content code {
-  background: #f6f8fa;
-  color: #d73a49;
+  background: #1a1a1a;
+  color: #ff6b6b;
   padding: 0.2em 0.6em;
   border-radius: 4px;
   font-weight: 500;
 }
 
 .content pre {
-  background: #f6f8fa;
+  background: #1a1a1a;
   border-radius: 8px;
   padding: 20px;
   margin: 1.5em 0;
   overflow-x: auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 .content pre code {
   background: transparent;
-  color: #24292e;
+  color: #e0e0e0;
   padding: 0;
 }
 
 .content blockquote {
-  background: #f6f8fa;
-  border-left: 4px solid #0366d6;
+  background: #1a1a1a;
+  border-left: 4px solid #4a9eff;
   padding: 1em 1.5em;
   margin: 1.5em 0;
-  color: #586069;
+  color: #b0b0b0;
   border-radius: 0 8px 8px 0;
 }
 
@@ -239,39 +239,39 @@ body {
   margin: 1.5em 0;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .content th, .content td {
-  border: 1px solid #e1e4e8;
+  border: 1px solid #404040;
   padding: 12px 16px;
   text-align: left;
-  color: #24292e;
+  color: #e0e0e0;
 }
 
 .content th {
-  background: #f6f8fa;
-  color: #24292e;
+  background: #1a1a1a;
+  color: #ffffff;
   font-weight: 600;
 }
 
 .content tr:nth-child(even) {
-  background-color: #f6f8fa;
+  background-color: #1a1a1a;
 }
 
 .content tr:hover {
-  background-color: #f1f8ff;
+  background-color: #404040;
 }
 
 .content a {
-  color: #0366d6;
+  color: #4a9eff;
   text-decoration: none;
   font-weight: 500;
 }
 
 .content a:hover {
   text-decoration: underline;
-  color: #0366d6;
+  color: #6bb3ff;
 }
 
 .content img {
@@ -302,8 +302,8 @@ body {
   top: 20px;
   width: 40px;
   height: 40px;
-  background: #ffffff;
-  border: 2px solid #e1e4e8;
+  background: #2d2d2d;
+  border: 2px solid #404040;
   border-radius: 8px;
   cursor: pointer;
   z-index: 100;
@@ -311,14 +311,14 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-toggle span {
   display: block;
   width: 20px;
   height: 2px;
-  background-color: #586069;
+  background-color: #e0e0e0;
   position: relative;
 }
 
@@ -329,7 +329,7 @@ body {
   left: 0;
   width: 20px;
   height: 2px;
-  background-color: #586069;
+  background-color: #e0e0e0;
   transition: all 0.3s ease;
 }
 
@@ -342,8 +342,8 @@ body {
 }
 
 .sidebar-toggle:hover {
-  background-color: #f6f8fa;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #404040;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 /* 侧边栏激活状态 */
@@ -412,25 +412,25 @@ body {
 .loading {
   text-align: center;
   padding: 80px 50px;
-  color: #24292e;
+  color: #e0e0e0;
 }
 
 .pdf-container {
   width: 100%;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #1a1a1a;
   padding: 30px 0;
   overflow-y: auto;
 }
 
 .pdf-page {
   margin: 0 auto 30px auto;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: #2d2d2d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 30px;
   max-width: 900px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid #404040;
 }
 
 .pdf-canvas {
@@ -442,13 +442,13 @@ body {
 .pdf-loading {
   text-align: center;
   padding: 60px;
-  color: #586069;
+  color: #b0b0b0;
   margin: 20px auto;
   max-width: 900px;
   border-radius: 8px;
-  background: #f6f8fa;
-  border: 1px solid #e1e4e8;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: #2d2d2d;
+  border: 1px solid #404040;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* ========================================
