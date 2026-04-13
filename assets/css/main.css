@@ -12,7 +12,7 @@
 
 /* 页面整体 */
 body {
-  background: transparent;
+  background: #f5f7fa;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -25,13 +25,14 @@ body {
   top: 0;
   bottom: 0;
   width: 300px;
-  background: linear-gradient(180deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   z-index: 10;
   transform: translateX(0);
   padding: 20px;
   box-sizing: border-box;
+  background: #ffffff;
+  border-right: 1px solid #e1e4e8;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
 /* 头像 */
@@ -40,16 +41,15 @@ body {
   margin: 0 auto 20px auto;
   border-radius: 50%;
   max-width: 150px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  border: 4px solid #e1e4e8;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar-post-author-name {
   font-weight: bold;
   margin: 10px 0 30px 0;
-  color: white;
+  color: #24292e;
   font-size: 18px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
@@ -59,16 +59,16 @@ body {
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: #f1f3f5;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: #d1d5da;
   border-radius: 3px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: #959da5;
 }
 
 /* 侧边栏内部容器 */
@@ -79,16 +79,15 @@ body {
 .sidebar-post-container {
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid #e1e4e8;
   text-align: center;
 }
 
 .sidebar-post-author-name {
   font-weight: bold;
   margin: 10px 0 0 0;
-  color: white;
+  color: #24292e;
   font-size: 18px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* 目录样式 */
@@ -100,13 +99,13 @@ body {
 .main-container {
   margin-left: 300px;
   min-height: 100vh;
-  background-color: transparent;
+  background-color: #f5f7fa;
   padding: 40px 30px;
   box-sizing: border-box;
 }
 
 .toc-header {
-  color: rgba(255, 255, 255, 0.9);
+  color: #24292e;
   font-weight: 600;
   margin: 16px 0 10px 0;
   font-size: 15px;
@@ -122,41 +121,42 @@ body {
 .toc-level-6 { margin: 4px 0 3px 75px; font-size: 13px; }
 
 .toc a {
-  color: rgba(255, 255, 255, 0.85);
+  color: #0366d6;
   text-decoration: none;
   display: block;
   padding: 8px 15px;
   margin: 2px 0;
   border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
 .toc a:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: #f1f8ff;
   text-decoration: none;
-  color: white;
+  color: #0366d6;
 }
 
 .content-wrap {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.02);
-  border-radius: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
   padding: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e1e4e8;
   position: relative;
   z-index: 30;
 }
 
 /* Markdown 内容样式 */
 .content {
-  color: #0f0;
+  color: #24292e;
   line-height: 1.8;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
-  color: #0f0;
+  color: #24292e;
   margin-top: 2em;
   margin-bottom: 1em;
   font-weight: 700;
@@ -166,7 +166,7 @@ body {
 
 .content h1 {
   font-size: 2.2em;
-  color: #0f0;
+  color: #24292e;
   margin-top: 0.5em;
 }
 
@@ -177,7 +177,7 @@ body {
   left: 0;
   width: 60px;
   height: 4px;
-  background: #0f0;
+  background: #0366d6;
   border-radius: 2px;
 }
 
@@ -193,7 +193,7 @@ body {
   left: 0;
   width: 40px;
   height: 3px;
-  background: #0f0;
+  background: #0366d6;
   border-radius: 2px;
 }
 
@@ -203,75 +203,75 @@ body {
 .content p { margin-bottom: 1.2em; }
 
 .content code {
-  background: #1a1a2e;
-  color: #e94560;
+  background: #f6f8fa;
+  color: #d73a49;
   padding: 0.2em 0.6em;
   border-radius: 4px;
   font-weight: 500;
 }
 
 .content pre {
-  background: #1a1a2e;
-  border-radius: 12px;
+  background: #f6f8fa;
+  border-radius: 8px;
   padding: 20px;
   margin: 1.5em 0;
   overflow-x: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 .content pre code {
   background: transparent;
-  color: #e94560;
+  color: #24292e;
   padding: 0;
 }
 
 .content blockquote {
-  background: rgba(0, 20, 0, 0.02);
-  border-left: 4px solid #0f0;
+  background: #f6f8fa;
+  border-left: 4px solid #0366d6;
   padding: 1em 1.5em;
   margin: 1.5em 0;
-  color: #0f0;
-  border-radius: 0 12px 12px 0;
+  color: #586069;
+  border-radius: 0 8px 8px 0;
 }
 
 .content table {
   border-collapse: collapse;
   width: 100%;
   margin: 1.5em 0;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .content th, .content td {
-  border: 1px solid #0f0;
+  border: 1px solid #e1e4e8;
   padding: 12px 16px;
   text-align: left;
-  color: #0f0;
+  color: #24292e;
 }
 
 .content th {
-  background: rgba(0, 20, 0, 0.02);
-  color: #0f0;
+  background: #f6f8fa;
+  color: #24292e;
   font-weight: 600;
 }
 
 .content tr:nth-child(even) {
-  background-color: rgba(0, 20, 0, 0.02);
+  background-color: #f6f8fa;
 }
 
 .content tr:hover {
-  background-color: rgba(0, 20, 0, 0.02);
+  background-color: #f1f8ff;
 }
 
 .content a {
-  color: #0f0;
+  color: #0366d6;
   text-decoration: none;
   font-weight: 500;
 }
 
 .content a:hover {
-  text-decoration: none;
-  color: #0f0;
+  text-decoration: underline;
+  color: #0366d6;
 }
 
 .content img {
@@ -302,8 +302,8 @@ body {
   top: 20px;
   width: 40px;
   height: 40px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid #0f0;
+  background: #ffffff;
+  border: 2px solid #e1e4e8;
   border-radius: 8px;
   cursor: pointer;
   z-index: 100;
@@ -311,13 +311,14 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-toggle span {
   display: block;
   width: 20px;
   height: 2px;
-  background-color: #0f0;
+  background-color: #586069;
   position: relative;
 }
 
@@ -328,7 +329,7 @@ body {
   left: 0;
   width: 20px;
   height: 2px;
-  background-color: #0f0;
+  background-color: #586069;
   transition: all 0.3s ease;
 }
 
@@ -341,8 +342,8 @@ body {
 }
 
 .sidebar-toggle:hover {
-  background-color: rgba(0, 255, 0, 0.9);
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+  background-color: #f6f8fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 侧边栏激活状态 */
@@ -411,26 +412,25 @@ body {
 .loading {
   text-align: center;
   padding: 80px 50px;
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #24292e;
 }
 
 .pdf-container {
   width: 100%;
   min-height: 100vh;
-  background-color: transparent;
+  background-color: #ffffff;
   padding: 30px 0;
   overflow-y: auto;
 }
 
 .pdf-page {
   margin: 0 auto 30px auto;
-  background: rgba(255, 255, 255, 0.02);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
   padding: 30px;
   max-width: 900px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #e1e4e8;
 }
 
 .pdf-canvas {
@@ -442,78 +442,15 @@ body {
 .pdf-loading {
   text-align: center;
   padding: 60px;
-  color: #666;
+  color: #586069;
   margin: 20px auto;
   max-width: 900px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-/* ========================================
- * 第二部分：黑客帝国主题样式
- * ======================================== */
-
-/* 黑客帝国数字雨背景 */
-.matrix-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-  overflow: hidden;
-  background-color: #000;
-}
-
-#matrix-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  opacity: 0.9;
-}
-
-/* 侧边栏主题 */
-.sidebar {
-  background: linear-gradient(180deg, rgba(10, 10, 10, 0.15) 0%, rgba(15, 15, 15, 0.15) 100%) !important;
-  box-shadow: 2px 0 15px rgba(0, 255, 0, 0.2) !important;
-  border-right: 1px solid #0f0 !important;
-}
-
-/* 侧边栏文字 */
-.sidebar-post-author-name,
-.toc-header {
-  color: #0f0 !important;
-  text-shadow: 0 0 3px #0f0 !important;
-}
-
-.toc a {
-  color: #0f0 !important;
-  text-shadow: 0 0 2px #0f0 !important;
-}
-
-.toc a:hover {
-  color: #0f0 !important;
-  text-shadow: 0 0 6px #0f0 !important;
-}
-
-/* 主内容区域 */
-.main-container {
-  background-color: rgba(0, 0, 0, 0.02) !important;
-  position: relative;
-  z-index: 20;
-}
-
-.content-wrap {
-  background-color: rgba(0, 0, 0, 0.02) !important;
-  padding: 20px;
   border-radius: 8px;
-  border: 1px solid #0f0;
-  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-  position: relative;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* ========================================
- * 侧边栏切换按钮
+ * 简洁博客样式
  * ======================================== */
