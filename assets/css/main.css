@@ -41,8 +41,8 @@ body {
   margin: 0 auto 20px auto;
   border-radius: 50%;
   max-width: 150px;
-  border: 4px solid #e1e4e8;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 4px solid #555;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-post-author-name {
@@ -156,7 +156,7 @@ body {
 }
 
 .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
-  color: #ffffff;
+  color: #c8c8c8;
   margin-top: 2em;
   margin-bottom: 1em;
   font-weight: 700;
@@ -166,7 +166,7 @@ body {
 
 .content h1 {
   font-size: 2.2em;
-  color: #ffffff;
+  color: #d0d0d0;
   margin-top: 0.5em;
 }
 
@@ -176,8 +176,8 @@ body {
   bottom: 0;
   left: 0;
   width: 60px;
-  height: 4px;
-  background: #4a9eff;
+  height: 3px;
+  background: #555;
   border-radius: 2px;
 }
 
@@ -193,7 +193,7 @@ body {
   left: 0;
   width: 40px;
   height: 3px;
-  background: #4a9eff;
+  background: #555;
   border-radius: 2px;
 }
 
@@ -204,7 +204,7 @@ body {
 
 .content code {
   background: #1a1a1a;
-  color: #ff6b6b;
+  color: #c9a0dc;
   padding: 0.2em 0.6em;
   border-radius: 4px;
   font-weight: 500;
@@ -226,10 +226,10 @@ body {
 
 .content blockquote {
   background: #1a1a1a;
-  border-left: 4px solid #4a9eff;
+  border-left: 4px solid #555;
   padding: 1em 1.5em;
   margin: 1.5em 0;
-  color: #b0b0b0;
+  color: #a0a0a0;
   border-radius: 0 8px 8px 0;
 }
 
@@ -251,7 +251,7 @@ body {
 
 .content th {
   background: #1a1a1a;
-  color: #ffffff;
+  color: #c8c8c8;
   font-weight: 600;
 }
 
@@ -264,14 +264,14 @@ body {
 }
 
 .content a {
-  color: #4a9eff;
+  color: #8ab4f8;
   text-decoration: none;
   font-weight: 500;
 }
 
 .content a:hover {
   text-decoration: underline;
-  color: #6bb3ff;
+  color: #a8c7fa;
 }
 
 .content img {
@@ -404,8 +404,8 @@ body {
 .touxiang {
   border-radius: 50%;
   max-width: 150px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 4px solid #555;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* 加载和PDF样式 */
