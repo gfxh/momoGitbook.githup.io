@@ -3,7 +3,7 @@
 //怎么访问根目录下的  rot13base.php
 
 
-访问 [rot13base.php](/rot13base.php)
+访问 [rot13base.php](./rot13base.php)
 
 # 命令执行,函数
 
