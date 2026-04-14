@@ -71,8 +71,9 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   if (hrefIndex >= 0) {
     const href = token.attrs[hrefIndex][1];
 
-    // 处理相对路径链接，转换为 GitHub raw 链接（针对 PHP 等文件）
-    if (href && !href.startsWith('http') && !href.startsWith('#') && (href.endsWith('.php') || href.endsWith('.py') || href.endsWith('.js') || href.endsWith('.html') || href.endsWith('.txt'))) {
+    // 处理相对路径链接，转换为 GitHub raw 链接（针对 PHP、PY、JS 等代码文件）
+    // HTML 文件保持相对路径，在 GitHub Pages 上直接访问
+    if (href && !href.startsWith('http') && !href.startsWith('#') && (href.endsWith('.php') || href.endsWith('.py') || href.endsWith('.js') || href.endsWith('.txt'))) {
       const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/refs/heads/main/';
       let directoryPath = '';
 
