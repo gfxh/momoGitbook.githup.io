@@ -63,6 +63,48 @@ md.renderer.rules.image = function (tokens, idx, options, _env, self) {
   return self.renderToken(tokens, idx, options);
 };
 
+// 修复链接路径为 GitHub raw 链接（对于 PHP 等文件）
+md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+  const token = tokens[idx];
+  const hrefIndex = token.attrIndex('href');
+
+  if (hrefIndex >= 0) {
+    const href = token.attrs[hrefIndex][1];
+
+    // 处理相对路径链接，转换为 GitHub raw 链接（针对 PHP 等文件）
+    if (href && !href.startsWith('http') && !href.startsWith('#') && (href.endsWith('.php') || href.endsWith('.py') || href.endsWith('.js') || href.endsWith('.html') || href.endsWith('.txt'))) {
+      const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/refs/heads/main/';
+      let directoryPath = '';
+
+      // 获取当前 Markdown 文件的目录路径
+      if (window.currentMarkdownPath) {
+        const pathParts = window.currentMarkdownPath.split('/');
+        pathParts.pop();
+        directoryPath = pathParts.join('/') + '/';
+      }
+
+      // 处理相对路径中的 ./ 和 ../
+      let relativePath = href.replace(/^\.\//, '');
+      if (relativePath.startsWith('../')) {
+        const upLevels = (relativePath.match(/\.\.\//g) || []).length;
+        let pathParts = directoryPath.split('/').filter(p => p);
+
+        for (let i = 0; i < upLevels && pathParts.length > 0; i++) {
+          pathParts.pop();
+        }
+
+        directoryPath = pathParts.join('/') + (pathParts.length > 0 ? '/' : '');
+        relativePath = relativePath.replace(/^(\.\.\/)+/, '');
+      }
+
+      const fullHref = rawBaseUrl + directoryPath + relativePath;
+      token.attrs[hrefIndex][1] = fullHref;
+    }
+  }
+
+  return self.renderToken(tokens, idx, options, env, self);
+};
+
 /**
  * 加载Markdown文件
  * @param {string} filePath - Markdown文件路径
