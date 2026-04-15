@@ -131,7 +131,7 @@ async function loadMarkdown(filePath) {
 
     // 更新页面标题
     const title = filePath.split('/').pop().replace('.md', '');
-    document.title = title + ' - mo技术博客';
+    document.title = title + ' - Bear随笔';
 
   } catch (error) {
     content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
@@ -170,7 +170,7 @@ async function loadPDF(filePath) {
 
     // 更新页面标题
     const title = filePath.split('/').pop().replace('.pdf', '');
-    document.title = title + ' - mo技术博客';
+    document.title = title + ' - Bear随笔';
 
   } catch (error) {
     content.innerHTML = '<div class="pdf-loading"><h2>PDF加载失败</h2><p>' + error.message + '</p></div>';
