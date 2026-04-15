@@ -2,9 +2,41 @@
  * ========================================
  * 主业务逻辑模块
  * ========================================
- * 包含：Markdown渲染、PDF阅读
+ * 包含：主题切换、Markdown渲染、PDF阅读
  * ========================================
  */
+
+// ========================================
+// 第零部分：主题切换
+// ========================================
+
+window.toggleTheme = function() {
+  var body = document.body;
+  var isLight = body.classList.contains('light-theme');
+  if (isLight) {
+    body.classList.remove('light-theme');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    body.classList.add('light-theme');
+    localStorage.setItem('theme', 'light');
+  }
+};
+
+(function initTheme() {
+  // 恢复用户选择
+  var saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.classList.add('light-theme');
+  } else if (!saved) {
+    // 首次访问跟随系统
+    if (window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add('light-theme');
+    }
+  }
+  // 绑定按钮点击事件
+  var btn = document.getElementById('themeToggleBtn');
+  if (btn) btn.addEventListener('click', window.toggleTheme);
+})();
 
 // ========================================
 // 第一部分：Markdown配置与渲染

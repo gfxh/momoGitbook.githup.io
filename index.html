@@ -15,13 +15,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
 
-  <!-- JavaScript -->
-  <script src="assets/js/main.js"></script>
-
 </head>
 
 <body>
-    <!-- 主内容区域 -->
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle-btn" id="themeToggleBtn" onclick="
+    document.body.classList.toggle('light-theme');
+    var isLight = document.body.classList.contains('light-theme');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  " title="切换主题">
+    <span class="icon-moon">🌙</span>
+    <span class="icon-sun">☀️</span>
+  </button>
+
+  <!-- 主内容区域 -->
   <div class="main-container">
     <div class="content-wrap">
       <div class="content" id="content">
@@ -174,6 +182,9 @@
 
   <!-- 跳到目录按钮 -->
   <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
+
+  <!-- JavaScript（放body末尾确保DOM已加载） -->
+  <script src="assets/js/main.js"></script>
 
 </body>
 
