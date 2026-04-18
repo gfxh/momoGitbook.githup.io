@@ -58,13 +58,35 @@ body {
   padding: 4px;
   background: conic-gradient(
     from var(--rotation, 0turn),
-    #2a0845,
-    #6441A5,
-    #4a9eff,
-    #b0b0b0,
-    #00d4aa,
-    #6441A5,
-    #2a0845
+    #FF4500,
+    #FF8C00,
+    #FFD700,
+    #00C09F,
+    #00A080,
+    #81C784,
+    #4CAF50,
+    #2E7D32,
+    #00705A,
+    #1E90FF,
+    #87CEEB,
+    #0F4C81,
+    #6A0DAD,
+    #9370DB,
+    #E6E6FA,
+    #FF0080,
+    #FF00FF,
+    #00FFFF,
+    #004E89,
+    #00A6FB,
+    #C3E0F4,
+    #5D4037,
+    #8D6E63,
+    #D7CCC8,
+    #1A1A1A,
+    #333333,
+    #666666,
+    
+    
   );
   mask:
     linear-gradient(#fff 0 0) content-box,
