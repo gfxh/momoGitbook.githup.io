@@ -84,16 +84,14 @@ body {
     #D7CCC8,
     #1A1A1A,
     #333333,
-    #666666,
-    
-    
+    #666666
   );
   mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   mask-composite: xor;
   -webkit-mask-composite: xor;
-  opacity: 0.45;
+  opacity: 0.8;
   animation: border-rotate 8s linear infinite;
   pointer-events: none;
 }
@@ -206,7 +204,7 @@ body {
 .sidebar-post-container { display: none; }
 
 /* ========================================
- * 跳到目录按钮（右侧悬浮）
+ * 跳到底部按钮（右侧悬浮）
  * ======================================== */
 
 .jump-to-toc-btn {
@@ -231,6 +229,36 @@ body {
 }
 
 .jump-to-toc-btn:hover {
+  background: #404040;
+  border-color: #8ab4f8;
+  color: #e0e0e0;
+  transform: translateY(50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+/* 跳到顶部按钮（右侧悬浮） */
+.jump-to-top-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 60%;
+  transform: translateY(50%);
+  z-index: 999;
+  width: 48px;
+  height: 48px;
+  background: #2d2d2d;
+  border: 1px solid #555;
+  border-radius: 50%;
+  color: #c8c8c8;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.jump-to-top-btn:hover {
   background: #404040;
   border-color: #8ab4f8;
   color: #e0e0e0;
