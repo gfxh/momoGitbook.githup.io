@@ -319,8 +319,8 @@ function initParticleSystem() {
       }
       
       // 边界反弹
-      if (this.x < 0 || this.x > canvas.width) this.vx *= -0.8;
-      if (this.y < 0 || this.y > canvas.height) this.vy *= -0.8;
+      if (this.x < 0 || this.x > canvas.width) this.vx *= -1.5;
+      if (this.y < 0 || this.y > canvas.height) this.vy *= -1.5;
       
       // 速度限制
       const maxSpeed = 1.5;
