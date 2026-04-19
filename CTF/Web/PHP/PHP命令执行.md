@@ -115,11 +115,20 @@ od -c flag      // 二进制读
 | \ ? | 问号    | %3F |
 | \\  | 右斜杠   | %2F |
 
-## 0x1: preg\_match()函数
+## 0x1: preg_match()函数
 
 执行一个正则表达式匹配.***经常与if搭配用于过滤***
 
+
 ```
+// 正确的过滤写法：只允许字母数字
+if (!preg_match('/^[a-zA-Z0-9]+$/', $input)) {
+    die('非法字符！只允许字母和数字'); // 不匹配白名单，直接拦住
+}
+// 匹配白名单，才继续执行
+echo '合法输入：' . $input;
+
+
 格式：int preg_match ( string $pattern , mixed $subject [, array &$matches [, int $flags = 0 [, int $offset = 0 ]]] )
 
 
@@ -264,7 +273,7 @@ echo `whoami`
 
 ## 0x7 空格被过滤了
 
-preg\_match过滤空格
+preg_match过滤空格
 1.`$IFS`或`${IFS}`:SHELL环境变量 **内部字段分割符**。默认值包含空格 制表符 换行符
 对于用到空格的命令，shell解析时会自动替换为空格
 

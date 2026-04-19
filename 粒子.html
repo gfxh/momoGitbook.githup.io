@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>粒子互联 + 鼠标小范围吸附</title>
+    <style>
+        body { margin: 0; background: #050512; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script>
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        document.body.appendChild(canvas);
+
+        // 适配窗口
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 配置（已按你要求优化）
+        const config = {
+            pointCount: 200,       // 粒子更多
+            speed: 0.5,           // 移动速度
+            connectDist: 150,      // 粒子连线距离
+            boxSize: 100,          // 鼠标吸附矩形大小
+            attractForce: 0.005,     // 吸附强度
+        };
+
+        // 鼠标
+        const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+
+        // 粒子
+        class Particle {
+            constructor(x, y) {
+                this.x = x ?? Math.random() * canvas.width;
+                this.y = y ?? Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * config.speed;
+                this.vy = (Math.random() - 0.5) * config.speed;
+                this.hue = Math.random() * 360;
+            }
+
+            update(mouse) {
+                // 基础移动
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // 判断：是否在鼠标矩形范围内
+                const inBox = 
+                    this.x > mouse.x - config.boxSize/2 &&
+                    this.x < mouse.x + config.boxSize/2 &&
+                    this.y > mouse.y - config.boxSize/2 &&
+                    this.y < mouse.y + config.boxSize/2;
+
+                // 只有在盒子里才被鼠标吸引
+                if (inBox) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    this.vx += dx * config.attractForce;
+                    this.vy += dy * config.attractForce;
+                }
+
+                // 边界反弹
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -0.8;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -0.8;
+
+                // 速度限制
+                const maxSpeed = 1.5;
+                const sp = Math.hypot(this.vx, this.vy);
+                if (sp > maxSpeed) {
+                    this.vx = this.vx / sp * maxSpeed;
+                    this.vy = this.vy / sp * maxSpeed;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 4, 0, Math.PI * 2); // 粒子变大
+                ctx.fillStyle = `hsl(${this.hue}, 85%, 65%)`;
+                ctx.fill();
+            }
+        }
+
+        // 初始化粒子
+        const particles = Array.from({ length: config.pointCount }, () => new Particle());
+
+        // 鼠标移动
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        // 点击生成新粒子
+        window.addEventListener('click', e => {
+            particles.push(new Particle(e.clientX, e.clientY));
+        });
+
+        // 主循环
+        function draw() {
+            // ========== 关键修复：每次直接清空画布，无拖尾、无背景变色 ==========
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 更新粒子位置
+            particles.forEach(p => p.update(mouse));
+
+            // 粒子之间互相连线
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+
+                    if (dist < config.connectDist) {
+                        const alpha = 1 - dist / config.connectDist;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `hsla(${(p1.hue + p2.hue) / 2}, 80%, 70%, ${alpha * 0.6})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // 绘制所有粒子
+            particles.forEach(p => p.draw());
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
+</html>
