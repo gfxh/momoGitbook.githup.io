@@ -1,5 +1,5 @@
 # PHP基础
->https://www.php.net/manual/zh/index.php
+>[PHP基础详情](https://www.php.net/manual/zh/index.php)
 ## PHP 基础格式
 1. PHP 标签
 ```
@@ -60,7 +60,7 @@
     x ?= y	|x = x ? y	|支持 +=, -=, *=, /=, %=,.=
 
     逻辑运算符
-    >详情：https://www.php.net/manual/zh/language.operators.logical.php
+    >[详情](https://www.php.net/manual/zh/language.operators.logical.php)
 
     运算符	|名称	|描述
     -----|-----|-----
@@ -70,7 +70,7 @@
     ! x	|非	|如果 x 不为 true，则返回 true
 
     类型比较
-    >详情：https://www.php.net/manual/zh/language.operators.comparison.php
+    >[详情](https://www.php.net/manual/zh/language.operators.comparison.php)
 
     **松散比较：使用两个等号 == 比较，只比较值，不比较类型**。
     **严格比较：用三个等号 === 比较，除了比较值，也比较类型。**
@@ -84,11 +84,11 @@
     print - 只允许输出一个字符串，返回值总为 1**
     
     运算符的优先级
-   >运算符优先级：https://www.php.net/manual/zh/language.operators.precedence.php
+   >[详情](https://www.php.net/manual/zh/language.operators.precedence.php)
     **下表按照优先级从高到低**
    ![运算符优先级](./TU/PHP1x1.png)
 ## 数组
-   >数组：https://www.php.net/manual/zh/language.operators.array.php
+   >[详情](https://www.php.net/manual/zh/language.operators.array.php)
 
    array() 函数用于创建数组
    ```
@@ -104,22 +104,22 @@
    关联数组：每个元素都有一个键名，键名可以是字符串或整数。
    索引数组：每个元素都有一个键名，键名是整数，从 0 开始递增。
 ## 魔术常量
-   >详情：https://www.php.net/manual/zh/language.constants.magic.php
+   >[详情](https://www.php.net/manual/zh/language.constants.magic.php)
     **__FILE__** 这样的 **__XXX__** 预定义常量，被称为魔术常量
    所有这些“魔术”常量都在编译时解析，而常规常量则在运行时解析
 
 魔术常量名|描述
 -----|-----
-__LINE__	|文件中的当前行号。
-__FILE__	|文件的完整路径和文件名。如果用在被包含文件中，则返回被包含的文件名。
-__DIR__	|文件所在的目录。如果用在被包括文件中，则返回被包括的文件所在的目录。它等价于 dirname(__FILE__)。除非是根目录，否则目录中名不包括末尾的斜杠。
-__FUNCTION__	|当前函数的名称。匿名函数则为 {closure}。
-__CLASS__	|当前类的名称。类名包括其被声明的作用域（例如 Foo\Bar）。当用在 trait 方法中时，__CLASS__ 是调用 trait 方法的类的名字。
-__TRAIT__	|Trait 的名字。Trait 名包括其被声明的作用域（例如 Foo\Bar）。
-__METHOD__	|类的方法名。
-__PROPERTY__	|仅在属性挂钩内有效。等同于属性的名称。
-__NAMESPACE__	|当前命名空间的名称。
-ClassName::class	|完整的类名。
+`__LINE__`	|文件中的当前行号。
+`__FILE__`	|文件的完整路径和文件名。如果用在被包含文件中，则返回被包含的文件名。
+`__DIR__`	|文件所在的目录。如果用在被包括文件中，则返回被包括的文件所在的目录。它等价于 dirname(__FILE__)。除非是根目录，否则目录中名不包括末尾的斜杠。
+`__FUNCTION__`	|当前函数的名称。匿名函数则为 {closure}。
+`__CLASS__`	|当前类的名称。类名包括其被声明的作用域（例如 Foo\Bar）。当用在 trait 方法中时，__CLASS__ 是调用 trait 方法的类的名字。
+`__TRAIT__`	|Trait 的名字。Trait 名包括其被声明的作用域（例如 Foo\Bar）。
+`__METHOD__`	|类的方法名。
+`__PROPERTY__`	|仅在属性挂钩内有效。等同于属性的名称。
+`__NAMESPACE__`	|当前命名空间的名称。
+`ClassName::class`	|完整的类名。
 
 ## 表单数据
 
@@ -133,7 +133,7 @@ ClassName::class	|完整的类名。
 
     **$_REQUEST** —— 接受 GET 和 POST 以及 Cookie 请求传递的参数。
 ## 函数
-   >详情：https://www.php.net/manual/zh/funcref.php
+   >[详情](https://www.php.net/manual/zh/funcref.php)
 文件操作函数：
 
 函数名|描述
@@ -172,8 +172,27 @@ unserialize(): 将一个已序列化的字符串转换回 PHP 的值。
 
 
 
-## 绕过
-
+## 流程控制
+>[详情](https://www.php.net/manual/zh/language.control-structures.php)
+```if
+else
+elseif/else if
+while
+do-while
+for
+foreach
+break
+continue
+switch
+match
+declare
+return
+require
+include
+require_once
+include_once
+goto
+```
 
 
 

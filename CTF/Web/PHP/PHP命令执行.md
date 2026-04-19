@@ -1,6 +1,6 @@
-# 命令执行的过滤,函数
+# 绕过 命令执行的过滤,函数
 
-> PHP官网:<https://www.php.net/>    查看各类函数
+> [PHP官网](https://www.php.net/)    查看各类函数
 
 访问 [Rot13AtbaseBase64编码解码](./CTF/Web/PHP/rot13base.html)
 
