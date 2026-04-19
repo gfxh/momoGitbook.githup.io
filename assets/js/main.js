@@ -17,7 +17,9 @@ const md = window.markdownit({
   typographer: true,
   breaks: true,
   highlight: function (str, lang) {
-    return '<pre><code class="language-' + lang + '">' + str + '</code></pre>';
+    // 对代码内容进行HTML转义，防止<和>被解析为HTML标签
+    const escapedStr = str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    return '<pre><code class="language-' + lang + '">' + escapedStr + '</code></pre>';
   }
 });
 

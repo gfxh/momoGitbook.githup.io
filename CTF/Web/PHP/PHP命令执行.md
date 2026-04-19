@@ -320,6 +320,7 @@ tac<./flag.php
 if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
   eval($_GET['shell']);
 }
+
 ```
 
 ### 没有字母就截取环境变量的字母
