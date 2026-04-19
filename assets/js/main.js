@@ -278,9 +278,11 @@ function initParticleSystem() {
   
   // 配置
   const config = {
-    pointCount: 300,       // 粒子数量
-    speed: 0.5,           // 移动速度
-    connectDist: 200,      // 粒子连线距离
+    initialPointCount: 100,       // 初始粒子数量
+    maxPointCount: 400,          // 最大粒子数量
+    addPerSecond: 20,            // 每秒增加的粒子数量
+    speed: 0.7,           // 移动速度
+    connectDist: 150,      // 粒子连线距离
     boxSize: 100,          // 鼠标吸附矩形大小
     attractForce: 0.05,     // 吸附强度
   };
@@ -340,7 +342,20 @@ function initParticleSystem() {
   }
   
   // 初始化粒子
-  const particles = Array.from({ length: config.pointCount }, () => new Particle());
+  const particles = Array.from({ length: config.initialPointCount }, () => new Particle());
+  
+  // 定时添加粒子
+  const addParticleInterval = setInterval(() => {
+    if (particles.length < config.maxPointCount) {
+      // 每秒添加20个粒子
+      for (let i = 0; i < config.addPerSecond / 10; i++) { // 每100毫秒添加2个粒子，确保每秒添加20个
+        particles.push(new Particle());
+      }
+    } else {
+      // 达到最大数量后停止添加
+      clearInterval(addParticleInterval);
+    }
+  }, 100); // 每100毫秒执行一次
   
   // 鼠标移动
   window.addEventListener('mousemove', e => {
