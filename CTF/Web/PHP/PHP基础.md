@@ -1,5 +1,6 @@
 # PHP基础
 >[PHP基础详情](https://www.php.net/manual/zh/index.php)
+[自制发包工具](./CTF/Web/GET.exe)
 ## PHP 基础格式
 1. PHP 标签
 ```
@@ -194,7 +195,12 @@ include_once
 goto
 ```
 
+## 执行运算符 
+PHP 支持一个执行运算符
+反引号（``）。
+注意这不是单引号！PHP 将尝试将反引号中的内容作为 shell 命令来执行，并将其输出信息返回（即，可以赋给一个变量而不是简单地丢弃到标准输出）。
 
+使用反引号运算符 **`` ` ``** 的效果与函数 shell_exec() 相同。
 
 
 
