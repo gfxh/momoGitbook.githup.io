@@ -257,8 +257,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // 加载默认内容
   loadMarkdown('README.md');
   
-  // 初始化粒子系统
-  initParticleSystem();
+  // 延迟初始化粒子系统，确保DOM完全加载
+  setTimeout(() => {
+    initParticleSystem();
+  }, 100);
 });
 
 /**
@@ -266,6 +268,10 @@ document.addEventListener('DOMContentLoaded', function () {
  */
 function initParticleSystem() {
   const canvas = document.getElementById('particle-canvas');
+  if (!canvas) {
+    console.error('Canvas element not found');
+    return;
+  }
   const ctx = canvas.getContext('2d');
   
   // 适配窗口
@@ -281,10 +287,10 @@ function initParticleSystem() {
     initialPointCount: 100,       // 初始粒子数量
     maxPointCount: 400,          // 最大粒子数量
     addPerSecond: 20,            // 每秒增加的粒子数量
-    speed: 0.7,           // 移动速度
-    connectDist: 150,      // 粒子连线距离
+    speed: 1,           // 移动速度
+    connectDist: 100,      // 粒子连线距离
     boxSize: 100,          // 鼠标吸附矩形大小
-    attractForce: 0.05,     // 吸附强度
+    attractForce: 0.1,     // 吸附强度
   };
   
   // 鼠标

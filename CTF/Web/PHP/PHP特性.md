@@ -168,6 +168,12 @@ pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
 把0x2d替换为-,最后一位需要爆破16次，题目给的flag少一位
 
 
+**·102**
+![5](TU/PHP4x15.png)
+
+
+[substr()](https://www.php.net/manual/zh/function.substr.php):返回字符串的子串
+
 
 
 
