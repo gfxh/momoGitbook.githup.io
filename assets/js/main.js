@@ -337,8 +337,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // 加载保存的主题偏好
   loadSavedTheme();
   
-  // 显示首页内容
-  showHome();
+  // 检查当前页面是否为首页
+  if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
+    // 显示首页内容
+    showHome();
+  }
   
   // 延迟初始化粒子系统，确保DOM完全加载
   setTimeout(() => {
