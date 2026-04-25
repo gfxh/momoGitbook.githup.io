@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Blog - Bear随笔</title>
+
+  <!-- 样式表 -->
+  <link rel="stylesheet" href="assets/css/main.css">
+
+  <!-- 外部库 -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
+  <!-- JavaScript -->
+  <script src="assets/js/main.js"></script>
+
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <li><a href="Links.html">Links</a></li>
+        <li><a href="Comment.html">Comment</a></li>
+        <li><a href="About.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 深色/浅色模式切换按钮 -->
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+    <span id="theme-icon">🌙</span>
+    <span id="theme-text">深色模式</span>
+  </button>
+
+  <!-- 主内容区域 -->
+  <div class="main-container">
+    <canvas id="particle-canvas"></canvas>
+    <div class="content-wrap">
+      <div class="content" id="content">
+        <div class="loading">
+          <h2>欢迎来到阅读页面</h2>
+          <p>请从下方目录选择要阅读的内容</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部目录区域 -->
+  <div class="sidebar">
+    <div class="sidebar-toc">
+      <div class="toc">
+
+        <!-- 介绍 -->
+        <div class="toc-level-1">
+          <div class="toc-header">介绍</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('README.md'); return false;">介绍</a>
+          </div>
+        </div>
+
+        <!-- markdown练习 -->
+        <div class="toc-level-1">
+          <div class="toc-header">Markdown</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('markdown的练习.md'); return false;">基础语法练习</a>
+          </div>
+        </div>
+
+        <!-- Git -->
+        <div class="toc-level-1">
+          <div class="toc-header">Git</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.1学习.md'); return false;">Git的学习</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.2代码推送.md'); return false;">Git的代码推送</a>
+          </div>
+        </div>
+
+        <!-- CTF -->
+        <div class="toc-level-1">
+          <div class="toc-header">CTF</div>
+
+          <!-- Web -->
+          <div class="toc-level-2">
+            <div class="toc-header">Web</div>
+            <div class="toc-level-3">
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/baopo/wifi破.md'); return false;">airmon/airodump</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/baopo/爆破登录.md'); return false;">登录爆破</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/信息收集/信息收集.md'); return false;">信息收集</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/信息收集/信息收集2.md'); return false;">where_is_flag</a>
+            </div>
+
+          </div>
+
+          
+          <!-- PHP -->
+          <div class="toc-level-2">
+            <div class="toc-header">PHP</div>
+            <div class="toc-level-3">
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP基础.md'); return false;">PHP基础</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP命令执行.md'); return false;">PHP命令执行</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP伪协议.md'); return false;">PHP伪协议</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP特性.md'); return false;">PHP特性</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP文件读取.md'); return false;">（未）PHP文件读取</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP文件写入.md'); return false;">（未）PHP文件写入</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/PHP/PHP文件上传.md'); return false;">（未）PHP文件上传</a>
+              
+            </div>
+          </div>
+
+          <!-- SQL -->
+          <div class="toc-level-2">
+            <div class="toc-header">SQL</div>
+            <div class="toc-level-3">
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/SQL/0x0.md'); return false;">SQL注入基础</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/SQL/0x3盲注.md'); return false;">SQL盲注</a>
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/SQL/0x4OrderBY.md'); return false;">SQL报错注入</a>
+            </div>
+          </div>
+
+          
+
+        </div>
+
+        <!-- 网络安全书籍 -->
+        <div class="toc-level-1">
+          <div class="toc-header">安全书籍</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/伏特台风Ⅲ—揭密美国政府机构实施的网络间谍和虚假信息行动.pdf'); return false;">伏特台风Ⅲ</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/2024中国实战化白帽人才能力白皮书.pdf'); return false;">白帽能力白皮书</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/高级渗透测试黑客攻击世界上最安全的网络.pdf'); return false;">高级渗透测试</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/汇编语言命令.pdf'); return false;">汇编语言命令</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/逆向工程教程.pdf'); return false;">逆向工程教程</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/网络安全CTF学习.pdf'); return false;">CTF学习</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/一本介绍红队攻击的电子书英文.pdf'); return false;">红队攻击</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/CTF竞赛入门指南.pdf'); return false;">CTF入门指南</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('网络空间安全Book/PWN二进制漏洞挖掘与利用.pdf'); return false;">PWN漏洞挖掘</a>
+          </div>
+        </div>
+
+        <!-- Python -->
+        <div class="toc-level-1">
+          <div class="toc-header">Python</div>
+          <div class="toc-level-2">
+            <a href="index.html" onclick="loadPDF('PythonBook/从入门到实践.pdf'); return false;">从入门到实践</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('PythonBook/快速上手让繁琐工作自动化.pdf'); return false;">快速上手</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadPDF('PythonBook/极客项目编程.pdf'); return false;">极客项目编程</a>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="toc-level-1">
+          <div class="toc-header">Java</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('Java的复习/Java 入门_1.md'); return false;">Java的运行</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('Java的复习/Java 入门_2.md'); return false;">什么是对象</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('Java的复习/Java 入门_3.md'); return false;">方法进阶</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('Java的复习/Java 入门_4.md'); return false;">面向对象</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('Java的复习/Java 入门_5.md'); return false;">文件IO</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('Java的复习/Java 入门_6.md'); return false;">项目实战</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 跳到顶部按钮 -->
+  <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
+  
+  <!-- 跳到目录按钮 -->
+  <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
+
+  <script>
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function () {
+      // 加载保存的主题偏好
+      loadSavedTheme();
+      
+      // 延迟初始化粒子系统，确保DOM完全加载
+      setTimeout(() => {
+        initParticleSystem();
+      }, 100);
+    });
+  </script>
+
+</body>
+
+</html>

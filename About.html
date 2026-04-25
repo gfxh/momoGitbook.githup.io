@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>Bear随笔</title>
+  <title>About - Bear随笔</title>
 
   <!-- 样式表 -->
   <link rel="stylesheet" href="assets/css/main.css">
@@ -42,17 +42,60 @@
 
   <!-- 主内容区域 -->
   <div class="main-container">
-    <div class="home-content" id="content">
+    <div class="page-content" id="content">
+      <!-- 内容留空，供用户修改 -->
     </div>
   </div>
 
-  
+  <!-- 底部目录区域 -->
+  <div class="sidebar">
+    <div class="sidebar-toc">
+      <div class="toc">
+
+        <!-- 介绍 -->
+        <div class="toc-level-1">
+          <div class="toc-header">介绍</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('README.md'); return false;">介绍</a>
+          </div>
+        </div>
+
+        <!-- markdown练习 -->
+        <div class="toc-level-1">
+          <div class="toc-header">Markdown</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('markdown的练习.md'); return false;">基础语法练习</a>
+          </div>
+        </div>
+
+        <!-- Git -->
+        <div class="toc-level-1">
+          <div class="toc-header">Git</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.1学习.md'); return false;">Git的学习</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.2代码推送.md'); return false;">Git的代码推送</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- 跳到顶部按钮 -->
   <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
   
   <!-- 跳到目录按钮 -->
   <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
+
+  <script>
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function () {
+      // 加载保存的主题偏好
+      loadSavedTheme();
+    });
+  </script>
 
 </body>
 

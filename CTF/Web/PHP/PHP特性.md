@@ -209,8 +209,31 @@ hex 码前面记得补两个0 (substr)
 
 上题pyload依然可用
 
+**·104**
+![7](TU/PHP4x17.png)
+sha1() 函数用于计算字符串的 SHA-1 哈希值。
+**[sha1()](https://www.php.net/manual/zh/function.sha1.php)**:返回字符串的 SHA-1 哈希值。()**   
+* 给get和post传入一样的字符串就行
+![8](TU/PHP4x17_1.png)
+* 注意 sha1 0e 漏洞, 而且是 ==  
+* 或者用数组绕过
+**·105**
+![9](TU/PHP4x18.png)
+**[foreach()](https://www.php.net/manual/zh/control-structures.foreach.php)**:遍历数组或对象的每个元素。
 
+`$$`是覆盖赋值运算符
+```
 
+首先我们 GET 不能传 error=xx, POST 不能传 xxx=flag
+因为这里的 $_POST['flag'] 无法进行覆盖, 如果我们想要绕过 if(!($_POST['flag']==$flag)), 就必须要已知 flag 的值, 或者是将 $flag 设置为空, 然后 post 传递 flag=
+只能是第二种办法, 但是这会清空原来 $flag 里面的内容, 于是我们需要找到一个可以输出的变量来存储原来 $flag 的值
+这里我们用 $suces 来存储 flag
+GET 传递 ?suces=flag&flag=, 同时 POST flag=
+注意这里 GET 的变量覆盖是按照参数传递时从左到右的顺序进行的, 所以清空 $flag 的操作一定在后面
+```
+
+![10](TU/PHP4x18_1.png)
+pyload=`URL/?suces=flag&, 同时 POST error=suces`
 
 
 

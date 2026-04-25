@@ -8,55 +8,40 @@
 
 ##### 五级标题
 
-
-
 正文
 
 **加粗**
 
 *加斜*
 
-
-
-
-
-
-
-
-
 # 列表
-* 无序列表
-    * 葫芦娃
-    * 奥特曼
-    * 小菜比
-* 有序列表
-    1. 大彩笔
-    1. 小王
-    1. 五点
 
+- 无序列表
+  - 葫芦娃
+  - 奥特曼
+  - 小菜比
+- 有序列表
+  1. 大彩笔
+  2. 小王
+  3. 五点
 
 # 代码块
 
-* 行内代码
+- 行内代码
 
 `行内代码`
 `DWFAFUVDYAVUIASU`
 
-
-
-
-* 行间代码
-
+- 行间代码
 
 ```
 ZHE SHI DAI MA NEI RONG
 print("你好啊")
 ```
 
-
 # 引用
-> warframe的官网 https://www.warframe.com/zh-hans
 
+> warframe的官网 <https://www.warframe.com/zh-hans>
 
 # 在线 MarkDown 编辑器
 
@@ -74,34 +59,43 @@ Markdown 编写的文档后缀为 `.md` 或 `.markdown`。
 
 **目录 (Table of Contents)**
 
-[TOCM]
+\[TOCM]
 
-[TOC]
+\[TOC]
 
 # Heading 1
+
 ## Heading 2
+
 ### Heading 3
+
 #### Heading 4
+
 ##### Heading 5
+
 ###### Heading 6
+
 # Heading 1 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ## Heading 2 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ### Heading 3 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 #### Heading 4 link [Heading link](https://github.com/pandao/editor.md "Heading link") Heading link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ##### Heading 5 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ###### Heading 6 link [Heading link](https://github.com/pandao/editor.md "Heading link")
 
 #### 标题（用底线的形式）Heading (underline)
 
-This is an H1
-=============
+# This is an H1
 
-This is an H2
--------------
+## This is an H2
 
 ### 字符效果和横线等
 
-----
+***
 
 ~~删除线~~ <s>删除线（开启识别HTML标签时）</s>
 *斜体字*      _斜体字_
@@ -130,15 +124,13 @@ The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is mainta
 
 [普通链接带标题](http://localhost/ "普通链接带标题")
 
-直接链接：<https: //github.com>
+直接链接：\<https: //github.com>
 
-[锚点链接][anchor-id]
+[锚点链接](http://www.this-anchor-link.com/)
 
-[anchor-id]: http://www.this-anchor-link.com/
+<mailto:test.test@gmail.com>
 
-[mailto:test.test@gmail.com](mailto:test.test@gmail.com)
-
-GFM a-tail link @pandao  邮箱地址自动链接 test.test@gmail.com  www@vip.qq.com
+GFM a-tail link @pandao  邮箱地址自动链接 <test.test@gmail.com>  <www@vip.qq.com>
 
 > @pandao
 
@@ -152,16 +144,20 @@ GFM a-tail link @pandao  邮箱地址自动链接 test.test@gmail.com  www@vip.q
 
 即缩进四个空格，也做为实现类似 `<pre>` 预格式化文本 ( Preformatted Text ) 的功能。
 
-    <?php
-        echo "Hello world!";
-    ?>
+```
+<?php
+    echo "Hello world!";
+?>
+```
 
 预格式化文本：
 
-    | First Header  | Second Header |
-    | ------------- | ------------- |
-    | Content Cell  | Content Cell  |
-    | Content Cell  | Content Cell  |
+```
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+```
 
 #### JS代码
 
@@ -256,7 +252,7 @@ Image:
 
 > 图为：李健首张专辑《似水流年》封面
 
-----
+***
 
 ### 列表 Lists
 
@@ -266,23 +262,23 @@ Image:
 - 列表二
 - 列表三
 
-#### 无序列表（星号）Unordered Lists (*)
+#### 无序列表（星号）Unordered Lists (\*)
 
-* 列表一
-* 列表二
-* 列表三
+- 列表一
+- 列表二
+- 列表三
 
 #### 无序列表（加号和嵌套）Unordered Lists (+)
 
-+ 列表一
-+ 列表二
-    + 列表二-1
-    + 列表二-2
-    + 列表二-3
-+ 列表三
-    * 列表一
-    * 列表二
-    * 列表三
+- 列表一
+- 列表二
+  - 列表二-1
+  - 列表二-2
+  - 列表二-3
+- 列表三
+  - 列表一
+  - 列表二
+  - 列表三
 
 #### 有序列表 Ordered Lists (-)
 
@@ -295,68 +291,68 @@ Image:
 - [x] GFM task list 1
 - [x] GFM task list 2
 - [ ] GFM task list 3
-    - [ ] GFM task list 3-1
-    - [ ] GFM task list 3-2
-    - [ ] GFM task list 3-3
+  - [ ] GFM task list 3-1
+  - [ ] GFM task list 3-2
+  - [ ] GFM task list 3-3
 - [ ] GFM task list 4
-    - [ ] GFM task list 4-1
-    - [ ] GFM task list 4-2
+  - [ ] GFM task list 4-1
+  - [ ] GFM task list 4-2
 
-----
+***
 
 ### 绘制表格 Tables
 
-| 项目        | 价格   |  数量  |
-| --------   | -----:  | :----:  |
-| 计算机      | $1600   |   5     |
-| 手机        |   $12   |   12   |
-| 管线        |    $1    |  234  |
+| 项目  |    价格 |  数量 |
+| --- | ----: | :-: |
+| 计算机 | $1600 |  5  |
+| 手机  |   $12 |  12 |
+| 管线  |    $1 | 234 |
 
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell 
+| First Header | Second Header |
+| ------------ | ------------- |
+| Content Cell | Content Cell  |
+| Content Cell | Content Cell  |
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+| First Header | Second Header |
+| ------------ | ------------- |
+| Content Cell | Content Cell  |
+| Content Cell | Content Cell  |
 
-| Function name | Description                    |
-| ------------- | ------------------------------ |
-| `help()`      | Display the help window.       |
-| `destroy()`   | **Destroy your computer!**     |
+| Function name | Description                |
+| ------------- | -------------------------- |
+| `help()`      | Display the help window.   |
+| `destroy()`   | **Destroy your computer!** |
 
-| Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
+| Left-Aligned  |  Center Aligned | Right Aligned |
+| :------------ | :-------------: | ------------: |
+| col 3 is      | some wordy text |         $1600 |
+| col 2 is      |     centered    |           $12 |
+| zebra stripes |     are neat    |            $1 |
 
-| Item      | Value |
-| --------- | -----:|
-| Computer  | $1600 |
-| Phone     |   $12 |
-| Pipe      |    $1 |
+| Item     | Value |
+| -------- | ----: |
+| Computer | $1600 |
+| Phone    |   $12 |
+| Pipe     |    $1 |
 
-----
+***
 
 #### 特殊符号 HTML Entities Codes
 
 © &  ¨ ™ ¡ £
-& < > ¥ € ® ± ¶ § ¦ ¯ « · 
+& < > ¥ € ® ± ¶ § ¦ ¯ « ·
 
 X² Y³ ¾ ¼  ×  ÷   »
 
 18ºC  "  '
 
-[========]
+\[========]
 
 #### 反斜杠 Escape
 
 \*literal asterisks\*
 
-[========]
+\[========]
 
 ### 科学公式 TeX(KaTeX)
 
@@ -366,9 +362,9 @@ $$E=mc^2$$
 
 $$x > y$$
 
-$$\(\sqrt{3x-1}+(1+x)^2\)$$
+$$(\sqrt{3x-1}+(1+x)^2)$$
 
-$$\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))$$
+$$\sin(\alpha)^{\theta}=\sum\_{i=0}^{n}(x^i + \cos(f))$$
 
 多行公式：
 
@@ -402,7 +398,7 @@ f(x) = \int_{-\infty}^\infty
 
 > Print Test: Ctrl + P
 
-[========]
+\[========]
 
 ### 绘制流程图 Flowchart
 
@@ -417,7 +413,7 @@ cond(yes)->e
 cond(no)->op
 ```
 
-[========]
+\[========]
 
 ### 绘制序列图 Sequence Diagram
 
@@ -430,16 +426,10 @@ Andrew->>China: I am good thanks!
 
 ### End
 
-
-
 # 插入网图
 
-![这是网图](https://ts1.tc.mm.bing.net/th/id/OIP-C.FBf-UToXl49Hdy6dC6mVwQHaHa?w=202&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2)
-![](https://ts1.tc.mm.bing.net/th/id/OIP-C.94vThm37fUIauPjrjkRKaQHaHa?w=202&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2)
-![](https://ts1.tc.mm.bing.net/th/id/OIP-C.RNMC8dkQ5LVDWUi2VePtIgHaJK?w=163&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2)
-![](https://img-baofun.zhhainiao.com/pcwallpaper_ugc_mobile/preview_jpg/21cb2279dd07492e586f228a3fb9031f.JPG)
-![](https://ts1.tc.mm.bing.net/th/id/OIP-C.sADtiQwtDU-c5UYFmyOxGwHaNK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3)
+![这是网图](https://ts1.tc.mm.bing.net/th/id/OIP-C.FBf-UToXl49Hdy6dC6mVwQHaHa?w=202\&h=211\&c=8\&rs=1\&qlt=90\&o=6\&dpr=1.5\&pid=3.1\&rm=2)
+![](https://ts1.tc.mm.bing.net/th/id/OIP-C.94vThm37fUIauPjrjkRKaQHaHa?w=202\&h=211\&c=8\&rs=1\&qlt=90\&o=6\&dpr=1.5\&pid=3.1\&rm=2)
+![](https://ts1.tc.mm.bing.net/th/id/OIP-C.RNMC8dkQ5LVDWUi2VePtIgHaJK?w=163\&h=211\&c=8\&rs=1\&qlt=90\&o=6\&dpr=1.5\&pid=3.1\&rm=2)
 
-
-
-
+![](https://ts1.tc.mm.bing.net/th/id/OIP-C.sADtiQwtDU-c5UYFmyOxGwHaNK?cb=12\&rs=1\&pid=ImgDetMain\&o=7\&rm=3)
