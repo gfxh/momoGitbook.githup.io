@@ -371,8 +371,8 @@ function initParticleSystem() {
   
   // 配置
   const config = {
-    initialPointCount: 100,       // 初始粒子数量
-    maxPointCount: 400,          // 最大粒子数量
+    initialPointCount: 50,       // 初始粒子数量
+    maxPointCount: 300,          // 最大粒子数量
     addPerSecond: 20,            // 每秒增加的粒子数量
     speed: 1,           // 移动速度
     connectDist: 100,      // 粒子连线距离
@@ -428,7 +428,7 @@ function initParticleSystem() {
     
     draw() {
       ctx.beginPath();
-      ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
       ctx.fillStyle = `hsl(${this.hue}, 85%, 65%)`;
       ctx.fill();
     }
