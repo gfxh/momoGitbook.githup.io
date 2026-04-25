@@ -262,7 +262,7 @@ function showHome() {
       <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" alt="Avatar" class="home-avatar">
       <h1 class="home-title">Hi, I Am Bear</h1>
       <p class="home-subtitle">Aspiring to become a full-stack cybersecurity professional</p>
-      <p class="home-description">I love coding, but they don't like me...</p>
+      <p class="home-description">I love coding, but they don't like me...这里是main.js</p>
     </div>
   `;
   
