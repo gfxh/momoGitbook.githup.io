@@ -337,12 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 加载保存的主题偏好
   loadSavedTheme();
   
-  // 简化路径判断，确保在 GitHub Pages 上也能正确识别首页
-  const path = window.location.pathname;
-  if (path.includes('index.html') || path.endsWith('/') || path === '' || path.endsWith('/momoGitbook.githup.io') || path.endsWith('/momoGitbook.githup.io/')) {
-    // 显示首页内容
-    showHome();
-  }
+  // 移除对 showHome() 的调用，让首页内容直接从 index.html 读取
   
   // 延迟初始化粒子系统，确保DOM完全加载
   setTimeout(() => {
