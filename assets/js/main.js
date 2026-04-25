@@ -250,40 +250,7 @@ async function renderAllPages() {
 // 第三部分：页面初始化
 // ========================================
 
-/**
- * 显示首页内容
- */
-function showHome() {
-  const content = document.getElementById('content');
-  
-  // 显示首页内容
-  content.innerHTML = `
-    <div class="home-content">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" alt="Avatar" class="home-avatar">
-      <h1 class="home-title">Hi, I Am Bear</h1>
-      <p class="home-subtitle">Aspiring to become a full-stack cybersecurity professional</p>
-      <p class="home-description">I love coding, but they don't like me...这里是main.js</p>
-    </div>
-  `;
-  
-  // 更新页面标题
-  document.title = 'Home - Bear随笔';
-  
-  // 显示粒子效果
-  const canvas = document.getElementById('particle-canvas');
-  if (canvas) {
-    canvas.style.display = 'block';
-  }
-  
-  // 延迟更新粒子canvas大小，确保内容已完全加载
-  setTimeout(() => {
-    const canvas = document.getElementById('particle-canvas');
-    if (canvas) {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-  }, 100);
-}
+
 
 /**
  * 切换深色/浅色模式
