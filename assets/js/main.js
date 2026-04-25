@@ -337,8 +337,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // 加载保存的主题偏好
   loadSavedTheme();
   
-  // 检查当前页面是否为首页
-  if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
+  // 简化路径判断，确保在 GitHub Pages 上也能正确识别首页
+  const path = window.location.pathname;
+  if (path.includes('index.html') || path.endsWith('/') || path === '' || path.endsWith('/momoGitbook.githup.io') || path.endsWith('/momoGitbook.githup.io/')) {
     // 显示首页内容
     showHome();
   }
