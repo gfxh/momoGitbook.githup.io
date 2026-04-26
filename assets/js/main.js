@@ -33,7 +33,7 @@ md.renderer.rules.image = function (tokens, idx, options, _env, self) {
 
     // 处理相对路径图片，转换为 GitHub raw 链接
     if (src && !src.startsWith('http') && !src.startsWith('data:')) {
-      const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/refs/heads/main/';
+      const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/main/';
       let directoryPath = '';
 
       // 获取当前 Markdown 文件的目录路径
@@ -76,7 +76,7 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
     // 处理相对路径链接，转换为 GitHub raw 链接（针对 PHP、PY、JS 等代码文件）
     // HTML 文件保持相对路径，在 GitHub Pages 上直接访问
     if (href && !href.startsWith('http') && !href.startsWith('#') && (href.endsWith('.php') || href.endsWith('.py') || href.endsWith('.js') || href.endsWith('.txt'))) {
-      const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/refs/heads/main/';
+      const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/main/';
       let directoryPath = '';
 
       // 获取当前 Markdown 文件的目录路径
