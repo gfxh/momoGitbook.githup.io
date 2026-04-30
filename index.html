@@ -10,11 +10,166 @@
 
   <!-- 样式表 -->
   <link rel="stylesheet" href="assets/css/main.css">
-
   <!-- 外部库 -->
   <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    /* 动态晚霞渐变背景（极客暗调+紫粉蓝灰） */
+    .main-container {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(-45deg,
+        #0f172a, /* 深海黑蓝 */
+        #1e293b, /* 暗灰蓝 */
+        #312e81, /* 深紫 */
+        #4c1d95, /* 紫罗兰 */
+        #a855f7, /* 晚霞紫粉 */
+        #f472b6, /* 日系柔粉 */
+        #3b82f6, /* 极简蓝 */
+        #1e293b  /* 收尾暗灰蓝 */
+      );
+      background-size: 500% 500%;
+      animation: gradientFlow 12s ease infinite;
+      overflow: hidden;
+    }
+
+    @keyframes gradientFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 暗角柔光遮罩 */
+    .main-container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.25) 100%);
+      z-index: 1;
+    }
+
+    /* 首页内容居中+毛玻璃卡片 */
+    .home-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 32px;
+      text-align: center;
+      backdrop-filter: blur(10px) saturate(130%);
+      -webkit-backdrop-filter: blur(10px) saturate(130%);
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      animation: contentFadeIn 1s ease-out;
+    }
+
+    @keyframes contentFadeIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* 头像样式+悬停动效 */
+    .home-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin-bottom: 24px;
+      border: 3px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+      transition: all 0.4s ease;
+    }
+    .home-avatar:hover {
+      transform: scale(1.08) rotate(3deg);
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.6);
+    }
+
+    /* 文字排版（高级精简） */
+    .home-title {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .home-subtitle {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .home-description {
+      font-size: 1rem;
+      color: #cbd5e1;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    /* 导航栏微调（适配暗黑） */
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 99;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-menu a {
+      color: #e2e8f0;
+      transition: color 0.3s ease;
+    }
+    .nav-menu a:hover {
+      color: #a855f7;
+    }
+
+    /* 主题按钮微调 */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #f8fafc;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* 响应式适配（手机友好） */
+    @media (max-width: 768px) {
+      .home-content {
+        margin: 0 16px;
+        padding: 40px 20px;
+      }
+      .home-title {
+        font-size: 2rem;
+      }
+      .home-avatar {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  </style>
 
   <!-- JavaScript -->
   <script src="assets/js/main.js"></script>
@@ -28,8 +183,6 @@
       <ul class="nav-menu">
         <li><a href="./">Home</a></li>
         <li><a href="Blog.html">Blog</a></li>
-        <!--<li><a href="Links.html">Links</a></li>
-        <li><a href="Comment.html">Comment</a></li>-->
         <li><a href="About.html">About</a></li>
       </ul>
     </div>
@@ -47,21 +200,11 @@
       <!-- 首页内容 -->
       <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" alt="Avatar" class="home-avatar">
       <h1 class="home-title">Hi, I Am 0xBear</h1>
-      <p class="home-subtitle">Aspiring to become a full-stack cybersecurity professional</p>
-      <p class="home-description">I love coding, but they don't like me...</p>
-
-      <p class="home-description">I am interested in cybersecurity, and I am trying to learn more about it.</p>
-      <p class="home-description">I am looking forward to working with others in the field of cybersecurity.</p>
-
-
-
-
-
-
-
-
-
-
+      <p class="home-subtitle">Aspiring Cybersecurity Full-Stack Developer</p>
+      <p class="home-description">Lover of code, security, and open-source.</p>
+      <p class="home-description">Exploring offensive & defensive security.</p>
+      <p class="home-description">Building, breaking, learning, sharing.</p>
+      <p class="home-description">Open to cooperation & knowledge exchange.</p>
     </div>
   </div>
 
