@@ -1,7 +1,7 @@
 # 26/4/23
 # 字符串
 ## 调用字符串对象方法 常用方法  字符串操作方法
-### 1.字符串长度 **length() **
+### 1.字符串长度 **length()**
 ```
 public static void main(String[] args) {
 
