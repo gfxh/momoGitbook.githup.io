@@ -17,29 +17,45 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
 
   <!-- 晚霞动态渐变背景（仅新增，不改动原有功能） -->
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-    }
-    body {
-      background: linear-gradient(-45deg,
-        #0f172a, #1e293b, #312e81, #4c1d95,
-        #a855f7, #f472b6, #3b82f6, #1e293b
-      );
-      background-size: 500% 500%;
-      animation: gradientFlow 12s ease infinite;
-    }
-    @keyframes gradientFlow {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .main-container {
-      background: transparent !important;
-    }
-  </style>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: linear-gradient(-45deg,
+      #0f172a, #1e293b, #312e81, #4c1d95,
+      #a855f7, #f472b6, #3b82f6, #1e293b
+    );
+    background-size: 500% 500%;
+    animation: gradientFlow 12s ease infinite;
+  }
+  @keyframes gradientFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .main-container {
+    background: transparent !important;
+  }
+
+  /* 👇 只新增了这段！解决浅色模式看不到晚霞 */
+  body.light-mode {
+    background: linear-gradient(-45deg,
+      #fcc8e0, #f8bbd0, #e1bee7, #d1c4e9,
+      #c8e6f9, #d1f2ff, #f0f5ff, #fcc8e0
+    ) !important;
+    background-size: 500% 500% !important;
+    animation: gradientFlow 12s ease infinite !important;
+  }
+  body.light-mode .main-container,
+  body.light-mode .content-wrap,
+  body.light-mode .sidebar {
+    background: transparent !important;
+  }
+</style>
+
 
   <!-- JavaScript -->
   <script src="assets/js/main.js"></script>

