@@ -160,4 +160,227 @@
 
 <body>
   <!-- 导航栏 -->
-  <nav class="nav-b
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <!--<li><a href="Links.html">Links</a></li>
+        <li><a href="Comment.html">Comment</a></li>-->
+        <li><a href="About.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 深色/浅色模式切换按钮 -->
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+    <span id="theme-icon">🌙</span>
+    <span id="theme-text">深色模式</span>
+  </button>
+
+  <!-- 主内容区域 -->
+  <div class="main-container">
+    <!-- 画布：夕阳与粒子 -->
+    <canvas id="sunset-canvas" aria-hidden="true"></canvas>
+
+    <!-- 太阳（独立 DOM 层，便于模糊和阴影） -->
+    <div class="sun" aria-hidden="true"></div>
+
+    <!-- 云朵 DOM 元素（多层） -->
+    <div class="cloud layer1 large" aria-hidden="true"></div>
+    <div class="cloud layer2 small" aria-hidden="true"></div>
+    <div class="cloud layer3" aria-hidden="true"></div>
+
+    <!-- 可选粒子容器（用于小光点） -->
+    <div class="particle-layer" id="particle-layer" aria-hidden="true"></div>
+
+    <!-- 页面主要内容卡片 -->
+    <div class="page-content" id="content">
+      <h1>关于我</h1>
+      <p>这里只是一个记录个人学习经历的小破网页。</p>
+
+      <p>一个初出茅庐的菜鸟，有着各种问题，但会一直不断改善。</p>
+      <p>一个喜欢到处看技术文章的小白。</p>
+      <p>邮箱：2701581775@qq.com</p>
+      <hr>
+      <p style="font-size:0.9em; color:rgba(255,255,255,0.75)">
+        夕阳动画为页面专属内联实现，不会影响站点其他页面。关闭 JS 后会显示渐变静态背景。
+      </p>
+    </div>
+  </div>
+
+  <!-- 跳到顶部按钮 -->
+  <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
+
+  <!-- 跳到目录按钮 -->
+  <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
+
+  <!-- 保留外部主脚本引用（如你仓库中已有） -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- 页面专属脚本（内嵌） -->
+  <script>
+    // ABOUT 页面专属：夕阳、云、粒子
+    (function () {
+      const canvas = document.getElementById('sunset-canvas');
+      const ctx = canvas.getContext('2d', { alpha: true });
+      let width, height, DPR;
+
+      function resize() {
+        DPR = window.devicePixelRatio || 1;
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        canvas.width = Math.floor(width * DPR);
+        canvas.height = Math.floor(height * DPR);
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      }
+
+      // 渐变天空绘制（包含薄雾层）
+      function drawSky(time) {
+        // 天空主渐变：顶部到地平线
+        const g = ctx.createLinearGradient(0, 0, 0, height);
+        // 夕阳色带（可微动画）
+        const t = (Math.sin(time * 0.0003) + 1) / 2; // 0..1
+        // interpolation for subtle motion
+        const topColor = lerpColor('#ff9a66', '#ff6b35', t);
+        const midColor = lerpColor('#ffb27a', '#ff8c42', t);
+        const botColor = lerpColor('#ffd7a6', '#ffb347', t);
+
+        g.addColorStop(0, topColor);
+        g.addColorStop(0.45, midColor);
+        g.addColorStop(1, botColor);
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, width, height);
+
+        // 添加远处薄雾层（柔和带）
+        const fogAlpha = 0.08 + 0.02 * Math.sin(time * 0.0004);
+        ctx.fillStyle = `rgba(255,220,200,${fogAlpha})`;
+        ctx.fillRect(0, height * 0.55, width, height * 0.45);
+      }
+
+      // 线性插色辅助
+      function lerpColor(a, b, t) {
+        const ca = hexToRgb(a);
+        const cb = hexToRgb(b);
+        const cr = Math.round(ca.r + (cb.r - ca.r) * t);
+        const cg = Math.round(ca.g + (cb.g - ca.g) * t);
+        const cbv = Math.round(ca.b + (cb.b - ca.b) * t);
+        return `rgb(${cr},${cg},${cbv})`;
+      }
+
+      function hexToRgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) {
+          hex = hex.split('').map(s => s + s).join('');
+        }
+        const int = parseInt(hex, 16);
+        return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255 };
+      }
+
+      // 粒子小光点（用于近景闪烁）
+      const particles = [];
+      function initParticles() {
+        particles.length = 0;
+        const count = Math.max(12, Math.floor((width * height) / 80000));
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: height * (0.6 + Math.random() * 0.35),
+            r: 0.8 + Math.random() * 2.2,
+            a: 0.2 + Math.random() * 0.8,
+            vx: (Math.random() - 0.5) * 0.08,
+            vy: -0.02 - Math.random() * 0.06,
+            life: Math.random() * 2000
+          });
+        }
+      }
+
+      function drawParticles(delta) {
+        for (const p of particles) {
+          p.x += p.vx * delta;
+          p.y += p.vy * delta * 0.8;
+          p.life += delta;
+          // wrap horizontally
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+          // reset if too high
+          if (p.y < height * 0.45) {
+            p.y = height * (0.6 + Math.random() * 0.35);
+            p.x = Math.random() * width;
+          }
+          const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 8);
+          const alpha = 0.05 + 0.35 * Math.abs(Math.sin(p.life * 0.002 + p.x));
+          glow.addColorStop(0, `rgba(255,220,160,${alpha})`);
+          glow.addColorStop(0.3, `rgba(255,140,60,${alpha * 0.6})`);
+          glow.addColorStop(1, 'rgba(255,140,60,0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 主渲染循环
+      let last = performance.now();
+      function frame(now) {
+        const delta = now - last;
+        last = now;
+        drawSky(now);
+        drawParticles(delta);
+
+        requestAnimationFrame(frame);
+      }
+
+      // 处理画布尺寸与初始化
+      function start() {
+        resize();
+        initParticles();
+        last = performance.now();
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        initParticles();
+      });
+
+      // 初次运行
+      if (canvas) start();
+
+      // ---- 页面 DOM 云朵透明度与太阳亮度微动画（用 DOM 动画增强效果） ----
+      (function domEffects() {
+        const sun = document.querySelector('.sun');
+        if (!sun) return;
+        let t0 = performance.now();
+        function loop(ts) {
+          const t = (ts - t0) * 0.001;
+          // 太阳上下微浮
+          const dy = Math.sin(t * 0.5) * 6;
+          sun.style.transform = `translateX(-50%) translateY(${dy}px)`;
+          // 太阳光晕 intensity
+          const glow = 0.12 + 0.08 * (Math.sin(t * 1.2) + 1) / 2;
+          sun.style.boxShadow = `0 0 80px 24px rgba(255,140,50,${glow}), 0 0 24px rgba(255,200,120,${glow*2})`;
+          requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+      })();
+
+      // 结束 IIFE
+    })();
+  </script>
+
+  <script>
+    // 保持与页面原有的主题切换、保存主题偏好功能兼容（如果你已有实现）
+    document.addEventListener('DOMContentLoaded', function () {
+      // 如果你仓库已有 loadSavedTheme 函数，则这里会调用它（main.js 中）
+      if (typeof loadSavedTheme === 'function') {
+        loadSavedTheme();
+      }
+      // 设置默认光标聚焦样等（可选）
+    });
+  </script>
+</body>
+
+</html>
