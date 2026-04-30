@@ -6,69 +6,158 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>About - Bear随笔</title>
-  <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" type="image/png">
+  <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&i[...]">
 
-  <!-- 样式表 -->
+  <!-- 全局样式（保留外部 main.css） -->
   <link rel="stylesheet" href="assets/css/main.css">
 
-  <!-- 外部库 -->
+  <!-- 页面专属样式：夕阳背景、云、太阳、粒子（内嵌，仅作用于 About.html） -->
+  <style>
+    /* 覆盖或补充 main.css，确保仅在本页面生效 */
+    .main-container {
+      position: relative;
+      min-height:  box-sizing: border-box;
+      overflow: hidden;
+      background: transparent; /* 背景由 canvas 提供 */
+    }
+
+    /* 背景画布，覆盖整个 main-container */
+    #sunset-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* 太阳 */
+    .sun {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 8%;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, rgba(255,230,150,0.95) 0%, rgba(255,140,50,0.75) 30%, rgba(255,80,30,0.55) 60%, rgba(255,60,10,0.15) 100%);
+      filter: blur(6px);
+      box-shadow: 0 0 80px 24px rgba(255,140,50,0.12), 0 0 24px rgba(255,200,120,0.28);
+      animation: sunPulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sunPulse {
+      0% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.03); opacity: 0.92; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+
+    /* 云朵（多个层级） */
+    .cloud {
+      position: absolute;
+      z-index: 2;
+      top: 12%;
+      width: 420px;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+      border-radius: 60px;
+      filter: blur(8px);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .cloud::before, .cloud::after {
+      content: "";
+      position: absolute;
+      background: inherit;
+      width: 60%;
+      height: 120%;
+      top: -20%;
+      left: 10%;
+      border-radius: 50%;
+    }
+
+    .cloud::after {
+      left: auto;
+      right: 10%;
+      width: 50%;
+      height: 110%;
+    }
+
+    /* 不同云层大小 */
+    .cloud.small { width: 260px; height: 80px; filter: blur(6px); opacity: 0.7; }
+    .cloud.large { width: 560px; height: 160px; filter: blur(12px); opacity: 0.95; top: 6%; }
+
+    /* 云漂浮动画（不同速度与方向） */
+    @keyframes cloudFloatLeft {
+      from { transform: translateX(120%); }
+      to { transform: translateX(-140%); }
+    }
+
+    @keyframes cloudFloatRight {
+      from { transform: translateX(-140%); }
+      to { transform: translateX(120%); }
+    }
+
+    .cloud.layer1 { animation: cloudFloatLeft 36s linear infinite; top: 8%; left: -20%; }
+    .cloud.layer2 { animation: cloudFloatRight 48s linear infinite; top: 18%; left: 10%; opacity: 0.8; transform: scale(0.95); }
+    .cloud.layer3 { animation: cloudFloatLeft 60s linear infinite; top: 26%; left: -30%; transform: scale(1.1); opacity: 0.9; }
+
+    /* 内容卡片提升可读性，毛玻璃效果 */
+    .page-content {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 32px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+      color: #fff;
+      animation: contentEnter 900ms ease-out;
+    }
+
+    @keyframes contentEnter {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* 适配浅色模式（如果你启用了 body.light-mode） */
+    body.light-mode .page-content {
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+      color: #222;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    /* 右下角粒子（微小光点）容器 */
+    .particle-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* 小屏适配 */
+    @media (max-width: 700px) {
+      .sun { width: 120px; height: 120px; bottom: 10%; }
+      .page-content { margin: 40px 16px; padding: 22px; }
+      .cloud.large { display: none; } /* 简化移动端显示 */
+    }
+  </style>
+
+  <!-- 你原有的外部脚本：保留 -->
   <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
-
-  <!-- JavaScript -->
-  <script src="assets/js/main.js"></script>
-
 </head>
 
 <body>
   <!-- 导航栏 -->
-  <nav class="nav-bar">
-    <div class="nav-container">
-      <ul class="nav-menu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Blog.html">Blog</a></li>
-        <!--<li><a href="Links.html">Links</a></li>
-        <li><a href="Comment.html">Comment</a></li>-->
-        <li><a href="About.html">About</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- 深色/浅色模式切换按钮 -->
-  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
-    <span id="theme-icon">🌙</span>
-    <span id="theme-text">深色模式</span>
-  </button>
-
-  <!-- 主内容区域 -->
-  <div class="main-container">
-    <div class="page-content" id="content">
-      <p>这里只是一个记录个人学习经历的小破网页</p>
-      
-      <p>一个初出茅庐的菜鸟，有着各种问题，但会一直不断改善</p>
-      <p>一个喜欢到处看技术文章的小白</p>
-      <p>邮箱：2701581775@qq.com</p>
-      
-    </div>
-  </div>
-
-  
-
-  <!-- 跳到顶部按钮 -->
-  <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
-  
-  <!-- 跳到目录按钮 -->
-  <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
-
-  <script>
-    // 页面加载完成后初始化
-    document.addEventListener('DOMContentLoaded', function () {
-      // 加载保存的主题偏好
-      loadSavedTheme();
-    });
-  </script>
-
-</body>
-
-</html>
+  <nav class="nav-b
