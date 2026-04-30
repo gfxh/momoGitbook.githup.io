@@ -58,7 +58,7 @@ public static void main(String[] args) {
 index = str.indexOf("a", index + 1);
 ```
 
-### 5.字符串拼接**substring()**我愿称之为子字符串截取
+### 5.字符串拼接 **substring()** 我愿称之为子字符串截取
 substring 方法有两种调用方式
 
 一种是： substring(开始索引)，这个方法执行的结果就是从开始索引开始（含这个值）一直到结束
