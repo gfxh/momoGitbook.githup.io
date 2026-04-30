@@ -1,7 +1,7 @@
 # 26/4/23
 # 字符串
 ## 调用字符串对象方法 常用方法  字符串操作方法
-### 1.字符串长度**length() **
+### 1.字符串长度 **length() **
 ```
 public static void main(String[] args) {
 
@@ -14,7 +14,7 @@ public static void main(String[] args) {
 
 ```
 
-### 2.去除字符串的一个字符**charAt()**
+### 2.去除字符串的一个字符 **charAt()**
 ```
 public static void main(String[] args) {
 
@@ -27,7 +27,7 @@ public static void main(String[] args) {
   
 }
 ```
-### 2.去除字符串空格**trim()**
+### 2.去除字符串空格 **trim()**
 ```
 public static void main(String[] args) {
 
@@ -39,7 +39,7 @@ public static void main(String[] args) {
 }
 ```
 
-### 4.查找字符串**indexOf()**
+### 4.查找字符串 **indexOf()**
 ```
 public static void main(String[] args) {
 
@@ -77,7 +77,7 @@ public static void main(String[] args) {
 
 
 
-### 6.字符串开始和结束内容判断**startsWith()**和**endsWith()**
+### 6.字符串开始和结束内容判断 **startsWith()** 和**endsWith()**
 startsWith 方法用于判断字符串是否以指定的前缀开始
 endsWith 方法用于判断字符串是否以指定的后缀结束
 ```
@@ -102,7 +102,7 @@ public static void main(String[] args) {
 
 }
 ```
-### 7.字符串替换**replace()**和**replaceAll()**
+### 7.字符串替换 **replace()** 和 **replaceAll()**
 replace 方法用于替换字符串中的指定子字符串
 replaceAll 方法用于替换字符串中的所有匹配项
 ```
@@ -117,7 +117,7 @@ public static void main(String[] args) {
 }
 ```
 
-### 8.字符串分割**split()**
+### 8.字符串分割 **split()**
 split 方法用于将字符串分割成多个字符串，返回一个字符串数组
 
 
@@ -142,7 +142,7 @@ public static void main(String[] args){
 
 
 
-### 9.大小写转换toUpperCase()和toLowerCase()
+### 9.大小写转换 toUpperCase() 和 toLowerCase()
 toUpperCase() 方法用于将字符串转换为大写
 toLowerCase() 方法用于将字符串转换为小写
 ```
@@ -156,7 +156,7 @@ toLowerCase() 方法用于将字符串转换为小写
 
 
 
-### 10.字符串比较**equals()**
+### 10.字符串比较 **equals()**
 equals() 方法用于比较两个字符串是否相等
 注意：`equals()` 方法是区分大小写的，所以如果两个字符串的大小写不同，那么返回的结果就是 `false`。
 
@@ -175,7 +175,7 @@ equals() 方法用于比较两个字符串是否相等
   }
 ```
 
-
+注意'str1==str2'比较的是地址，不是字符串的内容
 
 
 ### 11.数字和字符串转换 **Integer.parseInt()**
