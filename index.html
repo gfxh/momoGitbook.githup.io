@@ -16,48 +16,41 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
 
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      min-height: 100%;
     }
-    html, body {
-      height: 100%;
-      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-
-    /* 动态晚霞渐变背景（极客暗调+紫粉蓝灰） */
-    .main-container {
-      position: relative;
-      min-height: 100vh;
+    body {
       background: linear-gradient(-45deg,
-        #0f172a, /* 深海黑蓝 */
-        #1e293b, /* 暗灰蓝 */
-        #312e81, /* 深紫 */
-        #4c1d95, /* 紫罗兰 */
-        #a855f7, /* 晚霞紫粉 */
-        #f472b6, /* 日系柔粉 */
-        #3b82f6, /* 极简蓝 */
-        #1e293b  /* 收尾暗灰蓝 */
+        #0f172a, #1e293b, #312e81, #4c1d95,
+        #a855f7, #f472b6, #3b82f6, #1e293b
       );
       background-size: 500% 500%;
       animation: gradientFlow 12s ease infinite;
-      overflow: hidden;
     }
-
     @keyframes gradientFlow {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+    .main-container {
+      background: transparent !important;
+    }
 
-    /* 暗角柔光遮罩 */
-    .main-container::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.25) 100%);
-      z-index: 1;
+    body.light-mode {
+      background: linear-gradient(-45deg,
+        #0f172a, #1e293b, #312e81, #4c1d95,
+        #a855f7, #f472b6, #3b82f6, #1e293b
+      );
+      background-size: 500% 500%;
+      animation: gradientFlow 12s ease infinite;
+    }
+
+    body.light-mode .main-container,
+    body.light-mode .content-wrap,
+    body.light-mode .sidebar {
+      background: transparent !important;
     }
 
     /* 首页内容居中+毛玻璃卡片 */
@@ -116,43 +109,6 @@
       color: #cbd5e1;
       line-height: 1.8;
       margin-bottom: 12px;
-    }
-
-    /* 导航栏微调（适配暗黑） */
-    .nav-bar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 99;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .nav-menu a {
-      color: #e2e8f0;
-      transition: color 0.3s ease;
-    }
-    .nav-menu a:hover {
-      color: #a855f7;
-    }
-
-    /* 主题按钮微调 */
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #f8fafc;
-      cursor: pointer;
-      backdrop-filter: blur(6px);
-      transition: all 0.3s ease;
-    }
-    .theme-toggle:hover {
-      background: rgba(255,255,255,0.12);
     }
 
     /* 响应式适配（手机友好） */

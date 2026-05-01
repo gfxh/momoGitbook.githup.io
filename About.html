@@ -11,46 +11,41 @@
   <link rel="stylesheet" href="assets/css/main.css">
 
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
+      min-height: 100%;
     }
-    html, body {
-      height: 100%;
-    }
-
-    .main-container {
-      position: relative;
-      min-height: 100vh;
-      /* 8种晚霞高级色 连续渐变 */
-      background: linear-gradient(-45deg, 
-        #1a1b41,
-        #512b58,
-        #b86bba,
-        #f8bbd0,
-        #ff9a8b,
-        #ff6b6b,
-        #4a6990,
-        #2c3e50
+    body {
+      background: linear-gradient(-45deg,
+        #0f172a, #1e293b, #312e81, #4c1d95,
+        #a855f7, #f472b6, #3b82f6, #1e293b
       );
       background-size: 500% 500%;
-      /* 加快速度：14秒循环，比之前快很多 */
-      animation: gradientFlow 14s ease infinite;
-      overflow: hidden;
+      animation: gradientFlow 12s ease infinite;
     }
-
     @keyframes gradientFlow {
-      0%  { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100%{ background-position: 0% 50%; }
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .main-container {
+      background: transparent !important;
     }
 
-    .main-container::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.18);
-      z-index: 1;
+    body.light-mode {
+      background: linear-gradient(-45deg,
+        #0f172a, #1e293b, #312e81, #4c1d95,
+        #a855f7, #f472b6, #3b82f6, #1e293b
+      );
+      background-size: 500% 500%;
+      animation: gradientFlow 12s ease infinite;
+    }
+
+    body.light-mode .main-container,
+    body.light-mode .content-wrap,
+    body.light-mode .sidebar {
+      background: transparent !important;
     }
 
     .page-content {
@@ -75,10 +70,10 @@
     }
 
     body.light-mode .page-content {
-      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
-      color: #222;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.45);
     }
 
     @media (max-width: 700px) {
