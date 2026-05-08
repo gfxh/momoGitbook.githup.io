@@ -79,17 +79,16 @@
   <!-- 深色/浅色模式切换按钮 -->
   <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
     <span id="theme-icon">🌙</span>
-    <span id="theme-text">深色模式</span>
+    <span id="theme-text">浅色模式</span>
   </button>
 
   <!-- 主内容区域 -->
   <div class="main-container">
-    <canvas id="particle-canvas"></canvas>
     <div class="content-wrap">
       <div class="content" id="content">
         <div class="loading">
-          <h2>欢迎来到阅读页面</h2>
-          <p>请从下方目录选择要阅读的内容</p>
+          <h2>Simple article</h2>
+          <p>🐻Bottom menu🐻</p>
         </div>
       </div>
     </div>
@@ -106,18 +105,7 @@
           <div class="toc-level-2">
             <a href="Blog.html" onclick="loadMarkdown('README.md'); return false;">链接</a>
           </div>
-        </div>
 
-        <!-- markdown练习 -->
-        <div class="toc-level-1">
-          <div class="toc-header">Markdown</div>
-          <div class="toc-level-2">
-            <a href="Blog.html" onclick="loadMarkdown('markdown的练习.md'); return false;">基础语法练习</a>
-          </div>
-        </div>
-
-        <!-- Git -->
-        <div class="toc-level-1">
           <div class="toc-header">Git</div>
           <div class="toc-level-2">
             <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.1学习.md'); return false;">Git的学习</a>
@@ -125,7 +113,14 @@
           <div class="toc-level-2">
             <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.2代码推送.md'); return false;">Git的代码推送</a>
           </div>
-        </div>
+            <div class="toc-header">Markdown</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('markdown的练习.md'); return false;">基础语法练习</a>
+          </div>
+        
+          </div>
+
+        
 
         <!-- CTF -->
         <div class="toc-level-1">

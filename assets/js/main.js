@@ -135,32 +135,8 @@ async function loadMarkdown(filePath) {
     const title = filePath.split('/').pop().replace('.md', '');
     document.title = title + ' - Bear随笔';
 
-    // 显示粒子效果
-    const canvas = document.getElementById('particle-canvas');
-    if (canvas) {
-      canvas.style.display = 'block';
-    }
-
-    // 延迟更新粒子canvas大小，确保内容已完全加载
-    setTimeout(() => {
-      const canvas = document.getElementById('particle-canvas');
-      if (canvas) {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-      }
-    }, 100);
-
   } catch (error) {
     content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
-    
-    // 即使加载失败，也更新粒子canvas大小
-    setTimeout(() => {
-      const canvas = document.getElementById('particle-canvas');
-      if (canvas) {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-      }
-    }, 100);
   }
 }
 
@@ -180,12 +156,6 @@ const PDF_SCALE = 1.2;
  * @param {string} filePath - PDF文件路径
  */
 async function loadPDF(filePath) {
-  // 立即隐藏粒子效果
-  const canvas = document.getElementById('particle-canvas');
-  if (canvas) {
-    canvas.style.display = 'none';
-  }
-
   const content = document.getElementById('content');
   content.innerHTML = '<div class="pdf-loading">正在加载PDF...</div>';
 
@@ -305,156 +275,4 @@ document.addEventListener('DOMContentLoaded', function () {
   loadSavedTheme();
   
   // 移除对 showHome() 的调用，让首页内容直接从 index.html 读取
-  
-  // 延迟初始化粒子系统，确保DOM完全加载
-  setTimeout(() => {
-    initParticleSystem();
-  }, 100);
 });
-
-/**
- * 初始化粒子系统
- */
-function initParticleSystem() {
-  const canvas = document.getElementById('particle-canvas');
-  if (!canvas) {
-    // 如果canvas元素不存在，直接返回，不初始化粒子系统
-    return;
-  }
-  const ctx = canvas.getContext('2d');
-  
-  // 适配窗口
-  function resizeCanvas() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-  
-  // 配置
-  const config = {
-    initialPointCount: 20,       // 初始粒子数量
-    maxPointCount: 150,          // 最大粒子数量
-    addPerSecond: 10,            // 每秒增加的粒子数量
-    speed: 1,           // 移动速度
-    connectDist: 100,      // 粒子连线距离
-    boxSize: 100,          // 鼠标吸附矩形大小
-    attractForce: 0.01,     // 吸附强度
-  };
-  
-  // 鼠标
-  const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
-  
-  // 粒子
-  class Particle {
-    constructor(x, y) {
-      this.x = x ?? Math.random() * canvas.width;
-      this.y = y ?? Math.random() * canvas.height;
-      this.vx = (Math.random() - 0.5) * config.speed;
-      this.vy = (Math.random() - 0.5) * config.speed;
-      this.hue = Math.random() * 360;
-    }
-    
-    update(mouse) {
-      // 基础移动
-      this.x += this.vx;
-      this.y += this.vy;
-      
-      // 判断：是否在鼠标矩形范围内
-      const inBox = 
-          this.x > mouse.x - config.boxSize/2 &&
-          this.x < mouse.x + config.boxSize/2 &&
-          this.y > mouse.y - config.boxSize/2 &&
-          this.y < mouse.y + config.boxSize/2;
-      
-      // 只有在盒子里才被鼠标吸引
-      if (inBox) {
-          const dx = mouse.x - this.x;
-          const dy = mouse.y - this.y;
-          this.vx += dx * config.attractForce;
-          this.vy += dy * config.attractForce;
-      }
-      
-      // 边界反弹
-      if (this.x < 0 || this.x > canvas.width) this.vx *= -1.5;
-      if (this.y < 0 || this.y > canvas.height) this.vy *= -1.5;
-      
-      // 速度限制
-      const maxSpeed = 1.5;
-      const sp = Math.hypot(this.vx, this.vy);
-      if (sp > maxSpeed) {
-          this.vx = this.vx / sp * maxSpeed;
-          this.vy = this.vy / sp * maxSpeed;
-      }
-    }
-    
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = `hsl(${this.hue}, 85%, 65%)`;
-      ctx.fill();
-    }
-  }
-  
-  // 初始化粒子
-  const particles = Array.from({ length: config.initialPointCount }, () => new Particle());
-  
-  // 定时添加粒子
-  const addParticleInterval = setInterval(() => {
-    if (particles.length < config.maxPointCount) {
-      // 每秒添加20个粒子
-      for (let i = 0; i < config.addPerSecond / 10; i++) { // 每100毫秒添加2个粒子，确保每秒添加20个
-        particles.push(new Particle());
-      }
-    } else {
-      // 达到最大数量后停止添加
-      clearInterval(addParticleInterval);
-    }
-  }, 100); // 每100毫秒执行一次
-  
-  // 鼠标移动
-  window.addEventListener('mousemove', e => {
-      mouse.x = e.pageX;
-      mouse.y = e.pageY;
-  });
-  
-  // 点击生成新粒子
-  window.addEventListener('click', e => {
-      particles.push(new Particle(e.pageX, e.pageY));
-  });
-  
-  // 主循环
-  function draw() {
-      // 清空画布
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // 更新粒子位置
-      particles.forEach(p => p.update(mouse));
-      
-      // 粒子之间互相连线
-      for (let i = 0; i < particles.length; i++) {
-          const p1 = particles[i];
-          for (let j = i + 1; j < particles.length; j++) {
-              const p2 = particles[j];
-              const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-              
-              if (dist < config.connectDist) {
-                  const alpha = 1 - dist / config.connectDist;
-                  ctx.beginPath();
-                  ctx.moveTo(p1.x, p1.y);
-                  ctx.lineTo(p2.x, p2.y);
-                  ctx.strokeStyle = `hsla(${(p1.hue + p2.hue) / 2}, 80%, 70%, ${alpha * 0.6})`;
-                  ctx.lineWidth = 1;
-                  ctx.stroke();
-              }
-          }
-      }
-      
-      // 绘制所有粒子
-      particles.forEach(p => p.draw());
-      
-      requestAnimationFrame(draw);
-  }
-  
-  draw();
-}
