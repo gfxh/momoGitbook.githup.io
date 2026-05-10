@@ -298,6 +298,7 @@ body {
   white-space: nowrap;
   padding: 4px 0;
   align-items: flex-start;
+  overflow-x: auto;
 }
 
 /* 一级分类 - 横向排列的卡片 */
