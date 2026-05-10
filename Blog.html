@@ -26,15 +26,20 @@
   body {
     background: linear-gradient(-45deg,
       #0f172a, #1e293b, #312e81, #4c1d95,
-      #a855f7, #f472b6, #3b82f6, #1e293b
+      #7c3aed, #a855f7, #d946ef, #ec4899,
+      #f472b6, #fb7185, #f97316, #fbbf24,
+      #22d3ee, #06b6d4, #0ea5e9, #3b82f6,
+      #10b981, #14b8a6, #8b5cf6, #6366f1
     );
-    background-size: 500% 500%;
-    animation: gradientFlow 12s ease infinite;
+    background-size: 800% 800%;
+    animation: gradientFlow 20s ease infinite;
   }
   @keyframes gradientFlow {
     0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    25%  { background-position: 25% 50%; }
+    50%  { background-position: 50% 50%; }
+    75%  { background-position: 75% 50%; }
+    100% { background-position: 100% 50%; }
   }
   .main-container {
     background: transparent !important;
@@ -43,10 +48,13 @@
   body.light-mode {
     background: linear-gradient(-45deg,
       #0f172a, #1e293b, #312e81, #4c1d95,
-      #a855f7, #f472b6, #3b82f6, #1e293b
+      #7c3aed, #a855f7, #d946ef, #ec4899,
+      #f472b6, #fb7185, #f97316, #fbbf24,
+      #22d3ee, #06b6d4, #0ea5e9, #3b82f6,
+      #10b981, #14b8a6, #8b5cf6, #6366f1
     );
-    background-size: 500% 500%;
-    animation: gradientFlow 12s ease infinite;
+    background-size: 800% 800%;
+    animation: gradientFlow 20s ease infinite;
   }
 
   body.light-mode .main-container,
@@ -179,7 +187,9 @@
 
           <div class="toc-level-2">
             <div class="toc-header">青岑wp</div>
-
+            <div class="toc-level-3">
+              <a href="Blog.html" onclick="loadMarkdown('CTF/Web/Qingcen/WebJD.md'); return false;">WebJD</a>
+            </div>
           </div>
 
                    
