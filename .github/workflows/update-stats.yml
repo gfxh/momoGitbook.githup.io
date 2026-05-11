@@ -18,25 +18,18 @@ jobs:
 
       - name: Get last commit date
         id: last-commit
-        run: |
-          LAST_COMMIT=$(git log -1 --format=%cd --date=iso)
-          echo "last_commit=$LAST_COMMIT" >> $GITHUB_OUTPUT
+        run: LAST_COMMIT=$(git log -1 --format=%cd --date=iso) && echo "last_commit=$LAST_COMMIT" >> $GITHUB_OUTPUT
 
       - name: Count words in markdown files
         id: word-count
-        run: |
-          TOTAL_WORDS=$(find . -name "*.md" -type f -exec cat {} \; | wc -c)
-          echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
-          echo "Found $(find . -name "*.md" -type f | wc -l) markdown files"
+        run: TOTAL_WORDS=$(find . -name "*.md" -type f -exec cat {} \; | wc -c) && echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
 
       - name: Update stats.json
         run: |
-          cat > stats.json << EOF
-{
-  "lastUpdate": "$(date -d "${{ steps.last-commit.outputs.last_commit }}" +%Y-%m-%d)",
-  "totalWords": ${{ steps.word-count.outputs.total_words }}
-}
-EOF
+          echo "{" > stats.json
+          echo "  \"lastUpdate\": \"$(date -d "${{ steps.last-commit.outputs.last_commit }}" +%Y-%m-%d)\"," >> stats.json
+          echo "  \"totalWords\": ${{ steps.word-count.outputs.total_words }}" >> stats.json
+          echo "}" >> stats.json
           cat stats.json
 
       - name: Commit and push changes

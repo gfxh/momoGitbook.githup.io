@@ -168,8 +168,15 @@
       }
       
       function formatWords(count) {
+        if (!count || count <= 0) {
+          return '0';
+        }
         if (count >= 10000) {
-          return (count / 10000).toFixed(2) + ' 万';
+          const result = (count / 10000);
+          if (result >= 10000) {
+            return (result / 10000).toFixed(2) + ' 亿';
+          }
+          return result.toFixed(2) + ' 万';
         }
         return count.toString();
       }
