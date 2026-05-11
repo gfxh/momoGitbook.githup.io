@@ -19,9 +19,24 @@ jobs:
         id: last-commit
         run: LAST_COMMIT=$(git log -1 --format=%cd --date=iso) && echo "last_commit=$LAST_COMMIT" >> $GITHUB_OUTPUT
 
-      - name: Count words in markdown files
+      - name: Count characters in markdown files
         id: word-count
-        run: TOTAL_WORDS=$(find . -name "*.md" -type f -exec cat {} \; | wc -c) && echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
+        run: |
+          TOTAL_WORDS=$(python3 -c "
+          import os
+          total = 0
+          for root, dirs, files in os.walk('.'):
+              for f in files:
+                  if f.endswith('.md'):
+                      path = os.path.join(root, f)
+                      try:
+                          with open(path, 'r', encoding='utf-8') as file:
+                              total += len(file.read())
+                      except:
+                          pass
+          print(total)
+          ")
+          echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
 
       - name: Update stats.json
         run: |
