@@ -10,29 +10,38 @@ jobs:
   update-stats:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
       - name: Get last commit date
         id: last-commit
         run: |
           LAST_COMMIT=$(git log -1 --format=%cd --date=iso)
           echo "last_commit=$LAST_COMMIT" >> $GITHUB_OUTPUT
-      
+
       - name: Count words in markdown files
         id: word-count
         run: |
-          TOTAL_WORDS=$(find . -name "*.md" -exec cat {} \; | wc -c)
+          TOTAL_WORDS=$(find . -name "*.md" -type f -exec cat {} \; | wc -c)
           echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
-      
+          echo "Found $(find . -name "*.md" -type f | wc -l) markdown files"
+
       - name: Update stats.json
         run: |
-          echo "{
-            \"lastUpdate\": \"$(date -d "${{ steps.last-commit.outputs.last_commit }}" +%Y-%m-%d)\",
-            \"totalWords\": ${{ steps.word-count.outputs.total_words }}
-          }" > stats.json
-      
+          cat > stats.json << EOF
+{
+  "lastUpdate": "$(date -d "${{ steps.last-commit.outputs.last_commit }}" +%Y-%m-%d)",
+  "totalWords": ${{ steps.word-count.outputs.total_words }}
+}
+EOF
+          cat stats.json
+
       - name: Commit and push changes
-        uses: EndBug/add-and-commit@v9
+        uses: ad-m/github-push-action@master
         with:
-          message: 'Update stats.json'
-          default_author: github_actions
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: false
