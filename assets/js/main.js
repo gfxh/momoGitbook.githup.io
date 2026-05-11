@@ -223,56 +223,8 @@ async function renderAllPages() {
 
 
 /**
- * 切换深色/浅色模式
- */
-function toggleTheme() {
-  const body = document.body;
-  const themeIcon = document.getElementById('theme-icon');
-  const themeText = document.getElementById('theme-text');
-  
-  // 切换主题类
-  body.classList.toggle('light-mode');
-  
-  // 更新图标和文本
-  if (body.classList.contains('light-mode')) {
-    themeIcon.textContent = '☀️';
-    themeText.textContent = '浅色模式';
-    // 保存主题偏好到localStorage
-    localStorage.setItem('theme', 'light');
-  } else {
-    themeIcon.textContent = '🌙';
-    themeText.textContent = '深色模式';
-    // 保存主题偏好到localStorage
-    localStorage.setItem('theme', 'dark');
-  }
-}
-
-/**
- * 加载保存的主题偏好
- */
-function loadSavedTheme() {
-  const savedTheme = localStorage.getItem('theme');
-  const body = document.body;
-  const themeIcon = document.getElementById('theme-icon');
-  const themeText = document.getElementById('theme-text');
-  
-  if (savedTheme === 'light') {
-    body.classList.add('light-mode');
-    if (themeIcon) themeIcon.textContent = '☀️';
-    if (themeText) themeText.textContent = '浅色模式';
-  } else {
-    body.classList.remove('light-mode');
-    if (themeIcon) themeIcon.textContent = '🌙';
-    if (themeText) themeText.textContent = '深色模式';
-  }
-}
-
-/**
  * 页面加载完成后初始化
  */
 document.addEventListener('DOMContentLoaded', function () {
-  // 加载保存的主题偏好
-  loadSavedTheme();
-  
   // 移除对 showHome() 的调用，让首页内容直接从 index.html 读取
 });
