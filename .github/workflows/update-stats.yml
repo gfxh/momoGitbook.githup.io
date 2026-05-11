@@ -1,0 +1,38 @@
+name: Update Stats
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Get last commit date
+        id: last-commit
+        run: |
+          LAST_COMMIT=$(git log -1 --format=%cd --date=iso)
+          echo "last_commit=$LAST_COMMIT" >> $GITHUB_OUTPUT
+      
+      - name: Count words in markdown files
+        id: word-count
+        run: |
+          TOTAL_WORDS=$(find . -name "*.md" -exec cat {} \; | wc -c)
+          echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
+      
+      - name: Update stats.json
+        run: |
+          echo "{
+            \"lastUpdate\": \"$(date -d "${{ steps.last-commit.outputs.last_commit }}" +%Y-%m-%d)\",
+            \"totalWords\": ${{ steps.word-count.outputs.total_words }}
+          }" > stats.json
+      
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update stats.json'
+          default_author: github_actions

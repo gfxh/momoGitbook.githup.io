@@ -92,19 +92,28 @@
   <!-- 主内容区域 -->
   <div class="main-container">
     <div class="page-content" id="content">
-      <div style="display: flex; gap: 2rem; background: transparent; padding: 1.5rem 2rem; border-radius: 12px; color: #fff; width: fit-content; margin: 0 auto;">
-        <div style="text-align: center;">
+      <div style="display: flex; gap: 2rem; background: transparent; padding: 1.5rem 2rem; border-radius: 12px; color: #fff; width: fit-content; margin: 0 auto; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+        <div style="text-align: center; min-width: 120px;">
+          <div style="font-size:14px;opacity:0.7;">当前时间</div>
+          <div style="font-size:18px;font-weight:bold;margin-top:4px;" id="currentTime"></div>
+          <div style="font-size:12px;opacity:0.7;margin-top:2px;" id="currentDate"></div>
+        </div>
+        
+        
+        
+        <div style="text-align: center; min-width: 100px;">
           <div style="font-size:14px;opacity:0.7;">运营时长</div>
           <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="runTime"></div>
         </div>
-        <div style="text-align: center;">
+        <div style="text-align: center; min-width: 100px;">
           <div style="font-size:14px;opacity:0.7;">上次更新</div>
           <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="lastUpdate"></div>
         </div>
-        <div style="text-align: center;">
+        <div style="text-align: center; min-width: 100px;">
           <div style="font-size:14px;opacity:0.7;">总字数</div>
           <div class="total-words" style="font-size:28px;font-weight:bold;margin-top:4px;">计算中...</div>
         </div>
+        
       </div>
     </div>
   </div>
@@ -125,9 +134,6 @@
       
       // 统计卡片功能
       const BLOG_CREATE_DATE = '2025-12-18';
-      const user = 'gfxh';
-      const repo = 'momoGitbook.githup.io';
-      const branch = 'main'; // 如果你的分支是 master，请改成 'master'
       
       function calcRunTime() {
         const start = new Date(BLOG_CREATE_DATE);
@@ -138,62 +144,95 @@
         return `${months}个月${daysLeft}天`;
       }
       
-      async function getLastUpdate() {
+      async function getStats() {
         try {
-          const res = await fetch(`https://api.github.com/repos/${user}/${repo}/commits?per_page=1`);
-          const data = await res.json();
-          const date = new Date(data[0].commit.committer.date);
-          const now = new Date();
-          const days = Math.floor((now - date) / 86400000);
-          if (days === 0) return '今天';
-          if (days === 1) return '昨天';
-          return `${days}天前`;
+          const res = await fetch('stats.json', { cache: 'no-cache' });
+          if (!res.ok) {
+            console.warn('Failed to fetch stats.json');
+            return null;
+          }
+          return await res.json();
         } catch (e) {
-          return '获取中';
+          console.error('Failed to load stats:', e.message);
+          return null;
         }
       }
       
-      async function getTotalWords() {
-        try {
-          const res = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);
-          const data = await res.json();
-          if (!data.tree || data.message) {
-            return '获取失败';
-          }
-          const mdFiles = data.tree.filter(item => item.path.endsWith('.md'));
-          
-          let totalWords = 0;
-          for (const file of mdFiles) {
-            const contentRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file.path}?ref=${branch}`);
-            const contentData = await contentRes.json();
-            if (!contentData.content) continue;
-            const content = atob(contentData.content);
-            totalWords += content.length;
-          }
-          
-          if (totalWords >= 10000) {
-            return (totalWords / 10000).toFixed(2) + ' 万';
-          } else {
-            return totalWords.toString();
-          }
-        } catch (e) {
-          return '获取失败';
+      function formatLastUpdate(dateStr) {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const days = Math.floor((now - date) / 86400000);
+        if (days === 0) return '今天';
+        if (days === 1) return '昨天';
+        return `${days}天前`;
+      }
+      
+      function formatWords(count) {
+        if (count >= 10000) {
+          return (count / 10000).toFixed(2) + ' 万';
         }
+        return count.toString();
+      }
+      
+      function updateCurrentTime() {
+        const now = new Date();
+        
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const weekDay = weekDays[now.getDay()];
+        
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        if (document.getElementById('currentTime')) {
+          document.getElementById('currentTime').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+        if (document.getElementById('currentDate')) {
+          document.getElementById('currentDate').innerText = `${year}-${month}-${day} ${weekDay}`;
+        }
+      }
+      
+      async function updateStats() {
+        const stats = await getStats();
+        
+        if (stats) {
+          if (document.getElementById('lastUpdate') && stats.lastUpdate) {
+            document.getElementById('lastUpdate').innerText = formatLastUpdate(stats.lastUpdate);
+          }
+          if (document.querySelector('.total-words') && stats.totalWords) {
+            document.querySelector('.total-words').innerText = formatWords(stats.totalWords);
+          }
+        }
+      }
+      
+      // 添加动态效果
+      function addDynamicEffects() {
+        const cards = document.querySelectorAll('.page-content > div > div');
+        cards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          card.style.transition = 'all 0.5s ease';
+          
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, index * 100);
+        });
       }
       
       if (document.getElementById('runTime')) {
         document.getElementById('runTime').innerText = calcRunTime();
-        getLastUpdate().then(str => {
-          if (document.getElementById('lastUpdate')) {
-            document.getElementById('lastUpdate').innerText = str;
-          }
-        });
-        getTotalWords().then(str => {
-          const wordEl = document.querySelector('.total-words');
-          if (wordEl) {
-            wordEl.innerText = str;
-          }
-        });
+        updateStats();
+        updateCurrentTime();
+        
+        // 每秒更新时间
+        setInterval(updateCurrentTime, 1000);
+        
+        // 添加入场动画
+        setTimeout(addDynamicEffects, 100);
       }
     });
   </script>
