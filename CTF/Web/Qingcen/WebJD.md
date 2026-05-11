@@ -42,6 +42,61 @@ ASCLL码解密
 响应中的data再base64解码
 
 **basic_6**
+![](TU/image%20copy%2011.png)
+检查源码没什么有用的东西
+抓包在标头有发现flag
+![](TU/image%20copy%2012.png)
+![](TU/image%20copy%2013.png)
+
+**basic_7**
+![](TU/image%20copy%2014.png)
+拼图之后提交会返回你是小猪。flag就在这个返回的响应体中。
+这是拼图之后发送的包，flag是不存在的
+![](TU/image%20copy%2015.png)
+这个包**放行**之后还会有一个包，flag在响应体中。
+![](TU/image%20copy%2016.png)
+
+**basic_8**
+![](TU/image%20copy%2017.png)
+查看源码，抓包，都没什么有用信息
+查看index.phps。至于为什么时phps下一题有解释
+![](TU/image%20copy%2018.png)
+有发现。给了一个GET a  越过if条件就可以获得flag
+![](TU/image%20copy%2019.png)
+![](TU/image%20copy%2020.png)
+**basic_9**
+![](TU/image%20copy%2021.png)
+没有index.php所以试不了
+文章中有提到爬虫排除协议
+访问/robots.txt
+![](TU/image%20copy%2022.png)
+有一个qcq.php
+打开文件就是flag
+**basic_10**
+![](TU/image%20copy%2024.png)
+![](TU/image%20copy%2023.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

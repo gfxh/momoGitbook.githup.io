@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Links - Bear随笔</title>
+  <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" type="image/png">
+
+  <!-- 样式表 -->
+  <link rel="stylesheet" href="assets/css/main.css">
+  
+  <style>
+    body {
+      background: linear-gradient(-45deg,
+        #c6e5ff, #a4d3ff, #82c1ff, #60afff, #3f9df6,
+        #2367b3, #1d5899, #17487f, #10284a, #242e6f,
+        #383494, #5a3d9e, #7750bb, #9564d8, #a47de0,
+        #b496e8, #c4aeee, #d4c6f3, #e3dff9, #f1f7fe,
+        #ffd8a8, #ffc17a, #ffa94d, #f89228, #e67700,
+        #d85137, #c92a61, #d14a76, #d86a8c, #e07a96,
+        #ff8da1, #ffb3c2, #ffdce5, #ccebe7, #99e9f2,
+        #66d4f1, #339af0, #217fc0, #0b7285, #0d5b72,
+        #0f435e, #10284a, #17487f, #1d5899, #2367b3,
+        #4f8df0, #7bb2ff, #c6e5ff
+      );
+      background-size: 2000% 2000%;
+      animation: gradientFlow 30s ease infinite;
+    }
+    body.light-mode {
+      background: linear-gradient(-45deg,
+        #c6e5ff, #a4d3ff, #82c1ff, #60afff, #3f9df6,
+        #2367b3, #1d5899, #17487f, #10284a, #242e6f,
+        #383494, #5a3d9e, #7750bb, #9564d8, #a47de0,
+        #b496e8, #c4aeee, #d4c6f3, #e3dff9, #f1f7fe,
+        #ffd8a8, #ffc17a, #ffa94d, #f89228, #e67700,
+        #d85137, #c92a61, #d14a76, #d86a8c, #e07a96,
+        #ff8da1, #ffb3c2, #ffdce5, #ccebe7, #99e9f2,
+        #66d4f1, #339af0, #217fc0, #0b7285, #0d5b72,
+        #0f435e, #10284a, #17487f, #1d5899, #2367b3,
+        #4f8df0, #7bb2ff, #c6e5ff
+      );
+      background-size: 2000% 2000%;
+      animation: gradientFlow 30s ease infinite;
+    }
+    @keyframes gradientFlow {
+      0%   { background-position: 0% 50%; }
+      10%  { background-position: 10% 50%; }
+      20%  { background-position: 20% 50%; }
+      30%  { background-position: 30% 50%; }
+      40%  { background-position: 40% 50%; }
+      50%  { background-position: 50% 50%; }
+      60%  { background-position: 60% 50%; }
+      70%  { background-position: 70% 50%; }
+      80%  { background-position: 80% 50%; }
+      90%  { background-position: 90% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+  </style>
+
+  <!-- 外部库 -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
+  <!-- JavaScript -->
+  <script src="assets/js/main.js"></script>
+
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <li><a href="Links.html">Links</a></li>
+        <li><a href="Comment.html">Comment</a></li>
+        <li><a href="About.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 深色/浅色模式切换按钮 -->
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+    <span id="theme-icon">🌙</span>
+    <span id="theme-text">深色模式</span>
+  </button>
+
+  <!-- 主内容区域 -->
+  <div class="main-container">
+    <div class="page-content" id="content">
+      <div style="display: flex; gap: 2rem; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; color: #fff; width: fit-content;">
+        <div style="text-align: center;">
+          <div style="font-size:14px;opacity:0.7;">运营时长</div>
+          <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="runTime"></div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size:14px;opacity:0.7;">上次更新</div>
+          <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="lastUpdate"></div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size:14px;opacity:0.7;">总字数</div>
+          <div class="total-words" style="font-size:28px;font-weight:bold;margin-top:4px;">计算中...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部目录区域 -->
+  <div class="sidebar">
+    <div class="sidebar-toc">
+      <div class="toc">
+
+        <!-- 介绍 -->
+        <div class="toc-level-1">
+          <div class="toc-header">介绍</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('README.md'); return false;">介绍</a>
+          </div>
+        </div>
+
+        <!-- markdown练习 -->
+        <div class="toc-level-1">
+          <div class="toc-header">Markdown</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('markdown的练习.md'); return false;">基础语法练习</a>
+          </div>
+        </div>
+
+        <!-- Git -->
+        <div class="toc-level-1">
+          <div class="toc-header">Git</div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.1学习.md'); return false;">Git的学习</a>
+          </div>
+          <div class="toc-level-2">
+            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.2代码推送.md'); return false;">Git的代码推送</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 跳到顶部按钮 -->
+  <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
+  
+  <!-- 跳到目录按钮 -->
+  <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
+
+  <script>
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function () {
+      // 加载保存的主题偏好
+      loadSavedTheme();
+      
+      // 统计卡片功能
+      const BLOG_CREATE_DATE = '2025-12-18';
+      const user = window.location.hostname.split('.')[0];
+      const repo = user + '.github.io';
+      
+      function calcRunTime() {
+        const start = new Date(BLOG_CREATE_DATE);
+        const now = new Date();
+        const days = Math.floor((now - start) / 86400000);
+        const months = Math.floor(days / 30);
+        const daysLeft = days % 30;
+        return `${months}个月${daysLeft}天`;
+      }
+      
+      async function getLastUpdate() {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${user}/${repo}/commits?per_page=1`);
+          const data = await res.json();
+          const date = new Date(data[0].commit.committer.date);
+          const now = new Date();
+          const days = Math.floor((now - date) / 86400000);
+          if (days === 0) return '今天';
+          if (days === 1) return '昨天';
+          return `${days}天前`;
+        } catch (e) {
+          return '获取中';
+        }
+      }
+      
+      async function getTotalWords() {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/main?recursive=1`);
+          const data = await res.json();
+          const mdFiles = data.tree.filter(item => item.path.endsWith('.md'));
+          
+          let totalWords = 0;
+          for (const file of mdFiles) {
+            const contentRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file.path}`);
+            const contentData = await contentRes.json();
+            const content = atob(contentData.content);
+            totalWords += content.length;
+          }
+          
+          if (totalWords >= 10000) {
+            return (totalWords / 10000).toFixed(2) + ' 万';
+          } else {
+            return totalWords.toString();
+          }
+        } catch (e) {
+          return '计算中';
+        }
+      }
+      
+      if (document.getElementById('runTime')) {
+        document.getElementById('runTime').innerText = calcRunTime();
+        getLastUpdate().then(str => {
+          if (document.getElementById('lastUpdate')) {
+            document.getElementById('lastUpdate').innerText = str;
+          }
+        });
+        getTotalWords().then(str => {
+          const wordEl = document.querySelector('.total-words');
+          if (wordEl) {
+            wordEl.innerText = str;
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+
+</html>
