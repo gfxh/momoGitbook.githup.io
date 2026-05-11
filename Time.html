@@ -76,8 +76,8 @@
       <ul class="nav-menu">
         <li><a href="index.html">Home</a></li>
         <li><a href="Blog.html">Blog</a></li>
-        <li><a href="Links.html">Links</a></li>
-        <li><a href="Comment.html">Comment</a></li>
+        <!--<li><a href="Comment.html">Comment</a></li>-->
+        <li><a href="Time.html">Time</a></li>
         <li><a href="About.html">About</a></li>
       </ul>
     </div>
@@ -92,7 +92,7 @@
   <!-- 主内容区域 -->
   <div class="main-container">
     <div class="page-content" id="content">
-      <div style="display: flex; gap: 2rem; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; color: #fff; width: fit-content;">
+      <div style="display: flex; gap: 2rem; background: transparent; padding: 1.5rem 2rem; border-radius: 12px; color: #fff; width: fit-content; margin: 0 auto;">
         <div style="text-align: center;">
           <div style="font-size:14px;opacity:0.7;">运营时长</div>
           <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="runTime"></div>
@@ -109,41 +109,7 @@
     </div>
   </div>
 
-  <!-- 底部目录区域 -->
-  <div class="sidebar">
-    <div class="sidebar-toc">
-      <div class="toc">
-
-        <!-- 介绍 -->
-        <div class="toc-level-1">
-          <div class="toc-header">介绍</div>
-          <div class="toc-level-2">
-            <a href="Blog.html" onclick="loadMarkdown('README.md'); return false;">介绍</a>
-          </div>
-        </div>
-
-        <!-- markdown练习 -->
-        <div class="toc-level-1">
-          <div class="toc-header">Markdown</div>
-          <div class="toc-level-2">
-            <a href="Blog.html" onclick="loadMarkdown('markdown的练习.md'); return false;">基础语法练习</a>
-          </div>
-        </div>
-
-        <!-- Git -->
-        <div class="toc-level-1">
-          <div class="toc-header">Git</div>
-          <div class="toc-level-2">
-            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.1学习.md'); return false;">Git的学习</a>
-          </div>
-          <div class="toc-level-2">
-            <a href="Blog.html" onclick="loadMarkdown('关于Git/Git.2代码推送.md'); return false;">Git的代码推送</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
+  
 
   <!-- 跳到顶部按钮 -->
   <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
@@ -159,8 +125,9 @@
       
       // 统计卡片功能
       const BLOG_CREATE_DATE = '2025-12-18';
-      const user = window.location.hostname.split('.')[0];
-      const repo = user + '.github.io';
+      const user = 'gfxh';
+      const repo = 'momoGitbook.githup.io';
+      const branch = 'main'; // 如果你的分支是 master，请改成 'master'
       
       function calcRunTime() {
         const start = new Date(BLOG_CREATE_DATE);
@@ -188,14 +155,18 @@
       
       async function getTotalWords() {
         try {
-          const res = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/main?recursive=1`);
+          const res = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);
           const data = await res.json();
+          if (!data.tree || data.message) {
+            return '获取失败';
+          }
           const mdFiles = data.tree.filter(item => item.path.endsWith('.md'));
           
           let totalWords = 0;
           for (const file of mdFiles) {
-            const contentRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file.path}`);
+            const contentRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file.path}?ref=${branch}`);
             const contentData = await contentRes.json();
+            if (!contentData.content) continue;
             const content = atob(contentData.content);
             totalWords += content.length;
           }
@@ -206,7 +177,7 @@
             return totalWords.toString();
           }
         } catch (e) {
-          return '计算中';
+          return '获取失败';
         }
       }
       
