@@ -1,4 +1,4 @@
-name: Update Stats
+name: Update Stats and Deploy
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  update-stats:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -31,8 +31,30 @@ jobs:
           echo "}" >> stats.json
           cat stats.json
 
-      - name: Commit and push changes
+      - name: Commit stats.json
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update stats.json
           file_pattern: stats.json
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
