@@ -94,7 +94,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="Blog.html">Blog</a></li>
         <!--<li><a href="Comment.html">Comment</a></li>-->
-        <li><a href="Time.html">Time</a></li>
+        
         <li><a href="About.html">About</a></li>
       </ul>
     </div>
@@ -110,6 +110,27 @@
    <div class="loading">
           <h1>在题目中学东西</h1>
           <p>The first principle of learning is self-study.</p>
+          
+          <!-- 统计卡片 -->
+          <div id="stats-card-container" style="display: flex; gap: 2rem; background: transparent; padding: 1.5rem 2rem; border-radius: 12px; color: #fff; width: fit-content; margin: 2rem auto; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+            <div style="text-align: center; min-width: 100px;">
+              <div style="font-size:14px;opacity:0.7;">运营时长</div>
+              <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="runTime"></div>
+            </div>
+            <div style="text-align: center; min-width: 100px;">
+              <div style="font-size:14px;opacity:0.7;">上次更新</div>
+              <div style="font-size:28px;font-weight:bold;margin-top:4px;" id="lastUpdate"></div>
+            </div>
+            <div style="text-align: center; min-width: 100px;">
+              <div style="font-size:14px;opacity:0.7;">总字数</div>
+              <div class="total-words" style="font-size:28px;font-weight:bold;margin-top:4px;">计算中...</div>
+            </div>
+            <div style="text-align: center; min-width: 120px;">
+              <div style="font-size:14px;opacity:0.7;">当前时间</div>
+              <div style="font-size:18px;font-weight:bold;margin-top:4px;" id="currentTime"></div>
+              <div style="font-size:12px;opacity:0.7;margin-top:2px;" id="currentDate"></div>
+            </div>
+          </div>
         </div>
   <div class="main-container">
     <div class="content-wrap">
@@ -334,15 +355,95 @@
   <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
 
   <script>
+    // 博客创建日期
+    const BLOG_CREATE_DATE = '2025-12-18';
+    
+    // 计算运营时长
+    function calcRunTime() {
+      const start = new Date(BLOG_CREATE_DATE);
+      const now = new Date();
+      const days = Math.floor((now - start) / 86400000);
+      const months = Math.floor(days / 30);
+      const daysLeft = days % 30;
+      return `${months}个月${daysLeft}天`;
+    }
+    
+    // 获取统计数据
+    async function loadStats() {
+      try {
+        const res = await fetch('stats.json');
+        const data = await res.json();
+        document.getElementById('lastUpdate').innerText = formatDate(data.lastUpdate);
+        document.querySelector('.total-words').innerText = formatWords(data.totalWords);
+      } catch (e) {
+        document.getElementById('lastUpdate').innerText = '获取中';
+        document.querySelector('.total-words').innerText = '计算中';
+      }
+    }
+    
+    // 格式化日期
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const days = Math.floor((now - date) / 86400000);
+      if (days === 0) return '今天';
+      if (days === 1) return '昨天';
+      return `${days}天前`;
+    }
+    
+    // 格式化字数
+    function formatWords(count) {
+      if (!count || count <= 0) return '0';
+      if (count >= 10000) {
+        return (count / 10000).toFixed(2) + ' 万';
+      }
+      return count.toString();
+    }
+    
+    // 更新当前时间
+    function updateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('zh-CN', { hour12: false });
+      const date = now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' });
+      document.getElementById('currentTime').innerText = time;
+      document.getElementById('currentDate').innerText = date;
+    }
+    
+    // 统计卡片入场动画
+    function animateStatsCards() {
+      const container = document.getElementById('stats-card-container');
+      if (!container) return;
+      
+      const cards = container.querySelectorAll('div');
+      cards.forEach((card, index) => {
+        // 随机从左或右入场
+        const direction = index % 2 === 0 ? -100 : 100; // 偶数从左，奇数从右
+        card.style.opacity = '0';
+        card.style.transform = `translateX(${direction}px)`;
+        card.style.transition = 'all 0.6s ease-out';
+        
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateX(0)';
+        }, index * 150);
+      });
+    }
+    
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', function () {
       // 加载保存的主题偏好
       loadSavedTheme();
       
-      // 延迟初始化粒子系统，确保DOM完全加载
-      setTimeout(() => {
-        initParticleSystem();
-      }, 100);
+      // 初始化统计卡片
+      document.getElementById('runTime').innerText = calcRunTime();
+      loadStats();
+      updateTime();
+      setInterval(updateTime, 1000);
+      
+      // 添加入场动画
+      setTimeout(animateStatsCards, 200);
+      
+
     });
   </script>
 
