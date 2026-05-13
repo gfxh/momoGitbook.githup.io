@@ -75,26 +75,43 @@ ASCLL码解密
 **basic_10**
 ![](TU/image%20copy%2024.png)
 ![](TU/image%20copy%2023.png)
+好吧都没有用
 
 
+![](TU/image%20copy%2025.png)
+目录扫描，找到一个sitemap.xml ，打开发现一个wqw.php
+wqw.php需要Cookie是admin身份
+![](TU/image%20copy%2026.png)
+
+**EZ_PHP**
+![](TU/image%20copy%2027.png)
+GET a和b
+ PHP 中 `and` 的优先级比 `==` 低
+a构造为0e就可以绕过
+b在数字后面加一个字母即可
+PHP 的弱类型特性：字符串和数字比较时，会自动从开头提取数字部分，非数字部分会被忽略。
+![](TU/image%20copy%2028.png)
+**EZ_PHP1**
+![](TU/image%20copy%2029.png)
+
+必须传入非空的qc参数
+qc必须是合法 JSON，解码后转成数组
+array_search("QCCTF", $qc)的结果必须严格等于1
+
+array_search("QCCTF", $qc) 会在数组中搜索值为"QCCTF"的元素，并返回它的键名
+
+`?qc=["1","QCCTF"]`
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+**ezphp_2**
+![](TU/image%20copy%2030.png)
+```
+$qc是一个包含"n"键的数组，"n"对应的值是一个非空数组
+$qc中存在值为0的元素（绕过QCCTF的array_search）
+$qc["n"]数组中存在值为0的元素（绕过QCyyds的array_search）
+$qc["n"]数组中没有严格等于"QCyyds"的元素
+```
+![](TU/image%20copy%2031.png)
 
 
 
