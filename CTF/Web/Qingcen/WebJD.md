@@ -115,8 +115,64 @@ $qc["n"]数组中没有严格等于"QCyyds"的元素
 
 
 
+**第一章**
+![](TU/image%20copy%2034.png)
+
+![](TU/image%20copy%2035.png)
+
+![](TU/image%20copy%2039.png)
+禁用js就可以粘贴了
+![](TU/image%20copy%2040.png)
+500次就交给BP吧。第500次有flag
+额，可能题目没做好吧
+**第二章**
+![](TU/image%20copy%2036.png)
+
+藏字了。`前往/golden_trail看看`
+![](TU/image%20copy%2037.png)
 
 
+题目提示http的请求头
+![](TU/image%20copy%2038.png)
+moectf{0bs3rv3_Th3_Gold3n_traiL}
+改成flag{}就行
+
+**第三章**
+
+
+
+**第四章**
+
+![](TU/image%20copy%2041.png)
+
+--->`bW9lY3Rme0Mw`
+
+![](TU/image%20copy%2042.png)
+--->`bjZyNDd1MTQ3`
+
+![](TU/image%20copy%2043.png)
+--->`MTBuNV95MHVy`
+
+![](TU/image%20copy%2044.png)
+--->`X2g3N1BfbDN2`
+
+![](TU/image%20copy%2045.png)
+--->`M2xfMTVfcjM0`
+
+![](TU/image%20copy%2046.png)
+--->`bGx5X2gxOWgh`
+![](TU/image%20copy%2050.png)
+
+把GET改为PUT。在最下面写上`新生！`
+![](TU/image%20copy%2051.png)
+--->`fQ==`  
+
+`bW9lY3Rme0MwbjZyNDd1MTQ3MTBuNV95MHVyX2g3N1BfbDN2M2xfMTVfcjM0bGx5X2gxOWghfQ==`
+base64-->`moectf{C0n6r47u14710n5_y0ur_h77P_l3v3l_15_r34lly_h19h!}`
+要改成**flag{C0n6r47u14710n5_y0ur_h77P_l3v3l_15_r34lly_h19h!}**
+![](TU/image%20copy%2047.png)
+![](TU/image%20copy%2048.png)
+![](TU/image%20copy%2049.png)
 
 
 
