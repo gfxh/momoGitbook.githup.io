@@ -312,17 +312,29 @@ compress.zlib://flag.php
 **113**
 ![18](TU/image%20copy%204.png)
 
-`compress.zlib://flag.php`
+`compress.zlib://flag.php` 压缩流
 
+`/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/p
+roc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/pro
+c/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/
+self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/se
+lf/root/proc/self/root/var/www/html/flag.php` 目录溢出
 
+**114**
+![19](TU/image%20copy%205.png)
+这题的php没有被过滤。相应的zip流被过滤了
+`?file=php://filter/resource=flag.php`
+`is_numeric(num);`这个函数可以在数字前面加上空格绕过%09%20
+![20](TU/image%20copy%206.png)
+![21](TU/image%20copy%207.png)
+trim()函数可以去掉字符串首尾的空格。这里看到`%0C`没有被去掉。`%0C `对应的是 ASCII 字符中**换页符**
+**[str_replace($search,$replace,$subject)](https://www.php.net/manual/zh/function.str-replace.php)** 该函数返回字符串或者数组。该字符串或数组是将 subject 中全部的 search 都被 replace 替换之后的结果
+![22](TU/image%20copy%208.png)
 
-
-
-
-
-
-
-
-
+**补充**
+`var_dump($num!=='36' and $num=='36');`
+`==` 比较一个数字和字符串或者比较涉及到数字内容的字符串，则字符串会被转换为数值并且比较按照数值来进行
+`===`或 `!==` 进行比较时则不进行类型转换，因为此时类型和数值都要比对。
+![23](TU/image%20copy%209.png)
 
 
