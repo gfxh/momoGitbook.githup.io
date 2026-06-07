@@ -12,6 +12,7 @@
 `eval("extract($_POST);");` 执行后，$_POST 里的所有参数都会被注册为变量。
 执行 `extract($_POST)` 后，就会自动创建 `$fl0g = "flag_give_me"`
 
+![seer_screenshot_20260605210414.png](https://img.xobear.cn/file/1780813788479_seer_screenshot_20260605210414.png)
 **126**
 ![live2d-photo.png](https://img.xobear.cn/file/1780814394304_live2d-photo.png)
 
