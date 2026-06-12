@@ -214,7 +214,7 @@ function addReadingTime(text) {
   el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + label;
 
   var firstChild = document.getElementById('content').firstElementChild;
-  if (firstChild) firstChild.insertBefore(el, firstChild.firstChild);
+  if (firstChild) firstChild.prepend(el);
 }
 
 /** 代码块复制按钮 */
@@ -246,22 +246,100 @@ function initLightbox() {
   if (!overlay) {
     overlay = document.createElement('div');
     overlay.className = 'img-lightbox-overlay';
-    overlay.innerHTML = '<img alt="预览"><button class="img-lightbox-close" aria-label="关闭">&times;</button>';
+    overlay.innerHTML = '<img alt="预览">';
     document.body.appendChild(overlay);
 
-    overlay.querySelector('.img-lightbox-close').addEventListener('click', closeLightbox);
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) closeLightbox();
     });
+    var previewImg = overlay.querySelector('img');
+    var scale = 1;
+    var translateX = 0, translateY = 0;
+    var isDragging = false, startX = 0, startY = 0, lastX = 0, lastY = 0;
+
+    function updateTransform() {
+      previewImg.style.transform = 'translate(' + translateX + 'px, ' + translateY + 'px) scale(' + scale + ')';
+    }
+
+    function resetView() {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      updateTransform();
+      previewImg.style.cursor = scale > 1 ? 'move' : '';
+    }
+
+    // 滚轮缩放
+    overlay.addEventListener('wheel', function (e) {
+      if (!overlay.classList.contains('active')) return;
+      e.preventDefault();
+      var delta = e.deltaY > 0 ? -0.25 : 0.25;
+      scale = Math.min(5, Math.max(0.5, scale + delta));
+      if (scale <= 1) { translateX = 0; translateY = 0; }
+      updateTransform();
+      previewImg.style.cursor = scale > 1 ? 'move' : '';
+    }, { passive: false });
+
+    // 双击切换缩放
+    previewImg.addEventListener('dblclick', function (e) {
+      e.stopPropagation();
+      if (scale > 1) {
+        resetView();
+      } else {
+        scale = 2;
+        updateTransform();
+        previewImg.style.cursor = 'move';
+      }
+    });
+
+    // 拖拽
+    previewImg.addEventListener('mousedown', function (e) {
+      if (scale <= 1) return;
+      e.preventDefault();
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      lastX = translateX;
+      lastY = translateY;
+      previewImg.style.transition = 'none';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (!isDragging) return;
+      translateX = lastX + (e.clientX - startX);
+      translateY = lastY + (e.clientY - startY);
+      updateTransform();
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (!isDragging) return;
+      isDragging = false;
+      previewImg.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
   }
 
-  var img = overlay.querySelector('img');
+  var previewImg = overlay.querySelector('img');
+
+  // 点击图片关闭（未缩放时）
+  previewImg.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var currentScale = 1;
+    var m = previewImg.style.transform.match(/scale\(([\d.]+)\)/);
+    if (m) currentScale = parseFloat(m[1]);
+    if (currentScale > 1) return;
+    closeLightbox();
+  });
+
   document.querySelectorAll('#content img').forEach(function (el) {
     el.addEventListener('click', function () {
-      img.src = this.src;
-      img.alt = this.alt || '';
+      previewImg.src = this.src;
+      previewImg.alt = this.alt || '';
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      // 重置所有缩放状态
+      previewImg.style.transform = '';
+      previewImg.style.cursor = '';
+      previewImg.style.transition = '';
     });
   });
 
@@ -442,9 +520,7 @@ function initFriendsPage() {
             '<input type="hidden" name="from_name" value="Bear随笔友链申请">' +
             '<input type="hidden" name="friend_json" value="">' +
             '<input type="checkbox" name="botcheck" class="apply-botcheck" tabindex="-1" autocomplete="off">' +
-            '<div class="apply-input-row">' +
-              '<input type="email" name="email" class="apply-email-input" placeholder="' + escapeHtml(emailPh) + '" required autocomplete="email">' +
-            '</div>' +
+            '<input type="email" name="email" class="apply-field-input" placeholder="' + escapeHtml(emailPh) + '" required autocomplete="email">' +
             '<div class="apply-fields-row">' +
               '<input type="text" name="site_url" class="apply-field-input" placeholder="网站网址" required autocomplete="url">' +
               '<input type="text" name="site_name" class="apply-field-input" placeholder="网站名" required>' +

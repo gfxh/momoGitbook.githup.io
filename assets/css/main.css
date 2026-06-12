@@ -493,10 +493,6 @@ body {
 }
 
 /* ========================================
- * 第六部分：交互组件
- * ======================================== */
-
-/* ========================================
  * 站点视觉刷新：更安静的技术博客版式
  * ======================================== */
 
@@ -526,8 +522,8 @@ body.light-mode {
   background:
     radial-gradient(circle at 18% 12%, rgba(94, 234, 212, 0.08), transparent 28%),
     radial-gradient(circle at 88% 18%, rgba(245, 196, 81, 0.06), transparent 24%),
-    linear-gradient(135deg, #101214 0%, #151a1c 52%, #0f1717 100%) !important;
-  animation: none !important;
+    linear-gradient(135deg, #101214 0%, #151a1c 52%, #0f1717 100%);
+  animation: none;
   color: var(--site-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -1231,42 +1227,15 @@ body.light-mode {
 }
 
 .img-lightbox-overlay img {
-  max-width: 92vw;
-  max-height: 88vh;
+  max-width: 96vw;
+  max-height: 94vh;
   object-fit: contain;
-  border-radius: 8px;
-  border: 1px solid var(--site-line);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-  transform: scale(0.94);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.img-lightbox-overlay.active img {
-  transform: scale(1);
-}
-
-.img-lightbox-close {
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(26, 31, 34, 0.75);
-  border: 1px solid var(--site-line);
-  border-radius: 8px;
-  color: var(--site-muted-strong);
-  font-size: 18px;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.img-lightbox-close:hover {
-  background: rgba(32, 38, 42, 0.95);
-  border-color: rgba(94, 234, 212, 0.35);
-  color: var(--site-text);
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* 可点击图片的光标提示 */
@@ -1581,7 +1550,6 @@ body.light-mode {
 }
 
 /* 通用表单输入 */
-.apply-email-input,
 .apply-field-input {
   width: 100%;
   padding: 12px 16px;
@@ -1596,13 +1564,11 @@ body.light-mode {
   transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 
-.apply-email-input::placeholder,
 .apply-field-input::placeholder {
   color: var(--site-muted);
   opacity: 0.55;
 }
 
-.apply-email-input:focus,
 .apply-field-input:focus {
   border-color: rgba(94, 234, 212, 0.45);
   background: rgba(22, 27, 30, 0.92);
