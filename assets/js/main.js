@@ -440,11 +440,20 @@ function initFriendsPage() {
             '<input type="hidden" name="access_key" value="' + escapeHtml(w3fKey) + '">' +
             '<input type="hidden" name="subject" value="友链申请 - 来自 Bear随笔">' +
             '<input type="hidden" name="from_name" value="Bear随笔友链申请">' +
+            '<input type="hidden" name="friend_json" value="">' +
             '<input type="checkbox" name="botcheck" class="apply-botcheck" tabindex="-1" autocomplete="off">' +
             '<div class="apply-input-row">' +
               '<input type="email" name="email" class="apply-email-input" placeholder="' + escapeHtml(emailPh) + '" required autocomplete="email">' +
-              '<button type="submit" class="apply-submit-btn" data-loading="发送中...">' + escapeHtml(submitTxt) + '</button>' +
             '</div>' +
+            '<div class="apply-fields-row">' +
+              '<input type="text" name="site_url" class="apply-field-input" placeholder="网站网址" required autocomplete="url">' +
+              '<input type="text" name="site_name" class="apply-field-input" placeholder="网站名" required>' +
+            '</div>' +
+            '<div class="apply-fields-row">' +
+              '<input type="url" name="avatar_url" class="apply-field-input" placeholder="头像URL（选填）" autocomplete="url">' +
+              '<input type="text" name="description" class="apply-field-input" placeholder="网站简介（选填）">' +
+            '</div>' +
+            '<button type="submit" class="apply-submit-btn apply-submit-btn--full" data-loading="发送中...">' + escapeHtml(submitTxt) + '</button>' +
           '</form>' +
           '<p class="apply-note">' + escapeHtml(note) + '</p>' +
         '</section>';
@@ -458,14 +467,37 @@ function initFriendsPage() {
           e.preventDefault();
 
           var submitBtn = form.querySelector('.apply-submit-btn');
-          var emailInput = form.querySelector('.apply-email-input');
+          var emailInput = form.querySelector('input[name="email"]');
+          var urlInput = form.querySelector('input[name="site_url"]');
+          var nameInput = form.querySelector('input[name="site_name"]');
+
+          // 清除所有错误状态
+          [emailInput, urlInput, nameInput].forEach(function (el) {
+            el.classList.remove('apply-field-input--error');
+          });
+
+          var hasError = false;
 
           if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
-            emailInput.classList.add('apply-email-input--error');
+            emailInput.classList.add('apply-field-input--error');
             emailInput.focus();
-            emailInput.addEventListener('input', function clearError() {
-              emailInput.classList.remove('apply-email-input--error');
-              emailInput.removeEventListener('input', clearError);
+            hasError = true;
+          }
+          if (!urlInput.value.trim()) {
+            urlInput.classList.add('apply-field-input--error');
+            if (!hasError) urlInput.focus();
+            hasError = true;
+          }
+          if (!nameInput.value.trim()) {
+            nameInput.classList.add('apply-field-input--error');
+            if (!hasError) nameInput.focus();
+            hasError = true;
+          }
+
+          if (hasError) {
+            var clearError = function (e) { e.target.classList.remove('apply-field-input--error'); };
+            [emailInput, urlInput, nameInput].forEach(function (el) {
+              el.addEventListener('input', clearError);
             });
             return;
           }
@@ -474,6 +506,15 @@ function initFriendsPage() {
           submitBtn.classList.add('apply-submit-btn--loading');
           var originalText = submitBtn.textContent;
           submitBtn.textContent = submitBtn.getAttribute('data-loading') || '发送中...';
+
+          // 拼装友链 JSON
+          var friendJson = JSON.stringify({
+            name: (form.querySelector('input[name="site_name"]').value || '').trim(),
+            url: (form.querySelector('input[name="site_url"]').value || '').trim(),
+            avatar: (form.querySelector('input[name="avatar_url"]').value || '').trim(),
+            desc: (form.querySelector('input[name="description"]').value || '').trim()
+          });
+          form.querySelector('input[name="friend_json"]').value = friendJson;
 
           var formData = new FormData(form);
           fetch(form.action, { method: 'POST', body: formData })
