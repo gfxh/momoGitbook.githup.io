@@ -1,0 +1,28 @@
+{
+    "site": {"name": "XoBear",
+    "url": "http://xobear.cn/",
+    "avatar": "https://lf-cdn.trae.com.cn/obj/trae-ai-image/page_image/7ab1a2b9c62c649a2df29a7b130fa4b0.jpeg", "desc": "Aspiring Cybersecurity Full-Stack Developer"
+},
+    "groups": [
+        {"title": "好友", "friends": [
+            {"name": "对方名字","url": "https://对方的网站","avatar": "https://lf-cdn.trae.com.cn/obj/trae-ai-image/page_image/7ab1a2b9c62c649a2df29a7b130fa4b0.jpeg","desc": "一句话简介"}
+
+
+        ]},
+        {"title": "网友", "friends": [
+            {"name": "对方名字","url": "https://对方的网站","avatar": "https://lf-cdn.trae.com.cn/obj/trae-ai-image/page_image/7ab1a2b9c62c649a2df29a7b130fa4b0.jpeg","desc": "一句话简介"}
+        ]}
+        ],
+    "apply": {
+        "title": "申请友链",
+        "description": "如果你有优质的个人网站，欢迎互换友链。请确认满足以下条件：",
+        "conditions": [
+            "个人博客或独立网站，非商业推广",
+            "站点内容积极健康，原创为主"
+        ],
+        "emailPlaceholder": "输入邮箱地址",
+        "submitText": "提交申请",
+        "web3formsAccessKey": "你的access_key",
+        "note": "提交后博主会通过邮件与你联系。同时希望你也添加本站到你的友链。"
+    }
+}

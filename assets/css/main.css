@@ -1334,3 +1334,399 @@ body.light-mode {
 .toc a.is-filtered-hidden {
   display: none;
 }
+
+/* ========================================
+ * 第七部分：友链页面
+ * ======================================== */
+
+.friends-page .main-container {
+  padding-top: 28px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--site-line);
+}
+
+.page-header h1 {
+  color: var(--site-text);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin: 0 0 10px;
+  letter-spacing: 0;
+}
+
+.page-header p {
+  color: var(--site-muted);
+  margin: 0;
+  font-size: 15px;
+}
+
+/* 分组区域 */
+.friend-section {
+  margin-bottom: 40px;
+}
+
+.friend-section-title {
+  color: var(--site-text);
+  font-size: 1.25rem;
+  margin: 0 0 18px;
+  letter-spacing: 1px;
+}
+
+/* 友链卡片 */
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(26, 31, 34, 0.82);
+  border: 1px solid var(--site-line);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: transform 0.22s ease, border-color 0.22s ease,
+    box-shadow 0.22s ease, background 0.22s ease;
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.friend-card:hover {
+  transform: translateX(4px) translateY(-2px);
+  border-color: rgba(94, 234, 212, 0.32);
+  background: rgba(31, 38, 41, 0.92);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2), 0 0 20px rgba(94, 234, 212, 0.05);
+}
+
+/* 编号徽章 */
+.friend-badge {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--site-muted-strong);
+  background: rgba(17, 19, 22, 0.8);
+  border: 1px solid var(--site-line);
+  border-radius: 50%;
+  line-height: 1;
+}
+
+/* 头像 */
+.friend-avatar {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid var(--site-line);
+  transition: border-color 0.2s ease;
+}
+
+.friend-card:hover .friend-avatar {
+  border-color: rgba(94, 234, 212, 0.45);
+}
+
+/* 本站信息头像稍大 */
+.friend-site-avatar {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+}
+
+/* 无头像时用首字母占位 */
+.friend-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--site-accent);
+  background: linear-gradient(135deg, rgba(94, 234, 212, 0.12), rgba(245, 196, 81, 0.08));
+  border-color: rgba(94, 234, 212, 0.25);
+}
+
+/* 信息区 */
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.friend-name {
+  color: var(--site-text);
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-url {
+  color: var(--site-accent);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}
+
+.friend-desc {
+  color: var(--site-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 本站信息卡片特殊样式（爱心） */
+.friend-card-self {
+  padding: 20px 24px;
+}
+
+.friend-heart {
+  flex-shrink: 0;
+  font-size: 20px;
+  margin-left: auto;
+  padding-left: 14px;
+}
+
+/* 加载状态 */
+.friends-loading {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--site-muted);
+  font-size: 14px;
+}
+
+/* ========================================
+ * 友链申请表单
+ * ======================================== */
+
+.friend-apply-section {
+  margin-top: 8px;
+  padding-top: 32px;
+  border-top: 1px solid var(--site-line);
+}
+
+.apply-header-icon {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.apply-title {
+  color: var(--site-text);
+  font-size: 1.35rem;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.apply-desc {
+  color: var(--site-muted-strong);
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+.apply-conditions {
+  list-style: none;
+  margin: 0 auto 20px;
+  padding: 14px 18px;
+  max-width: 420px;
+  background: rgba(26, 31, 34, 0.7);
+  border: 1px solid var(--site-line);
+  border-radius: 8px;
+}
+
+.apply-condition-item {
+  color: var(--site-muted-strong);
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 4px 0 4px 22px;
+  position: relative;
+}
+
+.apply-condition-item::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  color: var(--site-accent);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.apply-form {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.apply-botcheck {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+}
+
+.apply-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.apply-email-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--site-text);
+  background: rgba(26, 31, 34, 0.85);
+  border: 1px solid var(--site-line);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.apply-email-input::placeholder {
+  color: var(--site-muted);
+  opacity: 0.55;
+}
+
+.apply-email-input:focus {
+  border-color: rgba(94, 234, 212, 0.45);
+  background: rgba(22, 27, 30, 0.92);
+  box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.08);
+}
+
+.apply-email-input--error {
+  border-color: rgba(239, 68, 68, 0.55);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+}
+
+.apply-email-input--error:focus {
+  border-color: rgba(239, 68, 68, 0.65);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.apply-submit-btn {
+  flex-shrink: 0;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #111316;
+  background: var(--site-accent);
+  border: 1px solid var(--site-accent);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  white-space: nowrap;
+}
+
+.apply-submit-btn:hover {
+  background: rgba(94, 234, 212, 0.85);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(94, 234, 212, 0.18);
+}
+
+.apply-submit-btn:active {
+  transform: translateY(0);
+}
+
+.apply-submit-btn:disabled,
+.apply-submit-btn--loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.apply-success {
+  text-align: center;
+  padding: 24px 16px;
+}
+
+.apply-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(94, 234, 212, 0.15);
+  color: var(--site-accent);
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.apply-success-text {
+  color: var(--site-muted-strong);
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.apply-error-msg {
+  margin: 10px 0 0 !important;
+  font-size: 13px !important;
+  color: rgba(239, 68, 68, 0.85);
+  text-align: center;
+}
+
+.apply-note {
+  margin-top: 14px !important;
+  font-size: 13px !important;
+  opacity: 0.72;
+  text-align: center;
+}
+
+@media (max-width: 440px) {
+  .apply-input-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .apply-submit-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .apply-conditions {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .friend-card {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .friend-avatar {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+  }
+
+  .friend-site-avatar {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+  }
+
+  .friend-name { font-size: 15px; }
+  .friend-url   { font-size: 12px; }
+  .friend-desc { font-size: 12px; }
+}

@@ -319,6 +319,7 @@ function initTocSearch() {
 
 document.addEventListener('DOMContentLoaded', function () {
   initBlogInteractions();
+  initFriendsPage();
 });
 
 function initBlogInteractions() {
@@ -346,6 +347,171 @@ function initBlogInteractions() {
 
   // 目录搜索
   initTocSearch();
+}
+
+/** 友链页面：从 friends.json 加载并渲染（分组 + 本站信息 + 申请） */
+function initFriendsPage() {
+  var root = document.getElementById('friends-root');
+  if (!root) return;
+
+  fetch('friends.json')
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      var html = '';
+
+      // 本站信息
+      if (data.site) {
+        var s = data.site;
+        var avatarHtml = s.avatar
+          ? '<img class="friend-site-avatar" src="' + s.avatar + '" alt="' + escapeHtml(s.name) + '">'
+          : '<div class="friend-avatar friend-avatar-placeholder">' + escapeHtml(s.name.charAt(0)) + '</div>';
+        html +=
+          '<section class="friend-section">' +
+            '<h2 class="friend-section-title">本站信息</h2>' +
+            '<a class="friend-card friend-card-self" href="' + escapeHtml(s.url || '#') + '" target="_blank" rel="noopener noreferrer">' +
+              avatarHtml +
+              '<div class="friend-info">' +
+                '<span class="friend-name">' + escapeHtml(s.name) + '</span>' +
+                '<span class="friend-url">' + escapeHtml(s.url || '') + '</span>' +
+                '<span class="friend-desc">' + escapeHtml(s.desc || '') + '</span>' +
+              '</div>' +
+              '<span class="friend-heart">❤️</span>' +
+            '</a>' +
+          '</section>';
+      }
+
+      // 分组
+      if (data.groups && data.groups.length > 0) {
+        var globalIndex = 0;
+        data.groups.forEach(function (group) {
+          if (!group.friends || group.friends.length === 0) return;
+
+          html += '<section class="friend-section"><h2 class="friend-section-title">' + escapeHtml(group.title) + ' 🌐</h2>';
+
+          group.friends.forEach(function (f, i) {
+            globalIndex++;
+            var badge = String(globalIndex).padStart(2, '0');
+            var avatarHtml = f.avatar
+              ? '<img class="friend-avatar" src="' + f.avatar + '" alt="' + escapeHtml(f.name) + '" loading="lazy">'
+              : '<div class="friend-avatar friend-avatar-placeholder">' + escapeHtml(f.name.charAt(0)) + '</div>';
+
+            html +=
+              '<a class="friend-card" href="' + escapeHtml(f.url) + '" target="_blank" rel="noopener noreferrer">' +
+                '<div class="friend-badge">#' + badge + '</div>' +
+                avatarHtml +
+                '<div class="friend-info">' +
+                  '<span class="friend-name">' + escapeHtml(f.name) + '</span>' +
+                  '<span class="friend-url">' + escapeHtml(f.url) + '</span>' +
+                  '<span class="friend-desc">' + escapeHtml(f.desc || '') + '</span>' +
+                '</div>' +
+              '</a>';
+          });
+
+          html += '</section>';
+        });
+      }
+
+      // 申请区域
+      var applyCfg = data.apply || {};
+      var applyTitle = applyCfg.title || '申请友链';
+      var applyDesc  = applyCfg.description || '如果你有优质的个人网站，欢迎互换友链。请确认满足以下条件：';
+      var conditions = applyCfg.conditions || [];
+      var emailPh   = applyCfg.emailPlaceholder || '输入邮箱地址';
+      var submitTxt = applyCfg.submitText || '提交申请';
+      var w3fKey    = applyCfg.web3formsAccessKey || '';
+      var note      = applyCfg.note || '提交后博主会通过邮件与你联系。';
+
+      var conditionsHtml = '';
+      if (conditions.length > 0) {
+        conditionsHtml = '<ul class="apply-conditions">';
+        conditions.forEach(function (c) {
+          conditionsHtml += '<li class="apply-condition-item">' + escapeHtml(c) + '</li>';
+        });
+        conditionsHtml += '</ul>';
+      }
+
+      html +=
+        '<section class="friend-apply-section">' +
+          '<div class="apply-header-icon">📬</div>' +
+          '<h2 class="apply-title">' + escapeHtml(applyTitle) + '</h2>' +
+          '<p class="apply-desc">' + escapeHtml(applyDesc) + '</p>' +
+          conditionsHtml +
+          '<form class="apply-form" id="apply-form" action="https://api.web3forms.com/submit" method="POST">' +
+            '<input type="hidden" name="access_key" value="' + escapeHtml(w3fKey) + '">' +
+            '<input type="hidden" name="subject" value="友链申请 - 来自 Bear随笔">' +
+            '<input type="hidden" name="from_name" value="Bear随笔友链申请">' +
+            '<input type="checkbox" name="botcheck" class="apply-botcheck" tabindex="-1" autocomplete="off">' +
+            '<div class="apply-input-row">' +
+              '<input type="email" name="email" class="apply-email-input" placeholder="' + escapeHtml(emailPh) + '" required autocomplete="email">' +
+              '<button type="submit" class="apply-submit-btn" data-loading="发送中...">' + escapeHtml(submitTxt) + '</button>' +
+            '</div>' +
+          '</form>' +
+          '<p class="apply-note">' + escapeHtml(note) + '</p>' +
+        '</section>';
+
+      root.innerHTML = html;
+
+      // 绑定表单提交事件
+      var form = document.getElementById('apply-form');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          var submitBtn = form.querySelector('.apply-submit-btn');
+          var emailInput = form.querySelector('.apply-email-input');
+
+          if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+            emailInput.classList.add('apply-email-input--error');
+            emailInput.focus();
+            emailInput.addEventListener('input', function clearError() {
+              emailInput.classList.remove('apply-email-input--error');
+              emailInput.removeEventListener('input', clearError);
+            });
+            return;
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.classList.add('apply-submit-btn--loading');
+          var originalText = submitBtn.textContent;
+          submitBtn.textContent = submitBtn.getAttribute('data-loading') || '发送中...';
+
+          var formData = new FormData(form);
+          fetch(form.action, { method: 'POST', body: formData })
+            .then(function (res) { return res.json(); })
+            .then(function (resp) {
+              if (resp.success) {
+                form.innerHTML =
+                  '<div class="apply-success">' +
+                    '<div class="apply-success-icon">✓</div>' +
+                    '<p class="apply-success-text">申请已提交成功！博主会尽快通过邮件与你联系。</p>' +
+                  '</div>';
+              } else {
+                throw new Error(resp.message || '提交失败');
+              }
+            })
+            .catch(function () {
+              submitBtn.disabled = false;
+              submitBtn.classList.remove('apply-submit-btn--loading');
+              submitBtn.textContent = originalText;
+              var existing = form.querySelector('.apply-error-msg');
+              if (existing) existing.remove();
+              var errMsg = document.createElement('p');
+              errMsg.className = 'apply-error-msg';
+              errMsg.textContent = '提交失败，请稍后重试。如问题持续，可直接发送邮件至 2701581775@qq.com。';
+              form.appendChild(errMsg);
+            });
+        });
+      }
+    })
+    .catch(function () {
+      root.innerHTML = '<div class="friends-loading">加载失败，请刷新重试</div>';
+    });
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 window.scrollToReadingTop = scrollToReadingTop;
