@@ -87,8 +87,10 @@
     运算符的优先级
    >[详情](https://www.php.net/manual/zh/language.operators.precedence.php)
     **下表按照优先级从高到低**
-   ![运算符优先级](./TU/PHP1x1.png)
+   ![PHP1x1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271843590_PHP1x1.png)
+
 ## 数组
+
    >[详情](https://www.php.net/manual/zh/language.operators.array.php)
 
    array() 函数用于创建数组

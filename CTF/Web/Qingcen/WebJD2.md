@@ -1,5 +1,5 @@
 **EZMD5**
-![](TU/image%20copy%2052.png)
+![image copy 52.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272405384_image_copy_52.png)
 
 这里是弱比较，0e在这里作为0
 md5加密后为0e开头的就可以绕过
@@ -27,21 +27,21 @@ s1502113478a
 ```
 
 **EZMD5_1**
-![](TU/image%20copy%2053.png)
+![image copy 53.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272403477_image_copy_53.png)
 
 GET一个a一个b，两个之不相等，md5加密后进行弱比较
 
 **EZMD5_2**
-![](TU/image%20copy%2054.png)
+![image copy 54.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272408298_image_copy_54.png)
 
 MD5加密数组返回NULL,后面的代码继续进行
 `a[]=1&b[]=2`
 
 **EZMD5_3**
-![](TU/image%20copy%2055.png)
+![image copy 55.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272407855_image_copy_55.png)
 如果是 === ，可以使用数组绕过
 **EZMD5_4**
-![](TU/image%20copy%2056.png)
+![image copy 56.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272402379_image_copy_56.png)
 用代码暴力跑出来
 ```
 import hashlib
@@ -74,18 +74,18 @@ while True:
     i += **1**
 ```
 **EZMD5_5**
-![](TU/image%20copy%2057.png)
+![image copy 57.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272402703_image_copy_57.png)
 ab不等，但哈希值相同
 数组绕过
-![](TU/image%20copy%2058.png)
+![image copy 58.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272410628_image_copy_58.png)
 数组绕过
 
 **EZCMD**
-![](TU/image%20copy%2059.png)
+![image copy 59.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272408674_image_copy_59.png)
 PSOT:cmd=nl /flag
 
 **EZCMD_1**
-![](TU/image%20copy%2060.png)
+![image copy 60.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272411140_image_copy_60.png)
 PSOT:cmd=127.0.0.1;ls     查目录
 在../../../目录下有flag
 cmd=127.0.0.1;cat ../../../flag

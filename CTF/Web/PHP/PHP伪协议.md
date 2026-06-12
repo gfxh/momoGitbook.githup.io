@@ -24,7 +24,7 @@ while(!feof($f)){
 `feof` — 检查是否到达文件结束      >[PHP feof 详情](https://www.php.net/manual/zh/function.feof.php)
 `fgets` — 从文件指针读取一行       >[PHP fgets 详情](https://www.php.net/manual/zh/function.fgets.php)
 
-![PHP3x1](./TU/PHP3x1.png)
+![PHP3x1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271848762_PHP3x1.png)
 
 ## `php://stdout` 用于将标准输出写入数据。
 输出 类似于 echo
@@ -38,7 +38,7 @@ fclose($f);
 `fwrite($stream,$data, int $length = 0)`  — 向文件指针写入数据       >[PHP fwrite 详情](https://www.php.net/manual/zh/function.fwrite.php)
 `fclose($stream)`  — 关闭文件指针       >[PHP fclose 详情](https://www.php.net/manual/zh/function.fclose.php)
 
-![PHP3x2](./TU/PHP3x2.png)
+![PHP3x2.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271842669_PHP3x2.png)
 
 ## `php://sterr` 用于将标准错误写入数据。
 和 php://stdout 一样
@@ -49,7 +49,7 @@ fclose($f);
 echo file_get_contents('php://input');
 ?>
 ```
-![PHP3x3](./TU/PHP3x3.png)
+![PHP3x3.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271843753_PHP3x3.png)
 
 
 ## `php://output` 用于将数据写入标准输出。
@@ -61,13 +61,13 @@ fwrite($f,'test6666');
 fclose($f)
 ?>
 ```
-![PHP3x4](./TU/PHP3x4.png)
+![PHP3x4.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271854646_PHP3x4.png)
 
 
 ## `php://filter` 用于将数据通过过滤器进行处理。
 php 元封装器 类似于 readfile() file() file_get_contents()
 读取文件内容
-![PHP3x5](./TU/PHP3x5.png)
+![PHP3x5.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271841022_PHP3x5.png)
 
 
 常用过滤器
@@ -115,7 +115,7 @@ echo file_get_contents($_GET['file']);
 ?>
 ```
 pyload=http://127.0.0.1/test.php/?file=php://filter/convert.base64-encode/resource=flag.php
-![PHP3x6](./TU/PHP3x6.png)
+![PHP3x6.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271850555_PHP3x6.png)
 
 
 

@@ -1,9 +1,9 @@
 **123**
-![](TU/image%20copy%2010.png)
+![image copy 10.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272105766_image_copy_10.png)
 `CTF_SHOW=1&CTF[SHOW.COM=2&fun=echo $flag`
 突破到eval时就可以拿到flag了
 **125**
-![](TU/image%20copy%2011.png)
+![image copy 11.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272107370_image_copy_11.png)
 `CTF_SHOW=1&CTF[SHOW.COM=2&fun=extract($_POST)&fl0g=flag_give_me`
 
 `$c=$_POST['fun'];`，所以我们让` fun=extract($_POST)`
@@ -12,9 +12,9 @@
 `eval("extract($_POST);");` 执行后，$_POST 里的所有参数都会被注册为变量。
 执行 `extract($_POST)` 后，就会自动创建 `$fl0g = "flag_give_me"`
 
-![seer_screenshot_20260605210414.png](https://img.xobear.cn/file/1780813788479_seer_screenshot_20260605210414.png)
+
 **126**
-![live2d-photo.png](https://img.xobear.cn/file/1780814394304_live2d-photo.png)
+
 
 
 

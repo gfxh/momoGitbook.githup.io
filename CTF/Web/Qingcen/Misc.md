@@ -1,9 +1,9 @@
 Misc题目
-![](TU/image%20copy%2032.png)
+![image copy 32.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272394466_image_copy_32.png)
 第一关是伪加密，用7zip解压即可
 
 在第二关中 提示要把三段key合并
-![](TU/image%20copy%2033.png)
+![image copy 33.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272399527_image_copy_33.png)
 第一段是base100编码
 解码后：55yL5p2l5L2g5bey57uP55+l6YGTemlw5Lyq5Yqg5a+G5oCO5LmI56C06Kej5LqG77yM6YKj5LmI5bCx57uZ5L2g5LiA5Liqa2V5OnpzbQ==
 又套了一层base64->`看来你已经知道zip伪加密怎么破解了，那么就给你一个key:zsm`
