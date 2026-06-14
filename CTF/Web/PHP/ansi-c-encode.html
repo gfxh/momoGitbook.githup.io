@@ -22,11 +22,12 @@
   <textarea id="ac_input" placeholder="请输入要编码的文本，或粘贴 C 转义字符串（如 \x48\x65\x6c\x6c\x6f）..."></textarea>
   <button onclick="ac_encode()">编码 → C转义字符串</button>
   <button onclick="ac_decode()">解码 → 原始文本</button>
-  <label for="ac_output">输出：</label>
+  <label for="ac_output">十六进制 \xHH 输出：</label>
   <textarea id="ac_output" readonly placeholder="转换结果..."></textarea>
-  <button onclick="ac_to_octal()" style="background:#e8f0fe; border:1px solid #999;">十六进制\xHH → 转八进制 \NNN 格式</button>
-  <label for="ac_octal_output">八进制 \NNN 输出：</label>
-  <textarea id="ac_octal_output" readonly placeholder="点击上方按钮后将 ANSI-C \xHH 转为 \NNN..."></textarea>
+  <button onclick="ac_to_octal()" style="background:#e8f0fe; border:1px solid #999;">⬇️\xHH → \NNN⬇️</button>
+  <button onclick="octal_to_hex()" style="background:#e8f0fe; border:1px solid #999;">⬆️\NNN → \xHH⬆️</button>
+  <label for="ac_octal_output">\xHH / \NNN 联动区：</label>
+  <textarea id="ac_octal_output" placeholder="点击 \xHH → \NNN 或粘贴 \NNN 序列点反向按钮..."></textarea>
   <hr>
 
   <h2>进制转换</h2>
@@ -82,6 +83,31 @@
         result += '\\' + oct;
       }
       out.value = result;
+    }
+
+    // 反向联动：八进制 \NNN → 十六进制 \xHH
+    function octal_to_hex() {
+      var octStr = document.getElementById('ac_octal_output').value;
+      if (!octStr) {
+        var acIn = document.getElementById('ac_input').value;
+        if (acIn) octStr = acIn;
+      }
+      if (!octStr) {
+        document.getElementById('ac_output').value = '请先在八进制框填入 \\NNN 序列，或在输入框粘贴';
+        return;
+      }
+      var matches = octStr.match(/\\[0-7]{1,3}/g);
+      if (!matches) {
+        document.getElementById('ac_output').value = '未找到 \\NNN 格式的八进制序列';
+        return;
+      }
+      var result = '';
+      for (var i = 0; i < matches.length; i++) {
+        var oct = matches[i].substr(1);       // 去掉 \，取数字部分
+        var dec = parseInt(oct, 8);
+        result += '\\x' + dec.toString(16).toUpperCase().padStart(2, '0');
+      }
+      document.getElementById('ac_output').value = result;
     }
 
     function ac_decode() {
