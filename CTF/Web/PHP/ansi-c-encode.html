@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>ANSI-C 编码 & 进制转换</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+    textarea, input[type="text"] { width: 100%; font-size: 16px; padding: 8px; box-sizing: border-box; }
+    textarea { height: 120px; resize: vertical; }
+    input[type="text"] { margin-top: 4px; }
+    button { margin: 10px 0; padding: 10px 24px; font-size: 16px; cursor: pointer; }
+    label { font-weight: bold; display: block; margin-top: 16px; }
+    hr { margin: 30px 0; }
+    .radio-group { margin: 8px 0; }
+    .radio-group label { font-weight: normal; display: inline; margin-right: 16px; }
+    .error { color: #c00; font-size: 14px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h2>ANSI-C 编码/解码</h2>
+  <label for="ac_input">输入：</label>
+  <textarea id="ac_input" placeholder="请输入要编码的文本，或粘贴 C 转义字符串（如 \x48\x65\x6c\x6c\x6f）..."></textarea>
+  <button onclick="ac_encode()">编码 → C转义字符串</button>
+  <button onclick="ac_decode()">解码 → 原始文本</button>
+  <label for="ac_output">输出：</label>
+  <textarea id="ac_output" readonly placeholder="转换结果..."></textarea>
+  <button onclick="ac_to_octal()" style="background:#e8f0fe; border:1px solid #999;">十六进制\xHH → 转八进制 \NNN 格式</button>
+  <label for="ac_octal_output">八进制 \NNN 输出：</label>
+  <textarea id="ac_octal_output" readonly placeholder="点击上方按钮后将 ANSI-C \xHH 转为 \NNN..."></textarea>
+  <hr>
+
+  <h2>进制转换</h2>
+  <div class="radio-group">
+    <label><input type="radio" name="base_from" value="16" checked> 十六进制</label>
+    <label><input type="radio" name="base_from" value="10"> 十进制</label>
+    <label><input type="radio" name="base_from" value="8"> 八进制</label>
+    <label><input type="radio" name="base_from" value="2"> 二进制</label>
+  </div>
+  <label for="base_input">输入（源进制）：</label>
+  <input type="text" id="base_input" placeholder="请输入数值...">
+  <button onclick="base_convert()">转换</button>
+  <label for="base_hex">十六进制：</label>
+  <input type="text" id="base_hex" readonly>
+  <label for="base_dec">十进制：</label>
+  <input type="text" id="base_dec" readonly>
+  <label for="base_oct">八进制：</label>
+  <input type="text" id="base_oct" readonly>
+  <label for="base_bin">二进制：</label>
+  <input type="text" id="base_bin" readonly>
+  <div id="base_error" class="error"></div>
+
+  <script>
+    // ==================== ANSI-C 编码/解码 ====================
+    function ac_encode() {
+      var text = document.getElementById('ac_input').value;
+      var result = '';
+      for (var i = 0; i < text.length; i++) {
+        var code = text.charCodeAt(i);
+        result += '\\x' + code.toString(16).toUpperCase().padStart(2, '0');
+      }
+      document.getElementById('ac_output').value = result;
+    }
+
+    // 联动：把 ANSI-C \xHH 输出转为 \NNN 八进制格式
+    function ac_to_octal() {
+      var hexStr = document.getElementById('ac_output').value;
+      var out = document.getElementById('ac_octal_output');
+      if (!hexStr) {
+        out.value = '请先在 ANSI-C 区域编码得到 \\xHH 结果';
+        return;
+      }
+      var matches = hexStr.match(/\\x([0-9A-Fa-f]{2})/g);
+      if (!matches) {
+        out.value = '未找到 \\xHH 格式的十六进制序列';
+        return;
+      }
+      var result = '';
+      for (var i = 0; i < matches.length; i++) {
+        var hex = matches[i].substr(2);
+        var dec = parseInt(hex, 16);
+        var oct = dec.toString(8);
+        result += '\\' + oct;
+      }
+      out.value = result;
+    }
+
+    function ac_decode() {
+      var text = document.getElementById('ac_input').value;
+      try {
+        var result = '';
+        var i = 0;
+        while (i < text.length) {
+          if (text[i] === '\\' && i + 1 < text.length) {
+            var next = text[i + 1];
+            if (next === 'x' || next === 'X') {
+              // \xHH (十六进制转义)
+              var hex = text.substr(i + 2, 2);
+              if (!/^[0-9A-Fa-f]{2}$/.test(hex)) {
+                throw new Error('无效的十六进制转义序列: \\x' + hex + ' (位置 ' + i + ')');
+              }
+              result += String.fromCharCode(parseInt(hex, 16));
+              i += 4;
+            } else if (/[0-7]/.test(next)) {
+              // \NNN (八进制转义)，最多三位
+              var oct = '';
+              var j = i + 1;
+              while (j < text.length && j < i + 4 && /[0-7]/.test(text[j])) {
+                oct += text[j];
+                j++;
+              }
+              result += String.fromCharCode(parseInt(oct, 8));
+              i = j;
+            } else {
+              // 常见转义字符
+              var escaped = { 'n': '\n', 't': '\t', 'r': '\r', '\\': '\\', '"': '"', "'": "'", '0': '\0', 'a': '\x07', 'b': '\b', 'f': '\f', 'v': '\v' };
+              result += (next in escaped) ? escaped[next] : next;
+              i += 2;
+            }
+          } else {
+            result += text[i];
+            i++;
+          }
+        }
+        document.getElementById('ac_output').value = result;
+      } catch (e) {
+        document.getElementById('ac_output').value = '解码失败：' + e.message;
+      }
+    }
+
+    // ==================== 进制转换 ====================
+    function base_convert() {
+      var input = document.getElementById('base_input').value.trim();
+      var errDiv = document.getElementById('base_error');
+      errDiv.textContent = '';
+
+      // 确定源进制
+      var fromBase;
+      var radios = document.getElementsByName('base_from');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) { fromBase = parseInt(radios[i].value); break; }
+      }
+
+      if (!input) {
+        errDiv.textContent = '请输入数值';
+        clearBaseOutputs();
+        return;
+      }
+
+      // 验证输入与源进制匹配
+      var validPatterns = {
+        2: /^[01]+$/,
+        8: /^[0-7]+$/,
+        10: /^\d+$/,
+        16: /^[0-9A-Fa-f]+$/
+      };
+
+      if (!validPatterns[fromBase].test(input)) {
+        errDiv.textContent = '输入值不符合所选进制格式';
+        clearBaseOutputs();
+        return;
+      }
+
+      try {
+        var decValue = parseInt(input, fromBase);
+        if (isNaN(decValue)) throw new Error('无法解析');
+
+        document.getElementById('base_hex').value = '0x' + decValue.toString(16).toUpperCase();
+        document.getElementById('base_dec').value = decValue.toString(10);
+        document.getElementById('base_oct').value = '0' + decValue.toString(8);
+        document.getElementById('base_bin').value = decValue.toString(2);
+      } catch (e) {
+        errDiv.textContent = '转换失败：' + e.message;
+        clearBaseOutputs();
+      }
+    }
+
+    function clearBaseOutputs() {
+      document.getElementById('base_hex').value = '';
+      document.getElementById('base_dec').value = '';
+      document.getElementById('base_oct').value = '';
+      document.getElementById('base_bin').value = '';
+    }
+  </script>
+</body>
+</html>
