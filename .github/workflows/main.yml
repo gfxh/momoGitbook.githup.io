@@ -22,21 +22,45 @@ jobs:
       - name: Count characters in markdown files
         id: word-count
         run: |
-          TOTAL_WORDS=$(python3 -c "
-          import os
+          TOTAL_CHARS=$(python3 << 'PYEOF'
+          import os, re
+
+          EXCLUDE_DIRS = {'.claude', '.git', '.github', '.vscode', 'assets'}
+
+          def strip_non_content(text):
+              lines = []
+              for line in text.splitlines():
+                  stripped = line.strip()
+                  # skip empty lines
+                  if not stripped:
+                      continue
+                  # skip horizontal rules
+                  if re.fullmatch(r'[-*_]{3,}', stripped):
+                      continue
+                  lines.append(stripped)
+              result = '\n'.join(lines)
+              # remove image syntax: ![alt](url) -> remove entirely
+              result = re.sub(r'!\[.*?\]\(.*?\)', '', result)
+              # link syntax: [text](url) -> keep text
+              result = re.sub(r'\[([^\]]*)\]\(.*?\)', r'\1', result)
+              return result
+
           total = 0
           for root, dirs, files in os.walk('.'):
+              dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith('.')]
               for f in files:
                   if f.endswith('.md'):
                       path = os.path.join(root, f)
                       try:
-                          with open(path, 'r', encoding='utf-8') as file:
-                              total += len(file.read())
+                          with open(path, 'r', encoding='utf-8') as fp:
+                              cleaned = strip_non_content(fp.read())
+                              total += len(cleaned.replace('\n', ''))
                       except:
                           pass
           print(total)
-          ")
-          echo "total_words=$TOTAL_WORDS" >> $GITHUB_OUTPUT
+          PYEOF
+          )
+          echo "total_words=$TOTAL_CHARS" >> $GITHUB_OUTPUT
 
       - name: Update stats.json
         run: |
