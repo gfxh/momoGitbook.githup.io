@@ -2,7 +2,7 @@
 
 > [PHP官网](https://www.php.net/)    查看各类函数
 
-访问 [Rot13AtbaseBase64编码解码](./CTF/Web/PHP/rot13base.html)
+访问 [Rot13AtbaseBase64编码解码](https://xobear.cn/CTF/Web/PHP/rot13base.html)
 
 ## 常见命令
 
@@ -225,7 +225,7 @@ base64->`<?php system("tac flag.php")?>`-->`data://text/plain,<?php system("tac 
 
 **可以使用结束符来截断">/dev/null 2>&1"**
 
-**`;`**  **`&&`**  **`||`**  **\`\`**
+**`;`**  **`&&`**  **`||`**  **`#`**
 
 && 和 || 在系统命令里也是结束符：本质是它们会分隔命令，让 Shell 把一行拆成多条命令执行，是命令执行的核心绕过手段
 
@@ -234,7 +234,7 @@ base64->`<?php system("tac flag.php")?>`-->`data://text/plain,<?php system("tac 
 | ;（分号）   | 顺序执行符 | 无论前面的命令执行成功 / 失败，后面的命令一定会执行  | 最通用的分隔符，比如 id;whoami 会依次执行两个命令                    |
 | &&（逻辑与） | 成功执行符 | 只有前面的命令执行成功（返回码 0），后面的命令才会执行 | 用来做条件执行，比如 ls /flag && cat /flag，只有找到 flag 文件才会读取 |
 
-`||` 逻辑或   只有前面的命令执行失败（返回码非 0），后面的命令才会执行
+| `||` 逻辑或 | 失败执行符 |只有前面的命令执行失败（返回码非 0），后面的命令才会执行|   |
 
 ```
 命令A || 命令B
@@ -331,6 +331,10 @@ if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
 }
 
 ```
+
+### 没有**过滤数字**的无字母 RCE，使用 ANSI-C 风格的转义，格式为 **$'...'** ，省略号中用八进制
+
+[ANSI-C在线编码](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)注意编码后的是16进制，还需要转为八进制
 
 ### 没有字母就截取环境变量的字母
 
