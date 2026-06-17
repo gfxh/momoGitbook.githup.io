@@ -4,131 +4,429 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Bear随笔 | 个人博客</title>
   <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" type="image/png">
 
-  <!-- 样式表 -->
-  <link rel="stylesheet" href="assets/css/main.css?v=20260611e">
-  <!-- 外部库 -->
-  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js" defer></script>
+  <link rel="stylesheet" href="assets/css/main.css?v=20260617j">
 
   <style>
     html, body {
       margin: 0;
       padding: 0;
       min-height: 100%;
+      overflow-x: hidden;
     }
 
-    .main-container {
-      background: transparent !important;
-    }
+    /* ========================================
+     * 首页 Hero 区
+     * ======================================== */
 
-    /* 首页内容居中+毛玻璃卡片 */
-    .home-content {
-      position: relative;
-      z-index: 2;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 60px 32px;
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      backdrop-filter: blur(10px) saturate(130%);
-      -webkit-backdrop-filter: blur(10px) saturate(130%);
-      background: rgba(255,255,255,0.05);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-      animation: contentFadeIn 1s ease-out;
+      padding: 100px 20px 80px;
+      position: relative;
     }
 
-    @keyframes contentFadeIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* 头像样式+悬停动效 */
-    .home-avatar {
+    .hero-avatar {
       width: 140px;
       height: 140px;
       border-radius: 50%;
-      margin-bottom: 24px;
-      border: 3px solid rgba(255,255,255,0.15);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
-      transition: all 0.4s ease;
-    }
-    .home-avatar:hover {
-      transform: scale(1.08) rotate(3deg);
-      box-shadow: 0 0 35px rgba(168, 85, 247, 0.6);
+      margin-bottom: 36px;
+      border: 2px solid rgba(94, 234, 212, 0.35);
+      box-shadow: 0 0 40px rgba(94, 234, 212, 0.15);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      object-fit: cover;
     }
 
-    /* 文字排版（高级精简） */
-    .home-title {
-      font-size: 2.6rem;
+    .hero-avatar:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 56px rgba(94, 234, 212, 0.28);
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
       font-weight: 700;
-      color: #f8fafc;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
+      color: #f3f5f4;
+      margin: 0 0 12px;
+      letter-spacing: -0.5px;
+      animation: heroFadeUp 0.8s ease-out both;
+      animation-delay: 0.15s;
     }
-    .home-subtitle {
-      font-size: 1.2rem;
-      color: #e2e8f0;
-      font-weight: 500;
-      margin-bottom: 20px;
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: #94a3a6;
+      font-weight: 400;
+      margin: 0 0 10px;
+      animation: heroFadeUp 0.8s ease-out both;
+      animation-delay: 0.3s;
     }
-    .home-description {
-      font-size: 1rem;
-      color: #cbd5e1;
+
+    .hero-desc {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: #6b7580;
+      font-weight: 300;
+      line-height: 1.85;
+      max-width: 560px;
+      animation: heroFadeUp 0.8s ease-out both;
+      animation-delay: 0.45s;
+    }
+
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 滚动指示器 */
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      animation: floatHint 1.6s ease-in-out infinite;
+      transition: opacity 0.5s ease;
+    }
+
+    @keyframes floatHint {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(4px); }
+    }
+
+    /* ========================================
+     * 滚动文字区
+     * ======================================== */
+
+    .scroll-text-section {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 120px 20px;
+    }
+
+    .scroll-text {
+      text-align: center;
+      font-size: clamp(1.6rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: #f3f5f4;
+      user-select: none;
       line-height: 1.8;
-      margin-bottom: 12px;
     }
 
+    .scroll-text span {
+      display: inline-block;
+      transition: opacity 0.45s ease-out;
+      opacity: 0.18;
+    }
 
+    .scroll-text span.is-lit {
+      opacity: 1;
+    }
+
+    /* 区段配图：静默融入，不抢夺文字注意力 */
+    .scroll-img {
+      display: block;
+      max-width: 960px;
+      width: 100%;
+      border-radius: 12px;
+      opacity: 0.12;
+      filter: saturate(0.5);
+      transition: opacity 0.6s ease, filter 0.6s ease;
+    }
+
+    .scroll-img:hover {
+      opacity: 0.5;
+      filter: saturate(1);
+    }
+
+    @media (max-width: 640px) {
+      .scroll-img { max-width: 95%; }
+    }
+
+    /* ========================================
+     * Projects 区
+     * ======================================== */
+
+    .projects-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px 80px;
+    }
+
+    .projects-section h2 {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      color: #f3f5f4;
+      margin: 0 0 12px;
+    }
+
+    .projects-section .section-sub {
+      text-align: center;
+      font-size: 1.05rem;
+      color: #6b7580;
+      font-weight: 300;
+      margin: 0 0 48px;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      display: block;
+      padding: 28px 32px;
+      background: rgba(26, 31, 34, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      text-decoration: none;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(94, 234, 212, 0.26);
+      background: rgba(30, 36, 39, 0.9);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .project-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f3f5f4;
+      margin: 0 0 8px;
+    }
+
+    .project-card p {
+      font-size: 0.95rem;
+      color: #94a3a6;
+      margin: 0 0 14px;
+      line-height: 1.6;
+    }
+
+    .project-card .card-meta {
+      display: flex;
+      gap: 16px;
+    }
+
+    .project-card .card-meta span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #6b7580;
+      transition: color 0.2s ease;
+    }
+
+    .project-card:hover .card-meta span {
+      color: #94a3a6;
+    }
+
+    @media (max-width: 440px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .project-card {
+        padding: 22px 20px;
+      }
+    }
+
+    
+
+    /* ========================================
+     * Footer
+     * ======================================== */
+
+    .home-footer {
+      text-align: center;
+      padding: 20px 20px 40px;
+      font-size: 0.85rem;
+      color: #4b5358;
+    }
   </style>
-
-  <!-- JavaScript -->
-  <script src="assets/js/main.js?v=20260611e"></script>
-
 </head>
 
 <body class="home-page">
-  <!-- 导航栏 -->
-  <nav class="nav-bar">
-    <div class="nav-container">
-      <ul class="nav-menu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Blog.html">Blog</a></li>
-        <li><a href="Friends.html">Friends</a></li>
-        <li><a href="About.html">About</a></li>
-        
-      </ul>
-    </div>
-  </nav>
 
-  <!-- 深色/浅色模式切换按钮 
-  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
-    <span id="theme-icon">🌙</span>
-    <span id="theme-text">深色模式</span>
-  </button>
-  -->
-  <!-- 主内容区域 -->
-  <div class="main-container">
-    <div class="home-content" id="content">
-      <!-- 首页内容 -->
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" alt="Avatar" class="home-avatar">
-      <h1 class="home-title">Hi, I Am XoBear</h1>
-      <p class="home-subtitle">Aspiring Cybersecurity Full-Stack Developer</p>
-      <p class="home-description">Lover of code, security, and open-source.</p>
-      <p class="home-description">Exploring offensive & defensive security.</p>
-      <p class="home-description">Building, breaking, learning, sharing.</p>
-      <p class="home-description">Open to cooperation & knowledge exchange.</p>
-    </div>
-  </div>
+  <!-- 浮动导航胶囊 -->
+  <header class="nav-bar">
+    <nav class="nav-menu">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="Blog.html">Blog</a>
+      <a href="Friends.html">Friends</a>
+      <a href="About.html">About</a>
+    </nav>
+  </header>
 
-  <!-- 跳到顶部按钮 
-  <button class="jump-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="跳到顶部">⬆</button>
-   跳到目录按钮 
-  <button class="jump-to-toc-btn" onclick="document.querySelector('.sidebar').scrollIntoView({behavior:'smooth'})" title="跳到目录">⬇</button>
-  -->
+  <!-- Hero -->
+  <section class="hero-section">
+    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" alt="Avatar" class="hero-avatar" loading="eager" fetchpriority="high">
+    <h1 class="hero-title">Hi, I Am XoBear</h1>
+    <p class="hero-subtitle">Aspiring Cybersecurity Developer</p>
+    <p class="hero-desc">The first principle of learning is self-study.</p>
+    <div class="hero-scroll-hint" id="heroScrollHint" aria-hidden="true"></div>
+  </section>
+
+  <!-- 滚动文字 -->
+  <section class="scroll-text-section">
+    <div class="scroll-text" id="scrollText1" data-text="学习的第一性原理是自学">学习的第一性原理是自学</div>
+    <img src="https://haowallpaper.com/link//common/file/previewFileImg/16835618515570048" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+  </section>
+  <section class="scroll-text-section">
+    <div class="scroll-text" id="scrollText2" data-text="志气要和实力成正比，不然只是一场笑话">志气要和实力成正比，不然只是一场笑话</div>
+    <img src="https://haowallpaper.com/link//common/file/previewFileImg/16999423334010240" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+  </section>
+  <section class="scroll-text-section">
+    <div class="scroll-text" id="scrollText2" data-text="通宵写 Exp 不为虚名，只为解开谜题那一刻的释然">通宵写 Exp 不为虚名，只为解开谜题那一刻的释然</div>
+    <img src="https://haowallpaper.com/link//common/file/previewFileImg/17202184696024448" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+  </section>
+
+  
+
+  <footer class="home-footer">
+    <p>&copy; 2026 XoBear. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ========================================
+    // 滚动文字逐字点亮
+    // ========================================
+    (function initScrollTexts() {
+      const sections = document.querySelectorAll('.scroll-text');
+      if (sections.length === 0) return;
+
+      // 把每个 scroll-text 的内容拆成 span
+      sections.forEach(function (el) {
+        const text = el.dataset.text || el.textContent;
+        const chars = Array.from(text);
+        el.innerHTML = '';
+        chars.forEach(function (ch) {
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.style.opacity = '0.18';
+          el.appendChild(span);
+        });
+      });
+
+      let ticking = false;
+
+      function update() {
+        sections.forEach(function (el) {
+          const rect = el.getBoundingClientRect();
+          const winH = window.innerHeight;
+          // 只在元素进入视口时计算
+          if (rect.bottom < 0 || rect.top > winH) return;
+
+          const spans = Array.from(el.querySelectorAll('span'));
+          const total = spans.length;
+          if (total === 0) return;
+
+          // 元素中点越靠近视口顶部，点亮越多字符
+          const ratio = 1 - (rect.top + rect.height * 0.4) / winH;
+          const litCount = Math.round(Math.max(0, Math.min(1, ratio)) * total);
+
+          spans.forEach(function (span, i) {
+            if (i < litCount) {
+              span.style.opacity = '0.92';
+              span.style.color = i < litCount - 1 ? '#f3f5f4' : '#5eead4';
+            } else {
+              span.style.opacity = '0.18';
+              span.style.color = '';
+            }
+          });
+        });
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', function () {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      });
+
+      update();
+    })();
+
+    // ========================================
+    // Hero 滚动指示器显隐
+    // ========================================
+    (function initScrollHint() {
+      const hint = document.getElementById('heroScrollHint');
+      if (!hint) return;
+
+      window.addEventListener('scroll', function () {
+        hint.style.opacity = window.scrollY > 30 ? '0' : '1';
+      }, { passive: true });
+    })();
+
+    // ========================================
+    // Projects 数据加载
+    // ========================================
+    (function loadProjects() {
+      const grid = document.getElementById('projectsGrid');
+      if (!grid) return;
+
+      const projects = [
+        {
+          name: 'momoGitbook',
+          desc: 'Personal knowledge base & CTF writeups, built with vanilla HTML/CSS/JS and markdown-it.',
+          demo: null,
+          source: 'https://github.com/gfxh/momoGitbook.githup.io'
+        },
+        {
+          name: 'Coming Soon',
+          desc: 'More projects on the way — security tools, CTF challenges, and automation scripts.',
+          demo: null,
+          source: null
+        }
+      ];
+
+      var html = '';
+      projects.forEach(function (p) {
+        html += '<div class="project-card">';
+        html += '<h3>' + escapeHtml(p.name) + '</h3>';
+        html += '<p>' + escapeHtml(p.desc) + '</p>';
+        html += '<div class="card-meta">';
+        if (p.demo) {
+          html += '<a href="' + escapeHtml(p.demo) + '" target="_blank" rel="noopener noreferrer"><span>Demo</span></a>';
+        }
+        if (p.source) {
+          html += '<a href="' + escapeHtml(p.source) + '" target="_blank" rel="noopener noreferrer"><span>Source</span></a>';
+        }
+        html += '</div>';
+        html += '</div>';
+      });
+      grid.innerHTML = html;
+    })();
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  </script>
+
 </body>
-
 </html>

