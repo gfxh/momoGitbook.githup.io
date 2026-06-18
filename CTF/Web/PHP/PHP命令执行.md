@@ -332,9 +332,8 @@ if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
 
 ```
 
-### 没有**过滤数字**的无字母 RCE，使用 ANSI-C 风格的转义，格式为 **$'...'** ，省略号中用八进制
 
-[ANSI-C在线编码](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)注意编码后的是16进制，还需要转为八进制
+
 
 ### 没有字母就截取环境变量的字母
 
@@ -394,6 +393,10 @@ echo ${#SUM}--->7
 文件上传在一个临时目录当中结束后会删除
 
 在Linux中 `.`是可以执行脚本的
+
+也可以使用 ANSI-C 风格的转义，格式为 **$'...'** ，省略号中用八进制
+
+[ANSI-C在线编码](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)注意编码后的是16进制，还需要转为八进制
 
 ### 如果过滤了数字
 

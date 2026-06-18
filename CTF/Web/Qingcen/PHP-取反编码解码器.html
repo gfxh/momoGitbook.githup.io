@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP ~ 取反编码解码器 — 无字母数字WebShell</title>
+    <style>
+        :root {
+            --bg: #1a1d23;
+            --surface: #21252b;
+            --surface2: #282c34;
+            --border: #3a3f4b;
+            --text: #e1e4e8;
+            --text2: #959da5;
+            --accent: #61afef;
+            --accent2: #e5c07b;
+            --green: #98c379;
+            --red: #e06c75;
+            --orange: #d19a66;
+            --purple: #c678dd;
+            --bit0: #3a3f4b;
+            --bit1: #61afef;
+            --bit1flip: #e06c75;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* ---- 头部 ---- */
+        .header {
+            text-align: center;
+            padding: 10px 0 6px;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text2);
+            font-family: var(--font-mono);
+        }
+        .header .badge {
+            display: inline-block;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--orange);
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-family: var(--font-mono);
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ---- 面板 ---- */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            position: relative;
+        }
+        .panel-label {
+            position: absolute;
+            top: -11px;
+            left: 18px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+        .panel-label.top {
+            background: #2c313a;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .panel-label.bottom {
+            background: #2c313a;
+            border-color: var(--accent2);
+            color: var(--accent2);
+        }
+
+        /* ---- 输入框 ---- */
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .input-row input {
+            flex: 1;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .input-row input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.12);
+        }
+        .input-row.bottom-input input:focus {
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 3px rgba(229, 192, 123, 0.12);
+        }
+        .input-row input::placeholder {
+            color: #555;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+            font-family: inherit;
+        }
+        .btn-encode {
+            background: #1e3a5f;
+            border-color: #2d5a8e;
+            color: var(--accent);
+        }
+        .btn-encode:hover {
+            background: #254a73;
+            border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(97, 175, 239, 0.2);
+        }
+        .btn-decode {
+            background: #3d2e1a;
+            border-color: #5c4426;
+            color: var(--accent2);
+        }
+        .btn-decode:hover {
+            background: #4d3a22;
+            border-color: var(--accent2);
+            box-shadow: 0 0 16px rgba(229, 192, 123, 0.2);
+        }
+        .btn-copy {
+            background: var(--surface2);
+            border-color: var(--border);
+            color: var(--text2);
+            font-size: 0.75rem;
+            padding: 6px 12px;
+        }
+        .btn-copy:hover {
+            border-color: #666;
+            color: #fff;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            border-radius: 4px;
+        }
+        .btn-example {
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--text2);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 0.3px;
+        }
+        .btn-example:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(97, 175, 239, 0.05);
+        }
+
+        /* ---- 箭头区 ---- */
+        .arrow-zone {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 6px 0;
+            user-select: none;
+        }
+        .arrow-line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            opacity: 0.7;
+        }
+        .arrow-down {
+            font-size: 1.6rem;
+            color: var(--accent);
+            animation: bounceDown 2s infinite;
+            letter-spacing: -2px;
+        }
+        .arrow-up {
+            font-size: 1.6rem;
+            color: var(--accent2);
+            animation: bounceUp 2s infinite;
+            letter-spacing: -2px;
+        }
+        .arrow-label {
+            font-size: 0.65rem;
+            color: var(--text2);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        @keyframes bounceDown {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(6px);
+            }
+        }
+        @keyframes bounceUp {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* ---- 详情区 ---- */
+        .detail-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .detail-header {
+            background: var(--surface2);
+            padding: 10px 16px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text2);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-mono);
+        }
+        .detail-table-wrap {
+            overflow-x: auto;
+            padding: 4px;
+        }
+        table.detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            min-width: 700px;
+        }
+        table.detail-table th,
+        table.detail-table td {
+            padding: 9px 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        table.detail-table th {
+            background: var(--surface2);
+            color: var(--text2);
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+        }
+        table.detail-table .col-char {
+            width: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+        }
+        table.detail-table .col-hex {
+            width: 55px;
+            color: var(--purple);
+            font-weight: 600;
+        }
+        table.detail-table .col-binary {
+            width: 200px;
+        }
+        table.detail-table .col-url {
+            width: 90px;
+            color: var(--accent2);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        table.detail-table .col-dec {
+            width: 50px;
+            color: var(--text2);
+        }
+
+        /* 二进制位 */
+        .bit {
+            display: inline-block;
+            width: 20px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            margin: 0 1px;
+            border-radius: 3px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            font-family: var(--font-mono);
+        }
+        .bit0 {
+            background: #2a2e36;
+            color: #555;
+            border: 1px solid #333;
+        }
+        .bit1 {
+            background: #1a3d5c;
+            color: #8cc8f7;
+            border: 1px solid #2d5a8e;
+        }
+        .bit1flip {
+            background: #4d1a1f;
+            color: #f08c98;
+            border: 1px solid #8e2d3a;
+        }
+        .bit0flip {
+            background: #2a2e36;
+            color: #555;
+            border: 1px solid #333;
+        }
+        .bit-gap {
+            display: inline-block;
+            width: 4px;
+        }
+
+        /* 高亮行 */
+        table.detail-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        table.detail-table tbody tr.flash {
+            animation: rowFlash 0.6s ease-out;
+        }
+        @keyframes rowFlash {
+            0% {
+                background: rgba(97, 175, 239, 0.2);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        /* ---- 输出区 ---- */
+        .output-extra {
+            margin-top: 6px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .output-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            color: var(--text2);
+            letter-spacing: 0.4px;
+        }
+        .output-badge strong {
+            color: var(--accent2);
+        }
+
+        /* ---- PHP 代码预览 ---- */
+        .php-preview {
+            background: #1e2229;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--green);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            letter-spacing: 0.3px;
+            line-height: 1.7;
+            margin-top: 8px;
+        }
+        .php-preview .kw {
+            color: #c678dd;
+        }
+        .php-preview .str {
+            color: #98c379;
+        }
+        .php-preview .op {
+            color: #61afef;
+        }
+        .php-preview .fn {
+            color: #e5c07b;
+        }
+
+        /* ---- 响应式 ---- */
+        @media (max-width: 768px) {
+            .container {
+                gap: 12px;
+                padding: 0 4px;
+            }
+            .panel {
+                padding: 14px 10px;
+            }
+            .input-row {
+                flex-wrap: wrap;
+            }
+            .input-row input {
+                font-size: 0.82rem;
+                padding: 10px 10px;
+            }
+            .btn {
+                font-size: 0.78rem;
+                padding: 8px 14px;
+            }
+            table.detail-table {
+                font-size: 0.68rem;
+                min-width: 580px;
+            }
+            table.detail-table th,
+            table.detail-table td {
+                padding: 6px 4px;
+            }
+            .bit {
+                width: 15px;
+                height: 17px;
+                line-height: 17px;
+                font-size: 0.6rem;
+                margin: 0 0.5px;
+            }
+            .arrow-zone {
+                gap: 14px;
+            }
+            .arrow-down,
+            .arrow-up {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ========== 头部 ========== -->
+        <div class="header">
+            <h1>~ 取反编码解码器</h1>
+            <span class="subtitle">Bitwise NOT Encoder / Decoder</span>
+            <br>
+            <span class="badge">无字母数字 WebShell · preg_replace /e 绕过</span>
+        </div>
+
+        <!-- ========== 顶部面板：明文 ========== -->
+        <div class="panel" id="panel-top">
+            <span class="panel-label top">🅰 明文 · Plaintext</span>
+            <div class="input-row">
+                <input
+                type="text"
+                id="plainInput"
+                placeholder="例如：system  或  cat /flag"
+                spellcheck="false"
+                autocomplete="off"
+                >
+                <button class="btn btn-encode" id="btnEncode" title="向下编码">↓ 编码 ↓</button>
+                <button class="btn btn-copy" id="btnCopyPlain" title="复制明文">📋</button>
+            </div>
+            <div class="output-extra" style="margin-top:8px;">
+                <span style="font-size:0.7rem;color:var(--text2);">快捷示例：</span>
+                <button class="btn-example" data-plain="system">system</button>
+                <button class="btn-example" data-plain="cat /flag">cat /flag</button>
+                <button class="btn-example" data-plain="assert">assert</button>
+                <button class="btn-example" data-plain="phpinfo">phpinfo</button>
+                <button class="btn-example" data-plain="exec">exec</button>
+                <button class="btn-example" data-plain="_GET">_GET</button>
+                <button class="btn-example" data-plain="ls -la">ls -la</button>
+            </div>
+        </div>
+
+        <!-- ========== 箭头：向下编码 ========== -->
+        <div class="arrow-zone">
+            <div class="arrow-line">
+                <span class="arrow-label">编码方向</span>
+                <span class="arrow-down">⬇ ⬇ ⬇</span>
+                <span style="font-size:0.6rem;color:var(--text2);">~ 取反 → URL编码</span>
+            </div>
+        </div>
+
+        <!-- ========== 中间：二进制详情 ========== -->
+        <div class="detail-section" id="detailSection">
+            <div class="detail-header">
+                🔬 逐字节二进制转换详情 &nbsp;<span style="font-weight:400;font-size:0.65rem;color:var(--text2);">（原始 ⇄ 取反）</span>
+                <span style="float:right;font-weight:400;font-size:0.65rem;color:var(--text2);" id="charCount">—</span>
+            </div>
+            <div class="detail-table-wrap">
+                <table class="detail-table" id="detailTable">
+                    <thead>
+                        <tr>
+                            <th>字符</th>
+                            <th>Dec</th>
+                            <th>Hex</th>
+                            <th>二进制（原始）</th>
+                            <th>二进制（~取反）</th>
+                            <th>~Hex</th>
+                            <th>URL编码</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailBody">
+                        <tr>
+                            <td colspan="7" style="color:var(--text2);padding:28px;font-style:italic;">
+                                在上方输入明文或下方输入 URL 编码开始转换…
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========== 箭头：向上解码 ========== -->
+        <div class="arrow-zone">
+            <div class="arrow-line">
+                <span class="arrow-label">解码方向</span>
+                <span class="arrow-up">⬆ ⬆ ⬆</span>
+                <span style="font-size:0.6rem;color:var(--text2);">URL解码 → ~ 取反</span>
+            </div>
+        </div>
+
+        <!-- ========== 底部面板：URL编码 ========== -->
+        <div class="panel" id="panel-bottom">
+            <span class="panel-label bottom">🔗 URL 编码 · Encoded</span>
+            <div class="input-row bottom-input">
+                <input
+                type="text"
+                id="urlInput"
+                placeholder="例如：%8c%86%8c%8b%9a%92  或  8c868c8b9a92"
+                spellcheck="false"
+                autocomplete="off"
+                >
+                <button class="btn btn-decode" id="btnDecode" title="向上解码">↑ 解码 ↑</button>
+                <button class="btn btn-copy" id="btnCopyUrl" title="复制URL编码">📋</button>
+            </div>
+            <div class="output-extra" style="margin-top:8px;">
+                <span style="font-size:0.7rem;color:var(--text2);">快捷粘贴：</span>
+                <button class="btn-example" data-url="%8c%86%8c%8b%9a%92">%8c%86%8c%8b%9a%92</button>
+                <button class="btn-example" data-url="%9c%9e%8b%df%d0%99%93%9e%98">%9c%9e%8b%df%d0%99%93%9e%98</button>
+                <button class="btn-example" data-url="8c868c8b9a92">8c868c8b9a92 (纯hex)</button>
+                <button class="btn-example" data-url="%B8%BA%AB">%B8%BA%AB (GET)</button>
+            </div>
+            <!-- PHP 代码预览 -->
+            <div class="php-preview" id="phpPreview" style="display:none;">
+                <span class="kw">echo</span> <span class="op">~</span><span class="str">'<span id="phpRawBytes">—</span>'</span>;  <span class="kw">// →</span> <span class="str">"<span id="phpResult">—</span>"</span>
+            </div>
+            <div class="output-extra" style="margin-top:6px;">
+                <span class="output-badge" id="badgeLen">字节数: —</span>
+                <span class="output-badge" id="badgePayload">完整 Payload: —</span>
+                <button class="btn btn-copy btn-sm" id="btnCopyPayload" style="display:none;">📋 复制 Payload</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            // ============ DOM 引用 ============
+            const plainInput = document.getElementById('plainInput');
+            const urlInput = document.getElementById('urlInput');
+            const btnEncode = document.getElementById('btnEncode');
+            const btnDecode = document.getElementById('btnDecode');
+            const btnCopyPlain = document.getElementById('btnCopyPlain');
+            const btnCopyUrl = document.getElementById('btnCopyUrl');
+            const btnCopyPayload = document.getElementById('btnCopyPayload');
+            const detailBody = document.getElementById('detailBody');
+            const charCount = document.getElementById('charCount');
+            const phpPreview = document.getElementById('phpPreview');
+            const phpRawBytes = document.getElementById('phpRawBytes');
+            const phpResult = document.getElementById('phpResult');
+            const badgeLen = document.getElementById('badgeLen');
+            const badgePayload = document.getElementById('badgePayload');
+            const detailSection = document.getElementById('detailSection');
+
+            let lastPlain = '';
+            let lastUrl = '';
+            let currentUrlEncoded = '';
+            let currentPlaintext = '';
+
+            // ============ 工具函数 ============
+            function byteToBin(b) {
+                return b.toString(2).padStart(8, '0');
+            }
+
+            function isPrintableAscii(byte) {
+                return byte >= 32 && byte <= 126;
+            }
+
+            function byteToDisplayChar(byte) {
+                if (isPrintableAscii(byte)) {
+                    return String.fromCharCode(byte);
+                }
+                // 常见转义
+                if (byte === 0x20) return '␣';
+                if (byte === 0x0a) return '\\n';
+                if (byte === 0x0d) return '\\r';
+                if (byte === 0x09) return '\\t';
+                if (byte === 0x00) return '\\0';
+                return '\\x' + byte.toString(16).toUpperCase().padStart(2, '0');
+            }
+
+            function invertByte(b) {
+                return (~b) & 0xFF;
+            }
+
+            // 渲染二进制位（带颜色）
+            function renderBits(byte, flipMode) {
+                const bin = byteToBin(byte);
+                let html = '';
+                for (let i = 0; i < 8; i++) {
+                    const bit = bin[i];
+                    let cls;
+                    if (flipMode === 'original') {
+                        cls = bit === '1' ? 'bit1' : 'bit0';
+                    } else if (flipMode === 'flipped') {
+                        cls = bit === '1' ? 'bit1flip' : 'bit0flip';
+                    } else {
+                        cls = bit === '1' ? 'bit1' : 'bit0';
+                    }
+                    html += `<span class="bit ${cls}">${bit}</span>`;
+                    if (i === 3) html += '<span class="bit-gap"></span>';
+                }
+                return html;
+            }
+
+            // 纯文本二进制（用于复制等）
+            function byteToBinPlain(b) {
+                const bin = byteToBin(b);
+                return bin.slice(0, 4) + ' ' + bin.slice(4);
+            }
+
+            // ============ 编码：明文 → URL编码 ============
+            function encode(plain) {
+                if (plain === '') {
+                    return { bytes: [], url: '', rawHex: '' };
+                }
+                const bytes = [];
+                const results = [];
+                for (let i = 0; i < plain.length; i++) {
+                    const origByte = plain.charCodeAt(i);
+                    const invByte = invertByte(origByte);
+                    bytes.push(invByte);
+                    results.push({
+                        origChar: plain[i],
+                        origDec: origByte,
+                        origHex: origByte.toString(16).toUpperCase().padStart(2, '0'),
+                        origBin: byteToBin(origByte),
+                        invBin: byteToBin(invByte),
+                        invHex: invByte.toString(16).toUpperCase().padStart(2, '0'),
+                        invByte: invByte,
+                        urlPart: '%' + invByte.toString(16).toUpperCase().padStart(2, '0'),
+                    });
+                }
+                const url = results.map(r => r.urlPart).join('');
+                const rawHex = bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
+                return { results, url, rawHex, bytes };
+            }
+
+            // ============ 解码：URL编码 → 明文 ============
+            function parseUrlInput(input) {
+                // 支持格式：
+                // 1. %8c%86%8c%8b%9a%92
+                // 2. 8c868c8b9a92
+                // 3. \x8c\x86...
+                // 4. 混合带空格
+                let cleaned = input.trim();
+                // 去掉 \x 前缀
+                cleaned = cleaned.replace(/\\x/gi, '');
+                // 去掉所有 %
+                cleaned = cleaned.replace(/%/g, '');
+                // 去掉所有空格
+                cleaned = cleaned.replace(/\s+/g, '');
+                // 只保留十六进制字符
+                cleaned = cleaned.replace(/[^0-9a-fA-F]/g, '');
+                if (cleaned.length % 2 !== 0) {
+                    return { error: '十六进制字符串长度必须为偶数', bytes: [] };
+                }
+                const bytes = [];
+                for (let i = 0; i < cleaned.length; i += 2) {
+                    const hex = cleaned.substring(i, i + 2);
+                    const byte = parseInt(hex, 16);
+                    if (isNaN(byte)) {
+                        return { error: `无效的十六进制: "${hex}"`, bytes: [] };
+                    }
+                    bytes.push(byte);
+                }
+                return { error: null, bytes };
+            }
+
+            function decode(urlStr) {
+                const parsed = parseUrlInput(urlStr);
+                if (parsed.error || parsed.bytes.length === 0) {
+                    return { error: parsed.error || '请输入有效的URL编码', results: [], plain: '', rawHex: '' };
+                }
+                const results = [];
+                const plainChars = [];
+                for (const invByte of parsed.bytes) {
+                    const origByte = invertByte(invByte);
+                    plainChars.push(String.fromCharCode(origByte));
+                    results.push({
+                        invByte: invByte,
+                        invHex: invByte.toString(16).toUpperCase().padStart(2, '0'),
+                        invBin: byteToBin(invByte),
+                        urlPart: '%' + invByte.toString(16).toUpperCase().padStart(2, '0'),
+                        origByte: origByte,
+                        origHex: origByte.toString(16).toUpperCase().padStart(2, '0'),
+                        origBin: byteToBin(origByte),
+                        origChar: String.fromCharCode(origByte),
+                        origDec: origByte,
+                    });
+                }
+                const plain = plainChars.join('');
+                const rawHex = parsed.bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
+                return { results, plain, rawHex, bytes: parsed.bytes, error: null };
+            }
+
+            // ============ 渲染详情表格 ============
+            function renderEncodeDetail(results) {
+                if (!results || results.length === 0) {
+                    detailBody.innerHTML =
+                        '<tr><td colspan="7" style="color:var(--text2);padding:28px;font-style:italic;">等待输入…</td></tr>';
+                    charCount.textContent = '—';
+                    return;
+                }
+                let html = '';
+                results.forEach((r, idx) => {
+                    html += `
+                    <tr>
+                        <td class="col-char" title="原始字符">${escapeHTML(r.origChar)}</td>
+                        <td class="col-dec">${r.origDec}</td>
+                        <td class="col-hex">0x${r.origHex}</td>
+                        <td class="col-binary">${renderBits(r.origByte ?? r.origDec, 'original')}</td>
+                        <td class="col-binary">${renderBits(r.invByte, 'flipped')}</td>
+                        <td class="col-hex" style="color:var(--orange);">0x${r.invHex}</td>
+                        <td class="col-url">${r.urlPart}</td>
+                    </tr>`;
+                });
+                detailBody.innerHTML = html;
+                charCount.textContent = `${results.length} 个字符`;
+            }
+
+            function renderDecodeDetail(results) {
+                if (!results || results.length === 0) {
+                    detailBody.innerHTML =
+                        '<tr><td colspan="7" style="color:var(--text2);padding:28px;font-style:italic;">等待输入…</td></tr>';
+                    charCount.textContent = '—';
+                    return;
+                }
+                let html = '';
+                results.forEach((r, idx) => {
+                    html += `
+                    <tr>
+                        <td class="col-char" title="还原字符">${escapeHTML(r.origChar)}</td>
+                        <td class="col-dec">${r.origDec}</td>
+                        <td class="col-hex">0x${r.origHex}</td>
+                        <td class="col-binary">${renderBits(r.origByte, 'original')}</td>
+                        <td class="col-binary">${renderBits(r.invByte, 'flipped')}</td>
+                        <td class="col-hex" style="color:var(--orange);">0x${r.invHex}</td>
+                        <td class="col-url">${r.urlPart}</td>
+                    </tr>`;
+                });
+                detailBody.innerHTML = html;
+                charCount.textContent = `${results.length} 个字节`;
+            }
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ============ 更新 PHP 预览 ============
+            function updatePhpPreview(rawHex, plain) {
+                if (!rawHex || rawHex.length === 0) {
+                    phpPreview.style.display = 'none';
+                    return;
+                }
+                phpPreview.style.display = 'block';
+                // rawHex 是纯 hex 字符串，需要在 PHP 中以原始字节形式存在
+                // 显示为转义序列
+                const escapedHex = rawHex.match(/.{2}/g).map(h => '\\x' + h).join('');
+                phpRawBytes.textContent = escapedHex;
+                phpResult.textContent = plain || '(解码结果)';
+            }
+
+            function updateBadges(urlEncoded, plaintext) {
+                if (urlEncoded) {
+                    const byteCount = urlEncoded.replace(/%/g, '').length / 2;
+                    badgeLen.textContent = `字节数: ${byteCount}`;
+                    badgePayload.textContent = `完整 Payload: (~'${urlEncoded}')`;
+                    badgePayload.style.display = '';
+                    btnCopyPayload.style.display = '';
+                    currentUrlEncoded = urlEncoded;
+                } else {
+                    badgeLen.textContent = '字节数: —';
+                    badgePayload.textContent = '完整 Payload: —';
+                    badgePayload.style.display = 'none';
+                    btnCopyPayload.style.display = 'none';
+                    currentUrlEncoded = '';
+                }
+                currentPlaintext = plaintext || '';
+            }
+
+            // ============ 主动作：从明文编码 ============
+            function doEncode() {
+                const plain = plainInput.value;
+                lastPlain = plain;
+                const { results, url, rawHex } = encode(plain);
+                if (url) {
+                    urlInput.value = url.toLowerCase();
+                    lastUrl = url.toLowerCase();
+                } else {
+                    urlInput.value = '';
+                    lastUrl = '';
+                }
+                renderEncodeDetail(results);
+                updatePhpPreview(rawHex, plain);
+                updateBadges(url, plain);
+                // 闪一下表格行
+                setTimeout(() => {
+                    const rows = detailBody.querySelectorAll('tr');
+                    rows.forEach(r => r.classList.add('flash'));
+                    setTimeout(() => rows.forEach(r => r.classList.remove('flash')), 600);
+                }, 50);
+            }
+
+            // ============ 主动作：从URL编码解码 ============
+            function doDecode() {
+                const urlStr = urlInput.value.trim();
+                lastUrl = urlStr;
+                const { results, plain, rawHex, error, bytes } = decode(urlStr);
+                if (error && (!results || results.length === 0)) {
+                    detailBody.innerHTML =
+                        `<tr><td colspan="7" style="color:var(--red);padding:28px;font-style:italic;">⚠ ${escapeHTML(error)}</td></tr>`;
+                    charCount.textContent = '错误';
+                    plainInput.value = '';
+                    lastPlain = '';
+                    phpPreview.style.display = 'none';
+                    updateBadges('', '');
+                    return;
+                }
+                plainInput.value = plain;
+                lastPlain = plain;
+                const urlFormatted = bytes.map(b => '%' + b.toString(16).toUpperCase().padStart(2, '0')).join('');
+                urlInput.value = urlFormatted.toLowerCase();
+                lastUrl = urlFormatted.toLowerCase();
+                renderDecodeDetail(results);
+                updatePhpPreview(rawHex, plain);
+                updateBadges(urlFormatted.toLowerCase(), plain);
+                setTimeout(() => {
+                    const rows = detailBody.querySelectorAll('tr');
+                    rows.forEach(r => r.classList.add('flash'));
+                    setTimeout(() => rows.forEach(r => r.classList.remove('flash')), 600);
+                }, 50);
+            }
+
+            // ============ 实时联动 ============
+            let encodeTimeout;
+            let decodeTimeout;
+
+            plainInput.addEventListener('input', function() {
+                const val = plainInput.value;
+                if (val === lastPlain) return;
+                clearTimeout(encodeTimeout);
+                encodeTimeout = setTimeout(doEncode, 180);
+            });
+
+            urlInput.addEventListener('input', function() {
+                const val = urlInput.value.trim();
+                if (val === lastUrl) return;
+                clearTimeout(decodeTimeout);
+                decodeTimeout = setTimeout(doDecode, 180);
+            });
+
+            // 回车触发
+            plainInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(encodeTimeout);
+                    doEncode();
+                }
+            });
+            urlInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(decodeTimeout);
+                    doDecode();
+                }
+            });
+
+            // ============ 按钮事件 ============
+            btnEncode.addEventListener('click', function() {
+                clearTimeout(encodeTimeout);
+                doEncode();
+            });
+            btnDecode.addEventListener('click', function() {
+                clearTimeout(decodeTimeout);
+                doDecode();
+            });
+
+            btnCopyPlain.addEventListener('click', function() {
+                const val = plainInput.value;
+                if (!val) return;
+                copyToClipboard(val, btnCopyPlain);
+            });
+            btnCopyUrl.addEventListener('click', function() {
+                const val = urlInput.value;
+                if (!val) return;
+                copyToClipboard(val, btnCopyUrl);
+            });
+            btnCopyPayload.addEventListener('click', function() {
+                if (!currentUrlEncoded) return;
+                const payload = `(~'${currentUrlEncoded}')`;
+                copyToClipboard(payload, btnCopyPayload);
+            });
+
+            function copyToClipboard(text, btn) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = btn.textContent;
+                    btn.textContent = '✅ 已复制';
+                    btn.style.borderColor = 'var(--green)';
+                    btn.style.color = 'var(--green)';
+                    setTimeout(() => {
+                        btn.textContent = orig;
+                        btn.style.borderColor = '';
+                        btn.style.color = '';
+                    }, 1500);
+                }).catch(() => {
+                    // fallback
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    const orig = btn.textContent;
+                    btn.textContent = '✅ 已复制';
+                    setTimeout(() => { btn.textContent = orig; }, 1500);
+                });
+            }
+
+            // ============ 示例按钮 ============
+            document.querySelectorAll('.btn-example[data-plain]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const plain = this.getAttribute('data-plain');
+                    plainInput.value = plain;
+                    lastPlain = '';
+                    doEncode();
+                    // 滚动到详情区
+                    detailSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            document.querySelectorAll('.btn-example[data-url]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    urlInput.value = url;
+                    lastUrl = '';
+                    doDecode();
+                    detailSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // ============ 初始加载：预填示例 ============
+            function initExample() {
+                plainInput.value = 'system';
+                doEncode();
+            }
+
+            // 页面加载后自动展示示例
+            setTimeout(initExample, 100);
+
+            // ============ 键盘快捷键 ============
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+Shift+E → 聚焦明文框
+                if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+                    e.preventDefault();
+                    plainInput.focus();
+                    plainInput.select();
+                }
+                // Ctrl+Shift+D → 聚焦URL编码框
+                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                    e.preventDefault();
+                    urlInput.focus();
+                    urlInput.select();
+                }
+            });
+
+            console.log('%c🔧 ~ 取反编码解码器已就绪 %c| %c方向向下=编码 %c| %c方向向上=解码',
+                'color:#61afef;font-weight:bold;',
+                '',
+                'color:#61afef;',
+                '',
+                'color:#e5c07b;');
+            console.log('%c快捷键: Ctrl+Shift+E → 明文框 | Ctrl+Shift+D → URL编码框',
+                'color:#959da5;font-size:0.8em;');
+            console.log('%c示例: 输入 "system" → 编码得到 %8c%86%8c%8b%9a%92',
+                'color:#98c379;font-size:0.8em;');
+        })();
+    </script>
+</body>
+</html>
