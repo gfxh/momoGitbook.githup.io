@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP ~ 取反编码解码器 — 无字母数字WebShell</title>
+    <title>PHP ~ 取反和位操作</title>
     <style>
         :root {
             --bg: #1a1d23;
@@ -51,7 +51,7 @@
             gap: 18px;
         }
 
-        /* ---- 头部 ---- */
+
         .header {
             text-align: center;
             padding: 10px 0 6px;
@@ -81,7 +81,7 @@
             margin-top: 4px;
         }
 
-        /* ---- 面板 ---- */
+
         .panel {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -486,6 +486,104 @@
                 font-size: 1.2rem;
             }
         }
+
+        /* ======== XOR 异或构造 ======== */
+        .xor-section {
+            margin-top: 4px;
+        }
+        .xor-section .detail-header {
+            background: linear-gradient(135deg, #2d2a1a, #252a32);
+            border-bottom-color: var(--accent2);
+            color: var(--accent2);
+        }
+        .xor-results {
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .xor-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: border-color 0.2s;
+        }
+        .xor-card:hover { border-color: #555; }
+        .xor-card-invalid { opacity: 0.55; }
+        .xor-card-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            min-width: 52px;
+            text-align: center;
+            padding: 5px 12px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .xor-card-label.letters { background: #1a3d5c; color: var(--accent); }
+        .xor-card-label.digits { background: #3d2e1a; color: var(--accent2); }
+        .xor-card-label.symbols { background: #2a1a3d; color: var(--purple); }
+        .xor-card-body { flex: 1; min-width: 0; }
+        .xor-payload-display {
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #ccc;
+            word-break: break-all;
+        }
+        .xor-payload-display .xor-a { color: var(--accent); }
+        .xor-payload-display .xor-b { color: var(--accent2); }
+        .xor-payload-display .xor-op { color: var(--text2); }
+        .xor-payload-display .xor-result { color: var(--green); }
+        .xor-card-detail {
+            font-size: 0.7rem;
+            color: var(--text2);
+            margin-top: 6px;
+            font-family: var(--font-mono);
+            word-break: break-all;
+            line-height: 1.8;
+        }
+        .xor-card .btn-copy { flex-shrink: 0; font-size: 0.7rem; padding: 5px 10px; margin-top: 0; }
+        .xor-copy-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+            align-items: center;
+        }
+        .xor-copy-input {
+            flex: 1;
+            background: #1a1d23;
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            padding: 8px 10px;
+            border-radius: 4px;
+            outline: none;
+            cursor: text;
+            letter-spacing: 0.3px;
+        }
+        .xor-copy-input:focus { border-color: var(--accent2); }
+        .xor-empty { color: var(--text2); font-style: italic; padding: 8px 0; text-align: center; font-size: 0.82rem; }
+
+        .xor-filter-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .xor-filter-label input { cursor: pointer; accent-color: var(--accent2); }
     </style>
 </head>
 <body>
@@ -493,10 +591,10 @@
 
         <!-- ========== 头部 ========== -->
         <div class="header">
-            <h1>~ 取反编码解码器</h1>
-            <span class="subtitle">Bitwise NOT Encoder / Decoder</span>
+            <h1>~ 取反和位操作</h1>
+            <span class="subtitle">Invert and Bitwise Operations</span>
             <br>
-            <span class="badge">无字母数字 WebShell · preg_replace /e 绕过</span>
+            <span class="badge">无字母数字 WebShell  绕过</span>
         </div>
 
         <!-- ========== 顶部面板：明文 ========== -->
@@ -602,6 +700,30 @@
                 <span class="output-badge" id="badgeLen">字节数: —</span>
                 <span class="output-badge" id="badgePayload">完整 Payload: —</span>
                 <button class="btn btn-copy btn-sm" id="btnCopyPayload" style="display:none;">📋 复制 Payload</button>
+            </div>
+        </div>
+
+        <!-- ========== 异或构造区 ========== -->
+        <!-- ========== 头部 ========== -->
+        <div class="header">
+            <h1>异或构造</h1>
+            <span class="subtitle">HEX XOR Construction</span>
+            <br>
+            <span class="badge"> WebShell  绕过</span>
+            <span class="badge">只可以控制B侧的字符为字母、数字或符号</span>
+        </div>
+        <div class="detail-section xor-section" id="xorSection">
+            <div class="detail-header">
+                🔮 异或构造 <span style="font-weight:400;font-size:0.65rem;color:var(--text2);">HEX XOR Construction</span>
+                <span style="float:right;display:flex;gap:12px;align-items:center;">
+                    <span style="font-size:0.65rem;color:var(--text2);">只用：</span>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowLetters"> 字母</label>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowDigits"> 数字</label>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowSymbols" checked> 符号</label>
+                </span>
+            </div>
+            <div class="xor-results" id="xorResults">
+                <div class="xor-empty">在上方输入明文后自动生成异或构造…</div>
             </div>
         </div>
 
@@ -1050,6 +1172,145 @@
                 'color:#959da5;font-size:0.8em;');
             console.log('%c示例: 输入 "system" → 编码得到 %8c%86%8c%8b%9a%92',
                 'color:#98c379;font-size:0.8em;');
+
+            // ============ XOR 异或构造 ============
+            const xorResultsEl = document.getElementById('xorResults');
+            const xorAllowLetters = document.getElementById('xorAllowLetters');
+            const xorAllowDigits  = document.getElementById('xorAllowDigits');
+            const xorAllowSymbols = document.getElementById('xorAllowSymbols');
+
+            function isLetter(c)   { return /^[a-zA-Z]$/.test(c); }
+            function isDigit(c)    { return /^[0-9]$/.test(c); }
+            function isSymbol(c)   { const code = c.charCodeAt(0); return code >= 32 && code <= 126 && !isLetter(c) && !isDigit(c); }
+
+            function isAllowedType(c) {
+                const code = c.charCodeAt(0);
+                if (code < 32 || code > 126) return false; // 控制字符不可用
+                if (xorAllowLetters.checked && isLetter(c)) return true;
+                if (xorAllowDigits.checked  && isDigit(c))  return true;
+                if (xorAllowSymbols.checked && isSymbol(c)) return true;
+                return false;
+            }
+
+            function getBlockedKind(c) {
+                if (isLetter(c)) return '字母';
+                if (isDigit(c))  return '数字';
+                if (isSymbol(c)) return '符号';
+                return '不可打印';
+            }
+
+            function findCleanA(targetByte) {
+                // 遍历 A=1..127 所有值，只要 B 侧在允许类型内就选它（A 侧不做限制，可以是控制字符）
+                for (let a = 1; a <= 127; a++) {
+                    const b = a ^ targetByte;
+                    if (b < 32 || b > 126) continue;
+                    const bChar = String.fromCharCode(b);
+                    if (isAllowedType(bChar)) {
+                        return { a, b };
+                    }
+                }
+                // 找不到：用递增序列兜底
+                return null;
+            }
+
+            function buildXorHtml(plain) {
+                if (!plain) {
+                    xorResultsEl.innerHTML = '<div class="xor-empty">在上方输入明文后自动生成异或构造…</div>';
+                    return;
+                }
+
+                let hexPayloadA = '';
+                let hexPayloadB = '';
+                let allCleanA = true, allCleanB = true;
+                let tableHtml =
+                    '<div style="overflow-x:auto;margin-top:4px;"><table class="detail-table" style="min-width:auto;font-size:0.78rem;">' +
+                    '<thead><tr>' +
+                    '<th>字符</th><th>A (%hex)</th><th>A 二进制</th><th>A 字符</th><th>B (%hex)</th><th>B 二进制</th><th>B 字符</th><th>结果</th>' +
+                    '</tr></thead><tbody>';
+
+                for (let i = 0; i < plain.length; i++) {
+                    const targetByte = plain.charCodeAt(i);
+                    const found = findCleanA(targetByte);
+                    let a, b;
+                    if (found) {
+                        a = found.a;
+                        b = found.b;
+                    } else {
+                        // 实在找不到就用递增序列
+                        a = (i % 127) + 1;
+                        b = a ^ targetByte;
+                    }
+                    const aChar = String.fromCharCode(a);
+                    const bChar = String.fromCharCode(b);
+                    const hexAStr = a.toString(16).toUpperCase().padStart(2, '0');
+                    const hexBStr = b.toString(16).toUpperCase().padStart(2, '0');
+                    hexPayloadA += '%' + hexAStr;
+                    hexPayloadB += '%' + hexBStr;
+
+                    const bOk = isAllowedType(bChar);
+                    const bKind = bOk ? null : getBlockedKind(bChar);
+                    if (!bOk) allCleanB = false;
+
+                    tableHtml +=
+                        `<tr>
+                            <td class="col-char" style="font-weight:700;color:#fff;">${escapeHTML(plain[i])}</td>
+                            <td class="col-url" style="color:var(--accent);">%${hexAStr}</td>
+                            <td class="col-binary">${renderBits(a, 'original')}</td>
+                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(aChar === ' ' ? '␣' : aChar)}</td>
+                            <td class="col-url" style="color:var(--accent2);">%${hexBStr}</td>
+                            <td class="col-binary">${renderBits(b, 'flipped')}</td>
+                            <td style="font-weight:700;color:${bOk ? 'var(--green)' : 'var(--red)'};">${escapeHTML(bChar)}${bKind ? ' ⚠'+bKind : ''}</td>
+                            <td style="font-weight:700;color:var(--green);">${escapeHTML(plain[i])}</td>
+                        </tr>`;
+                }
+                const allClean = allCleanB;
+                tableHtml +=
+                    '<tr style="border-top:2px solid var(--border);">' +
+                    '<td colspan="8" style="font-size:0.7rem;color:var(--text2);padding:8px;">' +
+                    '<span style="color:var(--accent);">蓝色=1（A侧-控制字符）</span> &nbsp; <span style="color:var(--red);">红色=1（B侧）</span> &nbsp;|&nbsp; 相同位=0，不同位=1 → A ^ B = 目标字符' +
+                    (allClean ? ' &nbsp;|&nbsp; <span style="color:var(--green);">✓ B 侧均在允许类型内</span>' : ' &nbsp;|&nbsp; <span style="color:var(--red);">⚠ B 侧存在不在允许类型内的字符</span>') +
+                    '</td></tr>';
+                tableHtml += '</tbody></table></div>';
+
+                const phpPayload = `'${hexPayloadA}'^'${hexPayloadB}'`;
+                const payloadStr = `<span class="xor-a">'${escapeHTML(hexPayloadA)}'</span><span class="xor-op"> ^ </span><span class="xor-b">'${escapeHTML(hexPayloadB)}'</span>`;
+
+                const html = `
+                <div class="xor-card">
+                    <span class="xor-card-label symbols">HEX</span>
+                    <div class="xor-card-body">
+                        <div class="xor-payload-display">${payloadStr}</div>
+                        <div class="xor-copy-row">
+                            <input class="xor-copy-input" id="xorCopyInput" type="text" value="${escapeHTML(phpPayload)}" readonly spellcheck="false">
+                            <button class="btn btn-copy btn-sm xor-copy-btn-inline">📋 复制</button>
+                        </div>
+                        ${tableHtml}
+                    </div>
+                </div>`;
+
+                xorResultsEl.innerHTML = html;
+
+                document.querySelector('.xor-copy-btn-inline').addEventListener('click', function() {
+                    copyToClipboard(document.getElementById('xorCopyInput').value, this);
+                });
+            }
+
+            // checkbox 变化时刷新
+            [xorAllowLetters, xorAllowDigits, xorAllowSymbols].forEach(cb => {
+                cb.addEventListener('change', () => buildXorHtml(plainInput.value));
+            });
+
+            // 在 doEncode 和 doDecode 中调用 buildXorHtml
+            const _origDoEncode = doEncode;
+            const _origDoDecode = doDecode;
+            doEncode = function() {
+                _origDoEncode();
+                buildXorHtml(plainInput.value);
+            };
+            doDecode = function() {
+                _origDoDecode();
+                buildXorHtml(plainInput.value);
+            };
         })();
     </script>
 </body>

@@ -4,38 +4,186 @@
   <meta charset="UTF-8">
   <title>ROT13 & Atbash & Base64</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-    textarea { width: 100%; height: 120px; font-size: 16px; padding: 8px; box-sizing: border-box; resize: vertical; }
-    button { margin: 10px 0; padding: 10px 24px; font-size: 16px; cursor: pointer; }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
+    textarea { width: 100%; height: 100px; font-size: 16px; padding: 8px; box-sizing: border-box; resize: vertical; }
+    button { margin: 10px 4px 10px 0; padding: 10px 24px; font-size: 16px; cursor: pointer; }
     label { font-weight: bold; display: block; margin-top: 16px; }
+    h2 { border-bottom: 2px solid #4CAF50; padding-bottom: 6px; margin-top: 40px; }
+    .info {
+      background: #f9f9f9; border-left: 4px solid #4CAF50;
+      padding: 12px 16px; margin: 12px 0; border-radius: 0 6px 6px 0;
+      font-size: 14px; line-height: 1.8;
+    }
+    .info-details { margin: 12px 0; }
+    .info-details > summary {
+      font-size: 15px; padding: 6px 0; user-select: none;
+    }
+    .info-details > summary:hover { opacity: 0.7; }
+    .info-details[open] > .info { margin-top: 8px; }
+    .info table { border-collapse: collapse; margin: 8px 0; }
+    .info td, .info th { border: 1px solid #ccc; padding: 4px 10px; text-align: center; font-family: monospace; }
+    .info th { background: #e8e8e8; }
+    code { background: #eee; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+    .example { color: #2a7; }
   </style>
 </head>
 <body>
-  <h2>ROT13转换</h2>
+  <h1>编码转换工具箱</h1>
+
+  <!-- ==================== ROT13 ==================== -->
+  <h2>一、ROT13 转换</h2>
+  <details class="info-details">
+    <summary style="cursor:pointer;color:#4CAF50;font-weight:bold;">ROT13 介绍（点击展开）</summary>
+    <div class="info">
+      <p><b>原理：</b>ROT13（"rotate by 13 places"）是凯撒密码的特例，将每个英文字母在字母表中<b>循环移动 13 位</b>。</p>
+      <p>因为英文字母共 26 个，13 恰好是一半，所以 ROT13 是<b>自反的</b>——<b>加密和解密是同一个操作</b>，做两次就还原。</p>
+      <p><b>编码表：</b></p>
+      <table>
+        <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th></tr>
+        <tr><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td></tr>
+      </table>
+      <p>小写同理：a→n, b→o, ...</p>
+      <p><b>手算公式：</b>新位置 = (原位置 + 13) % 26 （A=0, B=1, ..., Z=25）</p>
+      <p><b>示例：</b><span class="example">HELLO → URYYB</span>（再做一次：URYYB → HELLO，还原！）</p>
+      <p><b>核心代码：</b><code>(offset + 13) % 26</code> 实现循环位移，%26 保证超过 Z 后回到 A。非字母字符原样保留。</p>
+    </div>
+  </details>
   <label for="rot13_input">输入：</label>
   <textarea id="rot13_input" placeholder="请输入要转换的文本..."></textarea>
   <button onclick="rot13_convert()">转换</button>
   <label for="rot13_output">输出：</label>
   <textarea id="rot13_output" readonly placeholder="转换结果..."></textarea>
 
-  <hr>
-
-  <h2>Atbash密码转换</h2>
+  <!-- ==================== Atbash ==================== -->
+  <h2>二、Atbash 密码转换</h2>
+  <details class="info-details">
+    <summary style="cursor:pointer;color:#4CAF50;font-weight:bold;">Atbash 介绍（点击展开）</summary>
+    <div class="info">
+      <p><b>原理：</b>Atbash 是<b>字母表反转</b>替换密码：A ↔ Z, B ↔ Y, C ↔ X, ... 第 i 个字母映射到倒数第 i 个。</p>
+      <p>它同样是<b>自反的</b>——加密和解密是同一个操作。</p>
+      <p><b>编码表：</b></p>
+      <table>
+        <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th></tr>
+        <tr><td>Z</td><td>Y</td><td>X</td><td>W</td><td>V</td><td>U</td><td>T</td><td>S</td><td>R</td><td>Q</td><td>P</td><td>O</td><td>N</td></tr>
+      </table>
+      <p><b>手算公式：</b>新位置 = 25 - 原位置 （A=0 → Z=25，B=1 → Y=24，...）</p>
+      <p><b>示例：</b><span class="example">HELLO → SVOOL</span>（再做一次：SVOOL → HELLO，还原！）</p>
+      <p><b>核心代码：</b><code>(25 - offset)</code>，与 ROT13 的区别仅这一行。</p>
+    </div>
+  </details>
   <label for="input">输入：</label>
   <textarea id="input" placeholder="请输入要转换的文本..."></textarea>
   <button onclick="convert()">转换</button>
   <label for="output">输出：</label>
   <textarea id="output" readonly placeholder="转换结果..."></textarea>
 
-  <hr>
-
-  <h2>Base64转换</h2>
+  <!-- ==================== Base64 ==================== -->
+  <h2>三、Base64 转换</h2>
+  <details class="info-details">
+    <summary style="cursor:pointer;color:#4CAF50;font-weight:bold;">Base64 介绍（点击展开）</summary>
+    <div class="info">
+      <p><b>原理：</b>Base64 将<b>二进制数据</b>表示为<b>可打印 ASCII 字符</b>。每 3 个字节（24 bit）拆成 4 组，每组 6 bit，映射到 64 个字符。</p>
+      <p><b>编码表（64 个字符）：</b><code>A-Z(0-25)</code> <code>a-z(26-51)</code> <code>0-9(52-61)</code> <code>+(62)</code> <code>/(63)</code></p>
+      <p><b>编码过程（以 "Man" 为例）：</b></p>
+      <table>
+        <tr><th>步骤</th><th colspan="4">数据</th></tr>
+        <tr><td>原始文本</td><td>M</td><td>a</td><td>n</td></tr>
+        <tr><td>ASCII 值</td><td>77</td><td>97</td><td>110</td></tr>
+        <tr><td>二进制</td><td>01001101</td><td>01100001</td><td>01101110</td></tr>
+        <tr><td>按 6 bit 分组</td><td>010011</td><td>010110</td><td>000101</td><td>101110</td></tr>
+        <tr><td>十进制</td><td>19</td><td>22</td><td>5</td><td>46</td></tr>
+        <tr><td>Base64 字符</td><td><b>T</b></td><td><b>W</b></td><td><b>F</b></td><td><b>u</b></td></tr>
+      </table>
+      <p><b>结果：</b><span class="example">Man → TWFu</span></p>
+      <p><b>填充规则：</b>输入字节数不是 3 的倍数时，用 <code>=</code> 补齐——余 1 字节补 2 个 =，余 2 字节补 1 个 =。</p>
+      <p><b>解码：</b>逆过程——每个 Base64 字符映射回 6 bit，拼接成 8 bit 字节流。</p>
+      <p><b>JS 核心：</b><code>btoa()</code> 编码 / <code>atob()</code> 解码（浏览器内置）。外层 <code>encodeURIComponent</code> 组合用于正确处理中文等非 ASCII 字符。</p>
+    </div>
+  </details>
   <label for="b64_input">输入：</label>
   <textarea id="b64_input" placeholder="请输入要转换的文本..."></textarea>
   <button onclick="b64_encode()">编码</button>
   <button onclick="b64_decode()">解码</button>
   <label for="b64_output">输出：</label>
   <textarea id="b64_output" readonly placeholder="转换结果..."></textarea>
+
+  <div class="info">
+    <p><b>Base64 完整编码表（含 ASCII 值）：</b></p>
+    <details>
+      <summary style="cursor:pointer;color:#4CAF50;font-weight:bold;">展开查看 64 个字符的编码表（单栏，按索引排序）</summary>
+      <table style="margin-top:10px;">
+        <tr><th>索引</th><th>二进制(8bit)</th><th>十进制</th><th>字符</th><th>ASCII</th></tr>
+        <tr><td>0</td><td>01000001</td><td>0</td><td><b>A</b></td><td>65</td></tr>
+        <tr><td>1</td><td>01000010</td><td>1</td><td><b>B</b></td><td>66</td></tr>
+        <tr><td>2</td><td>01000011</td><td>2</td><td><b>C</b></td><td>67</td></tr>
+        <tr><td>3</td><td>01000100</td><td>3</td><td><b>D</b></td><td>68</td></tr>
+        <tr><td>4</td><td>01000101</td><td>4</td><td><b>E</b></td><td>69</td></tr>
+        <tr><td>5</td><td>01000110</td><td>5</td><td><b>F</b></td><td>70</td></tr>
+        <tr><td>6</td><td>01000111</td><td>6</td><td><b>G</b></td><td>71</td></tr>
+        <tr><td>7</td><td>01001000</td><td>7</td><td><b>H</b></td><td>72</td></tr>
+        <tr><td>8</td><td>01001001</td><td>8</td><td><b>I</b></td><td>73</td></tr>
+        <tr><td>9</td><td>01001010</td><td>9</td><td><b>J</b></td><td>74</td></tr>
+        <tr><td>10</td><td>01001011</td><td>10</td><td><b>K</b></td><td>75</td></tr>
+        <tr><td>11</td><td>01001100</td><td>11</td><td><b>L</b></td><td>76</td></tr>
+        <tr><td>12</td><td>01001101</td><td>12</td><td><b>M</b></td><td>77</td></tr>
+        <tr><td>13</td><td>01001110</td><td>13</td><td><b>N</b></td><td>78</td></tr>
+        <tr><td>14</td><td>01001111</td><td>14</td><td><b>O</b></td><td>79</td></tr>
+        <tr><td>15</td><td>01010000</td><td>15</td><td><b>P</b></td><td>80</td></tr>
+        <tr><td>16</td><td>01010001</td><td>16</td><td><b>Q</b></td><td>81</td></tr>
+        <tr><td>17</td><td>01010010</td><td>17</td><td><b>R</b></td><td>82</td></tr>
+        <tr><td>18</td><td>01010011</td><td>18</td><td><b>S</b></td><td>83</td></tr>
+        <tr><td>19</td><td>01010100</td><td>19</td><td><b>T</b></td><td>84</td></tr>
+        <tr><td>20</td><td>01010101</td><td>20</td><td><b>U</b></td><td>85</td></tr>
+        <tr><td>21</td><td>01010110</td><td>21</td><td><b>V</b></td><td>86</td></tr>
+        <tr><td>22</td><td>01010111</td><td>22</td><td><b>W</b></td><td>87</td></tr>
+        <tr><td>23</td><td>01011000</td><td>23</td><td><b>X</b></td><td>88</td></tr>
+        <tr><td>24</td><td>01011001</td><td>24</td><td><b>Y</b></td><td>89</td></tr>
+        <tr><td>25</td><td>01011010</td><td>25</td><td><b>Z</b></td><td>90</td></tr>
+        <tr><td>26</td><td>01100001</td><td>26</td><td><b>a</b></td><td>97</td></tr>
+        <tr><td>27</td><td>01100010</td><td>27</td><td><b>b</b></td><td>98</td></tr>
+        <tr><td>28</td><td>01100011</td><td>28</td><td><b>c</b></td><td>99</td></tr>
+        <tr><td>29</td><td>01100100</td><td>29</td><td><b>d</b></td><td>100</td></tr>
+        <tr><td>30</td><td>01100101</td><td>30</td><td><b>e</b></td><td>101</td></tr>
+        <tr><td>31</td><td>01100110</td><td>31</td><td><b>f</b></td><td>102</td></tr>
+        <tr><td>32</td><td>01100111</td><td>32</td><td><b>g</b></td><td>103</td></tr>
+        <tr><td>33</td><td>01101000</td><td>33</td><td><b>h</b></td><td>104</td></tr>
+        <tr><td>34</td><td>01101001</td><td>34</td><td><b>i</b></td><td>105</td></tr>
+        <tr><td>35</td><td>01101010</td><td>35</td><td><b>j</b></td><td>106</td></tr>
+        <tr><td>36</td><td>01101011</td><td>36</td><td><b>k</b></td><td>107</td></tr>
+        <tr><td>37</td><td>01101100</td><td>37</td><td><b>l</b></td><td>108</td></tr>
+        <tr><td>38</td><td>01101101</td><td>38</td><td><b>m</b></td><td>109</td></tr>
+        <tr><td>39</td><td>01101110</td><td>39</td><td><b>n</b></td><td>110</td></tr>
+        <tr><td>40</td><td>01101111</td><td>40</td><td><b>o</b></td><td>111</td></tr>
+        <tr><td>41</td><td>01110000</td><td>41</td><td><b>p</b></td><td>112</td></tr>
+        <tr><td>42</td><td>01110001</td><td>42</td><td><b>q</b></td><td>113</td></tr>
+        <tr><td>43</td><td>01110010</td><td>43</td><td><b>r</b></td><td>114</td></tr>
+        <tr><td>44</td><td>01110011</td><td>44</td><td><b>s</b></td><td>115</td></tr>
+        <tr><td>45</td><td>01110100</td><td>45</td><td><b>t</b></td><td>116</td></tr>
+        <tr><td>46</td><td>01110101</td><td>46</td><td><b>u</b></td><td>117</td></tr>
+        <tr><td>47</td><td>01110110</td><td>47</td><td><b>v</b></td><td>118</td></tr>
+        <tr><td>48</td><td>01110111</td><td>48</td><td><b>w</b></td><td>119</td></tr>
+        <tr><td>49</td><td>01111000</td><td>49</td><td><b>x</b></td><td>120</td></tr>
+        <tr><td>50</td><td>01111001</td><td>50</td><td><b>y</b></td><td>121</td></tr>
+        <tr><td>51</td><td>01111010</td><td>51</td><td><b>z</b></td><td>122</td></tr>
+        <tr><td>52</td><td>00110000</td><td>52</td><td><b>0</b></td><td>48</td></tr>
+        <tr><td>53</td><td>00110001</td><td>53</td><td><b>1</b></td><td>49</td></tr>
+        <tr><td>54</td><td>00110010</td><td>54</td><td><b>2</b></td><td>50</td></tr>
+        <tr><td>55</td><td>00110011</td><td>55</td><td><b>3</b></td><td>51</td></tr>
+        <tr><td>56</td><td>00110100</td><td>56</td><td><b>4</b></td><td>52</td></tr>
+        <tr><td>57</td><td>00110101</td><td>57</td><td><b>5</b></td><td>53</td></tr>
+        <tr><td>58</td><td>00110110</td><td>58</td><td><b>6</b></td><td>54</td></tr>
+        <tr><td>59</td><td>00110111</td><td>59</td><td><b>7</b></td><td>55</td></tr>
+        <tr><td>60</td><td>00111000</td><td>60</td><td><b>8</b></td><td>56</td></tr>
+        <tr><td>61</td><td>00111001</td><td>61</td><td><b>9</b></td><td>57</td></tr>
+        <tr><td>62</td><td>00101011</td><td>62</td><td><b>+</b></td><td>43</td></tr>
+        <tr><td>63</td><td>00101111</td><td>63</td><td><b>/</b></td><td>47</td></tr>
+      </table>
+      <p style="margin-top:8px;">分组：<b>0-25</b> 大写字母 | <b>26-51</b> 小写字母 | <b>52-61</b> 数字 | <b>62</b> + | <b>63</b> /</p>
+    </details>
+  </div>
+
+  <hr>
+  <p style="text-align:center;color:#888;">非字母字符原样保留 | ROT13/Atbash 自反：加密解密同一操作 | Base64 不是加密，是编码</p>
 
   <script>
     function rot13(text) {

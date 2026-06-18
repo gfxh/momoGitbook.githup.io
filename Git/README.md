@@ -25,3 +25,11 @@
 > [图书馆](https://www.manongbook.com/)
 > [网安资源分享](https://get-shell.com/)
 
+## AI制造——》工具
+
+
+[取反和异或工具](https://xobear.cn/CTF/Web/Qingcen/Invert&XOR_Toolkit.html)
+[ANSI-C在线编码和进制转换](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)
+[ROT13_Atbash_Base64](https://xobear.cn/CTF/Web/PHP/rot13base.html)
+
+
