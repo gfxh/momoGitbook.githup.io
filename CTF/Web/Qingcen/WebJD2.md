@@ -303,20 +303,37 @@ $_=~%B8%BA%AB;${'_'.$_}[_](${'_'.$_}[__]);&_=system&__=cat /f*
 **两个操作数相同则结果为0，不同则结果为1** 
 （0 ^ 0 = 0，1 ^ 0 = 1，0 ^ 1 = 1，1 ^ 1 = 0）
 
+**EZCMD_15**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781850326449_image.png)
 
+**[exec](https://www.php.net/manual/zh/function.exec.php)** 这个函数 可以 直接调用电脑自带命令
+基本格式  exec(命令, 输出数组, 执行结果码);
+第一个参数：你要运行的系统命令
+第二个参数（带 `&`）：执行完后，命令打印的所有文字，全部塞进这个**数组**
+第三个参数（带 `&`）：命令成功 `/` 失败标记
+数字 0 = 正常成功
+非 0 = 报错、找不到文件、权限不足
+返回值：只能拿到命令输出最后一行。
 
+这一题  代码只传了 1 个参数给 exec，没有接收输出数组，所以 **无回显**
+我们可以将命令的返回值直接传递给一个文件
 
+`>` ：重定向符号  是系统 shell 自带的 和 PHP 函数参数完全无关。可以理解为**写入文件**
+`>>` :追加写入，不覆盖原有文件内容
+`2>&1` : 把错误信息也一起输出到文件中
+构造payload 
+`?qc=cat /f*>>1.txt`
+`?qc=ls|xargs cat>>1.txt `
 
+xargs :文本转命令参数
+grep :全局搜索
 
+**EZCMD_16**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781864261902_image.png)
+[create_function](https://www.php.net/manual/zh/function.create-function.php)创建匿名函数
+两个参数，形参和函数体
 
+`?qc=1;}system('cat /f*');//`--->`return 1;}system('cat /f*'');//;`
 
-
-
-
-
-
-
-
-
-
+匿名函数体执行 return 1; 后提前退出函数体，然后执行 system('cat /f*')，后面的部分被 // 注释掉。
 

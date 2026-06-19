@@ -1,4 +1,4 @@
-[师傅笔记先照着模仿吧](https://blog.yanxisishi.top/2026/qingcen_web_02#ezsql%E4%B8%87%E8%83%BD%E5%AF%86%E7%A0%81)
+[师傅笔记](https://blog.yanxisishi.top/2026/qingcen_web_02#ezsql%E4%B8%87%E8%83%BD%E5%AF%86%E7%A0%81)
 ```
 函数：
 version()       # 数据库版本

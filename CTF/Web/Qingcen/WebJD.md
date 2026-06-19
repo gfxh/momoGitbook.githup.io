@@ -1,3 +1,5 @@
+# 信息收集
+
 **basic**
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272320503_image.png)
 跟着心法走ctrl+U看源码
@@ -83,6 +85,8 @@ ASCLL码解密
 wqw.php需要Cookie是admin身份
 ![image copy 26.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272395938_image_copy_26.png)
 
+
+# 简单绕过
 **EZ_PHP**
 ![image copy 27.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272395839_image_copy_27.png)
 GET a和b
@@ -106,6 +110,8 @@ array_search("QCCTF", $qc) 会在数组中搜索值为"QCCTF"的元素，并返�
 **ezphp_2**
 ![image copy 30.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272402380_image_copy_30.png)
 ```
+array_search默认执行的是弱比较，数字与字符串比较时，字符串会被强行转换为数字。如果字符串以非数字字符开头，转换为 0 
+
 $qc是一个包含"n"键的数组，"n"对应的值是一个非空数组
 $qc中存在值为0的元素（绕过QCCTF的array_search）
 $qc["n"]数组中存在值为0的元素（绕过QCyyds的array_search）
@@ -113,74 +119,18 @@ $qc["n"]数组中没有严格等于"QCyyds"的元素
 ```
 ![image copy 31.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272394115_image_copy_31.png)
 
+**EZ_PHP3**
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781867773168_image.png)
+五层。。。
 
-
-**第一章**
-![image copy 34.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272398996_image_copy_34.png)
-
-![image copy 35.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272397714_image_copy_35.png)
-
-![image copy 39.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272396594_image_copy_39.png)
-禁用js就可以粘贴了
-![image copy 40.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272402073_image_copy_40.png)
-500次就交给BP吧。第500次有flag
-额，可能题目没做好吧
-**第二章**
-![image copy 36.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272404481_image_copy_36.png)
-
-藏字了。`前往/golden_trail看看`
-![image copy 37.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272399644_image_copy_37.png)
-
-
-题目提示http的请求头
-![image copy 38.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272403510_image_copy_38.png)
-moectf{0bs3rv3_Th3_Gold3n_traiL}
-改成flag{}就行
-
-**第三章**
-
-
-
-**第四章**
-
-![image copy 41.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272404344_image_copy_41.png)
-
---->`bW9lY3Rme0Mw`
-
-![image copy 42.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272406763_image_copy_42.png)
---->`bjZyNDd1MTQ3`
-
-![image copy 43.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272407469_image_copy_43.png)
---->`MTBuNV95MHVy`
-
-![image copy 44.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272407953_image_copy_44.png)
---->`X2g3N1BfbDN2`
-
-![image copy 45.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272405955_image_copy_45.png)
---->`M2xfMTVfcjM0`
-
-![image copy 46.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272404729_image_copy_46.png)
---->`bGx5X2gxOWgh`
-![image copy 50.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272404855_image_copy_50.png)
-
-把GET改为PUT。在最下面写上`新生！`
-![image copy 51.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272404904_image_copy_51.png)
---->`fQ==`  
-
-`bW9lY3Rme0MwbjZyNDd1MTQ3MTBuNV95MHVyX2g3N1BfbDN2M2xfMTVfcjM0bGx5X2gxOWghfQ==`
-base64-->`moectf{C0n6r47u14710n5_y0ur_h77P_l3v3l_15_r34lly_h19h!}`
-要改成**flag{C0n6r47u14710n5_y0ur_h77P_l3v3l_15_r34lly_h19h!}**
-![image copy 47.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272403275_image_copy_47.png)
-![image copy 48.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272403016_image_copy_48.png)
-![image copy 49.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272409377_image_copy_49.png)
-
-
-**第五章**
-
- 
-
-
-
+`?qc=Welcome to qingCen 2026!&lover=2024`
+`Q[]=1&C[]=1&ZJZ[QingCen.2026=Happy to see you!`
+层数|参数|描述|绕过
+---|---|---|---
+第一层 |`qc` | 正则 `/^Welcome to QingCen 2026!$/i `匹配（不区分大小写），但与 `'Welcome to QingCen 2026!'` 严格不等。|用大小写绕过
+第二层 |`lover` | `intval($lover) < 2025` 且 `intval($lover + 3) > 2026`|传 lover=2024，
+第三层 |`Q` 和 `C` | 两个参数都被 (string) 转换后 sha1 比对|传数组 `Q[]=1&C[]=2`，PHP 的 `(string)[]` 均得到 `"Array"`，SHA1 相等。补：如果遇到没有 `(string)` 类型的参数，直接传数组即可。
+第四层 |`ZJZ_QingCen.2026` | PHP 会把 POST 键名中的 `.` 自动转为 `_`，所以 ``$_POST['ZJZ_QingCen.2026'] ``正常情况下永远取不到值|PHP 同样会把 `[` 转为 `_`，但 `[` 之后的字符会原样保留。发送参数名 `ZJZ[QingCen.2026`，PHP 转换后变为 `ZJZ_QingCen.2026`
 
 
 

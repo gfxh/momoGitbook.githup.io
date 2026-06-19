@@ -301,14 +301,12 @@
   </footer>
 
   <script>
-    // ========================================
-    // 滚动文字逐字点亮
-    // ========================================
+
     (function initScrollTexts() {
       const sections = document.querySelectorAll('.scroll-text');
       if (sections.length === 0) return;
 
-      // 把每个 scroll-text 的内容拆成 span
+
       sections.forEach(function (el) {
         const text = el.dataset.text || el.textContent;
         const chars = Array.from(text);
@@ -369,9 +367,7 @@
       update();
     })();
 
-    // ========================================
-    // Hero 滚动指示器显隐
-    // ========================================
+
     (function initScrollHint() {
       const hint = document.getElementById('heroScrollHint');
       if (!hint) return;
@@ -381,9 +377,7 @@
       }, { passive: true });
     })();
 
-    // ========================================
-    // Projects 数据加载
-    // ========================================
+
     (function loadProjects() {
       const grid = document.getElementById('projectsGrid');
       if (!grid) return;
