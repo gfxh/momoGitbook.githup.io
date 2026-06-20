@@ -363,6 +363,40 @@ function initLightbox() {
   });
 }
 
+/** 目录弹层：按钮切换 + 点击链接自动收起 */
+function initTocCollapse() {
+  var sidebar = document.getElementById('sidebar');
+  var btn = sidebar ? sidebar.querySelector('.toc-toggle-btn') : null;
+  if (!sidebar || !btn) return;
+
+  function setCollapsed(collapse) {
+    sidebar.classList.toggle('sidebar-collapsed', collapse);
+    btn.setAttribute('aria-expanded', String(!collapse));
+  }
+
+  // 默认收起
+  setCollapsed(true);
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setCollapsed(!sidebar.classList.contains('sidebar-collapsed'));
+  });
+
+  // 点击外部关闭
+  document.addEventListener('click', function (e) {
+    if (!sidebar.classList.contains('sidebar-collapsed') && !sidebar.contains(e.target)) {
+      setCollapsed(true);
+    }
+  });
+
+  // 点击目录链接后自动收起
+  sidebar.querySelectorAll('.toc a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      setCollapsed(true);
+    });
+  });
+}
+
 /** 目录搜索过滤 */
 function initTocSearch() {
   var tocContainer = document.querySelector('.toc');
@@ -448,6 +482,9 @@ function initBlogInteractions() {
 
   // 目录搜索
   initTocSearch();
+
+  // 目录折叠
+  initTocCollapse();
 }
 
 /** 友链页面：从 friends.json 加载并渲染（分组 + 本站信息 + 申请） */
