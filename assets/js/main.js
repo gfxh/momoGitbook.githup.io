@@ -115,8 +115,11 @@ async function loadMarkdown(filePath) {
     window.currentMarkdownPath = filePath;
 
     // 渲染
-    const html = md.render(markdownText);
+    var html = md.render(markdownText);
     content.innerHTML = html;
+
+    // 表格包裹滚动容器
+    wrapTables();
 
     // 阅读时间估算
     addReadingTime(markdownText);
@@ -247,6 +250,17 @@ function initCopyButtons() {
       });
     });
     pre.appendChild(btn);
+  });
+}
+
+/** 表格包裹滚动容器 */
+function wrapTables() {
+  document.querySelectorAll('#content table').forEach(function (table) {
+    if (table.parentElement.classList.contains('table-wrap')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
+    table.parentNode.insertBefore(wrap, table);
+    wrap.appendChild(table);
   });
 }
 
