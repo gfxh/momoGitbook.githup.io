@@ -81,13 +81,9 @@ ab不等，但哈希值相同
 ![image copy 58.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272410628_image_copy_58.png)
 数组绕过
 
-# 命令执行EZCMD
+# EZCMD  命令执行
 ![image copy 59.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272408674_image_copy_59.png)
 PSOT:cmd=nl /flag
-
-
-
-
 
 ## EZCMD_1
 ![image copy 60.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272411140_image_copy_60.png)

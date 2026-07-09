@@ -2,6 +2,7 @@
 [特性总结](https://www.anquanke.com/post/id/231507/)
 **[CTFshow89-150](https://ctf.show/challenges)**
 **[学长笔记](https://exp10it.io/posts/ctfshow-web-php-89-110-writeup/)**
+
 ## ·89
 ![PHP4x0.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271597564_PHP4x0.png)
 
@@ -12,6 +13,7 @@
 `pyload=URL/?num[]=a`
 
 ## ·90
+
 ![PHP4x1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271594095_PHP4x1.png)
 
 **==** 会判断内容是否相同, 不会判断类型是否相同
@@ -27,6 +29,7 @@
 pyload=URL`/?num=0x117c`   `/?num=1146.0`   `/?num=1146aaa`
 
 ## ·91
+
 **[preg_match($pattern, $subject, $matches)](https://www.php.net/manual/zh/function.preg-match.php)**
 String $pattern 正则表达式模式 (pattern='/ /')
 
