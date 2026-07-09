@@ -103,6 +103,7 @@ async function loadMarkdown(filePath) {
   content.classList.remove('is-loaded');
   content.classList.add('is-loading');
   content.innerHTML = '<div class="loading">正在加载文档...</div>';
+  clearArticleToc();
   setActiveTocItem(filePath);
 
   try {
@@ -120,6 +121,9 @@ async function loadMarkdown(filePath) {
 
     // 表格包裹滚动容器
     wrapTables();
+
+    // 文章内目录
+    buildArticleToc();
 
     // 阅读时间估算
     addReadingTime(markdownText);
@@ -139,11 +143,13 @@ async function loadMarkdown(filePath) {
       content.classList.add('is-loaded');
       scrollToReadingTop();
       updateReadingProgress();
+      updateArticleTocActive();
     });
 
   } catch (error) {
     content.classList.remove('is-loading');
     content.classList.add('is-loaded');
+    clearArticleToc();
     content.innerHTML = '<div class="loading"><h2>加载失败</h2><p>' + error.message + '</p></div>';
   }
 }
@@ -152,11 +158,14 @@ async function loadMarkdown(filePath) {
 // 第二部分：滚动与导航工具
 // ========================================
 
+function getHeaderOffset() {
+  return window.innerWidth >= 1080 ? 96 : 76;
+}
+
 function getReadingTop() {
   const target = document.querySelector('.content-wrap') || document.getElementById('content');
   if (!target) return 0;
-  const headerOffset = window.innerWidth >= 1080 ? 96 : 76;
-  return Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerOffset);
+  return Math.max(0, target.getBoundingClientRect().top + window.scrollY - getHeaderOffset());
 }
 
 function getReadingBottom() {
@@ -188,6 +197,146 @@ function updateReadingProgress() {
   const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   const value = Math.min(1, Math.max(0, scrollTop / scrollable));
   progress.style.transform = `scaleX(${value})`;
+}
+
+var articleTocHeadings = [];
+
+function ensureArticleToc() {
+  var toc = document.getElementById('article-toc');
+  if (toc) return toc;
+
+  var main = document.querySelector('.blog-page .main-container');
+  if (!main) return null;
+
+  toc = document.createElement('aside');
+  toc.className = 'article-toc is-empty';
+  toc.id = 'article-toc';
+  toc.setAttribute('aria-label', '文章目录');
+  toc.innerHTML =
+    '<button class="toc-toggle-btn article-toc-toggle" type="button" aria-expanded="true" title="收起本文目录">&#9776;</button>' +
+    '<div class="article-toc-popup">' +
+      '<div class="article-toc-title">本文目录</div>' +
+      '<nav class="article-toc-list" aria-label="文章标题"></nav>' +
+    '</div>';
+
+  toc.querySelector('.article-toc-toggle').addEventListener('click', function (e) {
+    e.stopPropagation();
+    setArticleTocCollapsed(!toc.classList.contains('is-collapsed'));
+  });
+
+  main.appendChild(toc);
+
+  return toc;
+}
+
+function clearArticleToc() {
+  articleTocHeadings = [];
+  document.body.classList.remove('has-article-toc');
+  document.body.classList.remove('article-toc-collapsed');
+
+  var toc = document.getElementById('article-toc');
+  if (!toc) return;
+
+  toc.classList.add('is-empty');
+  toc.classList.remove('is-collapsed');
+  var list = toc.querySelector('.article-toc-list');
+  if (list) list.innerHTML = '';
+}
+
+function setArticleTocCollapsed(collapse) {
+  var toc = document.getElementById('article-toc');
+  if (!toc) return;
+
+  toc.classList.toggle('is-collapsed', collapse);
+  document.body.classList.toggle('article-toc-collapsed', collapse);
+
+  var btn = toc.querySelector('.article-toc-toggle');
+  if (!btn) return;
+
+  btn.setAttribute('aria-expanded', String(!collapse));
+  btn.setAttribute('title', collapse ? '展开本文目录' : '收起本文目录');
+}
+
+function buildArticleToc() {
+  var content = document.getElementById('content');
+  var toc = ensureArticleToc();
+  if (!content || !toc) return;
+
+  var headings = Array.from(content.querySelectorAll('h1, h2, h3')).filter(function (heading) {
+    return heading.textContent.trim();
+  });
+
+  if (headings.length < 2) {
+    clearArticleToc();
+    return;
+  }
+
+  articleTocHeadings = headings;
+
+  var usedIds = {};
+  var listHtml = headings.map(function (heading, index) {
+    var level = Number(heading.tagName.substring(1));
+    var id = heading.id || 'article-heading-' + (index + 1);
+
+    while (usedIds[id] || (document.getElementById(id) && document.getElementById(id) !== heading)) {
+      id = 'article-heading-' + (index + 1) + '-' + Object.keys(usedIds).length;
+    }
+
+    usedIds[id] = true;
+    heading.id = id;
+
+    return '<a class="article-toc-link article-toc-level-' + level + '" href="#' + id + '">' +
+      escapeHtml(heading.textContent.trim()) +
+      '</a>';
+  }).join('');
+
+  toc.querySelector('.article-toc-list').innerHTML = listHtml;
+  toc.classList.remove('is-empty');
+  setArticleTocCollapsed(false);
+  document.body.classList.add('has-article-toc');
+
+  toc.querySelectorAll('.article-toc-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = decodeURIComponent(link.getAttribute('href').slice(1));
+      var target = document.getElementById(id);
+      if (!target) return;
+
+      var top = target.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '#' + encodeURIComponent(id));
+      }
+      setActiveArticleTocLink(id);
+    });
+  });
+
+  updateArticleTocActive();
+}
+
+function setActiveArticleTocLink(id) {
+  document.querySelectorAll('.article-toc-link').forEach(function (link) {
+    var isActive = link.getAttribute('href') === '#' + id;
+    link.classList.toggle('is-active', isActive);
+    if (isActive) link.setAttribute('aria-current', 'true');
+    else link.removeAttribute('aria-current');
+  });
+}
+
+function updateArticleTocActive() {
+  if (!articleTocHeadings.length) return;
+
+  var offset = getHeaderOffset() + 18;
+  var current = articleTocHeadings[0];
+
+  articleTocHeadings.forEach(function (heading) {
+    if (heading.getBoundingClientRect().top <= offset) {
+      current = heading;
+    }
+  });
+
+  if (current && current.id) setActiveArticleTocLink(current.id);
 }
 
 /** 滚动感知按钮显隐 */
@@ -489,7 +638,9 @@ function initBlogInteractions() {
   // 滚动进度条
   updateReadingProgress();
   window.addEventListener('scroll', updateReadingProgress, { passive: true });
+  window.addEventListener('scroll', updateArticleTocActive, { passive: true });
   window.addEventListener('resize', updateReadingProgress);
+  window.addEventListener('resize', updateArticleTocActive);
 
   // 滚动感知按钮
   initScrollButtons();

