@@ -11,7 +11,7 @@
 获取变量的整数值，空的 array（**数组**） 返回 0，非空的 array 返回 1 (**True**)
 `pyload=URL/?num[]=a`
 
-**·90**
+# **·90**
 ![PHP4x1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271594095_PHP4x1.png)
 
 **==** 会判断内容是否相同, 不会判断类型是否相同

@@ -1,4 +1,4 @@
-Misc题目
+# Misc题目
 ![image copy 32.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1781272394466_image_copy_32.png)
 第一关是伪加密，用7zip解压即可
 
