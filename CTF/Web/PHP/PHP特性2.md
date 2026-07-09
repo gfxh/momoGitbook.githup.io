@@ -42,43 +42,57 @@ POST:`CTF_SHOW=&CTF[SHOW.COM=&fun=parse_str($a[1])`
 空格没有被过滤
 `?ctf show=ilove36d`
 
+**128**
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783555348429_image.png)
+[call_user_func](https://www.php.net/manual/zh/function.call-user-func.php):第一个参数是被调用的回调函数，其余参数是回调函数的参数。
+
+f1是无数字无大小写字母，f2可控
+有一个特殊函数 [gettext](https://www.php.net/manual/zh/function.gettext.php) 可以被`_`调用，这个函数可以输出一个字符串。
+f2：可以先用phpinfo来判断能不能继续re，[get_defined_vars](https://www.php.net/manual/zh/function.get-defined-vars.php) 可以泄露变量
 
 
+**129** 目录穿越
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783556029823_image.png)
+[stripos](https://www.php.net/manual/zh/function.stripos.php):第二个字符串在第一个字符串首次出现的位置。stripos不区分大小写，strpos区分大小写
+`/var/www/html/`默认目录。
+f=`/ctfshow/../../var/www/html/flag.php `
+
+也可以直接 `php://filter/read=convert.base64-encode/resource=ctfshow/../flag.php`
 
 
+**130**
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783557591858_image.png)
 
+```
+if(preg_match('/.+?ctfshow/is', $f)){       /i是匹配大小写，s是匹配换行  这里的正则 前面至少有一个问号，没有问号直接过
+        die('bye!');
+    }
+    if(stripos($f, 'ctfshow') === FALSE){   /stripos返回的是int型   === 全等不转换类型，int不全等bool型
+        die('bye!!');
+    }
 
+```
+**131**
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783558578878_image.png)
+这一题要使用正则溢出来绕过第一个。也就是说正则匹配超过一定字符数就会自动返回0（false）
+字符串长度大于 **[100014](https://www.laruence.com/2010/06/08/1579.html)** 的时候, 就不会得出正确结果
+```
+<?php
+echo str_repeat('very', '250000').'36Dctfshow';
+```
+pyload就是 复制结果
 
+**132**
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783561954676_image.png)
+先是进一个页面，去看/robots.txt能找到 /admin
+第一层存在username code password
+第二层 `||`满足后面的username=admin就行（或：一个为真就为真）
+第三层 code=admin
+pyload:`?username=admin&code=admin&password=1;`
 
+**133**
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783564626435_image.png)
 
 
 
