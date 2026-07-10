@@ -846,7 +846,7 @@ body.light-mode {
   position: fixed;
   z-index: 1100;
   right: 16px;
-  top: 92px;
+  top: 72px;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -864,7 +864,7 @@ body.light-mode {
   top: calc(100% + 8px);
   right: 0;
   z-index: 100;
-  width: min(320px, calc(100vw - 20px));
+  width: min(195px, calc(100vw - 20px));
   max-height: calc(100vh - 140px);
   overflow-y: auto;
   background: rgba(22, 27, 30, 0.98);
@@ -942,7 +942,7 @@ body.light-mode {
   box-shadow: none;
   padding: 0;
   width: auto;
-  top: 92px;
+  top: 72px;
 }
 
 /* 三横线按钮 */
@@ -977,7 +977,7 @@ body.light-mode {
   top: calc(100% + 8px);
   left: 0;
   z-index: 100;
-  width: min(420px, calc(100vw - 20px));
+  width: min(270px, calc(100vw - 20px));
   max-height: calc(100vh - 140px);
   overflow-y: auto;
   background: rgba(22, 27, 30, 0.98);
