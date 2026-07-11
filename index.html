@@ -55,7 +55,7 @@
       font-weight: 700;
       color: #f3f5f4;
       margin: 0 0 12px;
-      letter-spacing: -0.5px;
+      letter-spacing: 0;
       animation: heroFadeUp 0.8s ease-out both;
       animation-delay: 0.15s;
     }
@@ -77,6 +77,154 @@
       max-width: 560px;
       animation: heroFadeUp 0.8s ease-out both;
       animation-delay: 0.45s;
+    }
+
+    .hero-console {
+      width: min(620px, calc(100vw - 40px));
+      margin-top: 28px;
+      text-align: left;
+      color: #cbd5cf;
+      background: rgba(16, 18, 20, 0.82);
+      border: 1px solid rgba(94, 234, 212, 0.18);
+      border-radius: 8px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.32);
+      overflow: hidden;
+      animation: heroFadeUp 0.8s ease-out both;
+      animation-delay: 0.6s;
+    }
+
+    .console-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 14px;
+      color: #6b7580;
+      font-size: 0.82rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .console-status {
+      color: #5eead4;
+      font-weight: 600;
+    }
+
+    .console-body {
+      padding: 16px;
+    }
+
+    .console-line {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-height: 24px;
+      font-family: Consolas, "SFMono-Regular", "Microsoft YaHei UI", monospace;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .console-prompt {
+      flex: 0 0 auto;
+      color: #5eead4;
+    }
+
+    .console-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: #f5c451;
+      vertical-align: -0.15em;
+      animation: cursorBlink 1s step-end infinite;
+    }
+
+    @keyframes cursorBlink {
+      50% { opacity: 0; }
+    }
+
+    .console-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .console-stat {
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+    }
+
+    .console-stat span {
+      display: block;
+      margin-bottom: 4px;
+      color: #6b7580;
+      font-size: 0.76rem;
+    }
+
+    .console-stat strong {
+      display: block;
+      color: #f3f5f4;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .console-note {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 14px;
+      color: #94a3a6;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .console-note strong {
+      color: #f3f5f4;
+      font-weight: 500;
+    }
+
+    .console-shuffle {
+      flex: 0 0 auto;
+      padding: 6px 10px;
+      color: #101214;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: #5eead4;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .console-shuffle:hover,
+    .console-shuffle:focus-visible {
+      background: #f5c451;
+      transform: translateY(-1px);
+    }
+
+    .console-shuffle:focus-visible {
+      outline: 2px solid rgba(245, 196, 81, 0.55);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .hero-console {
+        margin-top: 22px;
+      }
+
+      .console-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .console-note {
+        align-items: flex-start;
+        flex-direction: column;
+      }
     }
 
     @keyframes heroFadeUp {
@@ -136,115 +284,28 @@
       opacity: 1;
     }
 
-    /* 区段配图：静默融入，不抢夺文字注意力 */
-    .scroll-img {
+    /* 区段媒体：静默融入，不抢夺文字注意力 */
+    .scroll-media {
       display: block;
       max-width: 960px;
       width: 100%;
+      aspect-ratio: 16 / 9;
       border-radius: 12px;
       opacity: 0.12;
       filter: saturate(0.5);
+      object-fit: cover;
+      background: #101214;
       transition: opacity 0.6s ease, filter 0.6s ease;
     }
 
-    .scroll-img:hover {
+    .scroll-media:hover {
       opacity: 0.5;
       filter: saturate(1);
     }
 
     @media (max-width: 640px) {
-      .scroll-img { max-width: 95%; }
+      .scroll-media { max-width: 95%; }
     }
-
-    /* ========================================
-     * Projects 区
-     * ======================================== */
-
-    .projects-section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 80px 24px 80px;
-    }
-
-    .projects-section h2 {
-      text-align: center;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 700;
-      color: #f3f5f4;
-      margin: 0 0 12px;
-    }
-
-    .projects-section .section-sub {
-      text-align: center;
-      font-size: 1.05rem;
-      color: #6b7580;
-      font-weight: 300;
-      margin: 0 0 48px;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 20px;
-    }
-
-    .project-card {
-      display: block;
-      padding: 28px 32px;
-      background: rgba(26, 31, 34, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 16px;
-      text-decoration: none;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    }
-
-    .project-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(94, 234, 212, 0.26);
-      background: rgba(30, 36, 39, 0.9);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-    }
-
-    .project-card h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #f3f5f4;
-      margin: 0 0 8px;
-    }
-
-    .project-card p {
-      font-size: 0.95rem;
-      color: #94a3a6;
-      margin: 0 0 14px;
-      line-height: 1.6;
-    }
-
-    .project-card .card-meta {
-      display: flex;
-      gap: 16px;
-    }
-
-    .project-card .card-meta span {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #6b7580;
-      transition: color 0.2s ease;
-    }
-
-    .project-card:hover .card-meta span {
-      color: #94a3a6;
-    }
-
-    @media (max-width: 440px) {
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-      .project-card {
-        padding: 22px 20px;
-      }
-    }
-
-    
 
     /* ========================================
      * Footer
@@ -277,29 +338,61 @@
     <h1 class="hero-title">Hi, I Am XoBear</h1>
     <p class="hero-subtitle">Aspiring Cybersecurity Developer</p>
     <p class="hero-desc">The first principle of learning is self-study.</p>
+    <div class="hero-console" aria-label="站点状态">
+      <div class="console-bar">
+        <span>xobear@home</span>
+        <span class="console-status">online</span>
+      </div>
+      <div class="console-body">
+        <div class="console-line">
+          <span class="console-prompt">~/notes $</span>
+          <span id="heroTypewriter">scan --focus web-security</span>
+          <span class="console-cursor" aria-hidden="true"></span>
+        </div>
+        <div class="console-stats" aria-label="当前状态">
+          <div class="console-stat">
+            <span>Now</span>
+            <strong>CTF / Java</strong>
+          </div>
+          <div class="console-stat">
+            <span>Mode</span>
+            <strong>Self-study</strong>
+          </div>
+          <div class="console-stat">
+            <span>Next</span>
+            <strong>Write notes</strong>
+          </div>
+        </div>
+        <div class="console-note">
+          <span>Today: <strong id="focusNote">先跑通，再优雅。</strong></span>
+          <button class="console-shuffle" type="button" id="focusShuffle">换一句</button>
+        </div>
+      </div>
+    </div>
     <div class="hero-scroll-hint" id="heroScrollHint" aria-hidden="true"></div>
   </section>
 
   <!-- 滚动文字 -->
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText1" data-text="学习的第一性原理是自学">学习的第一性原理是自学</div>
-    <img src="https://xobear.cn/Git/TU/32.jpg" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+    <img src="https://haowallpaper.com/link//common/file/previewFileImg/18030757596220800" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
   </section>
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText2" data-text="志气要和实力成正比，不然只是一场笑话">志气要和实力成正比，不然只是一场笑话</div>
-    <img src="https://xobear.cn/Git/TU/22.jpg" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+    <img src="https://haowallpaper.com/link//common/file/previewFileImg/17395614222634368" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
   </section>
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText2" data-text="通宵写 Exp 不为虚名，只为解开谜题那一刻的释然">通宵写 Exp 不为虚名，只为解开谜题那一刻的释然</div>
-    <img src="https://xobear.cn/Git/TU/12.jpg" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+    <img src="https://haowallpaper.com/link//common/file/previewFileImg/17202184696024448" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+
   </section>
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText1" data-text="这是一条漫长的路">这是一条漫长的路</div>
-    <img src="https://xobear.cn/Git/TU/42.jpg" alt="壁纸" class="scroll-img" loading="lazy" decoding="async">
+    <video class="scroll-media" autoplay muted loop playsinline preload="metadata" aria-label="动态壁纸">
+      <source src="https://haowallpaper.com/link//common/file/previewFileImg/19121996127753088" type="video/mp4">
+      你的浏览器不支持视频播放。
+    </video>
   </section>
-
-  
-
   <footer class="home-footer">
     <p>&copy; 2026 XoBear. All rights reserved.</p>
   </footer>
@@ -381,49 +474,59 @@
       }, { passive: true });
     })();
 
+    (function initHeroConsole() {
+      const typeTarget = document.getElementById('heroTypewriter');
+      const noteTarget = document.getElementById('focusNote');
+      const shuffleBtn = document.getElementById('focusShuffle');
+      if (!typeTarget || !noteTarget || !shuffleBtn) return;
 
-    (function loadProjects() {
-      const grid = document.getElementById('projectsGrid');
-      if (!grid) return;
-
-      const projects = [
-        {
-          name: 'momoGitbook',
-          desc: 'Personal knowledge base & CTF writeups, built with vanilla HTML/CSS/JS and markdown-it.',
-          demo: null,
-          source: 'https://github.com/gfxh/momoGitbook.githup.io'
-        },
-        {
-          name: 'Coming Soon',
-          desc: 'More projects on the way — security tools, CTF challenges, and automation scripts.',
-          demo: null,
-          source: null
-        }
+      const commands = [
+        'scan --focus web-security',
+        'open ./CTF/Web/PHP',
+        'git commit -m "keep learning"',
+        'java --practice daily'
+      ];
+      const notes = [
+        '先跑通，再优雅。',
+        '不会就查，查完就记。',
+        '每天补一个小漏洞。',
+        '把复杂问题拆小。',
+        '今天也别空手下线。'
       ];
 
-      var html = '';
-      projects.forEach(function (p) {
-        html += '<div class="project-card">';
-        html += '<h3>' + escapeHtml(p.name) + '</h3>';
-        html += '<p>' + escapeHtml(p.desc) + '</p>';
-        html += '<div class="card-meta">';
-        if (p.demo) {
-          html += '<a href="' + escapeHtml(p.demo) + '" target="_blank" rel="noopener noreferrer"><span>Demo</span></a>';
-        }
-        if (p.source) {
-          html += '<a href="' + escapeHtml(p.source) + '" target="_blank" rel="noopener noreferrer"><span>Source</span></a>';
-        }
-        html += '</div>';
-        html += '</div>';
-      });
-      grid.innerHTML = html;
+      let commandIndex = 0;
+      let noteIndex = 0;
+
+      function typeCommand(text, done) {
+        let charIndex = 0;
+        typeTarget.textContent = '';
+        const timer = window.setInterval(function () {
+          typeTarget.textContent = text.slice(0, charIndex);
+          charIndex += 1;
+          if (charIndex > text.length) {
+            window.clearInterval(timer);
+            window.setTimeout(done, 1300);
+          }
+        }, 58);
+      }
+
+      function loopCommands() {
+        typeCommand(commands[commandIndex], function () {
+          commandIndex = (commandIndex + 1) % commands.length;
+          loopCommands();
+        });
+      }
+
+      function nextNote() {
+        noteIndex = (noteIndex + 1) % notes.length;
+        noteTarget.textContent = notes[noteIndex];
+      }
+
+      shuffleBtn.addEventListener('click', nextNote);
+      loopCommands();
     })();
 
-    function escapeHtml(str) {
-      var div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
+
   </script>
 
 </body>
