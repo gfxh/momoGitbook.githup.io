@@ -227,6 +227,171 @@
       }
     }
 
+    .mini-widgets {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      width: min(390px, calc(100vw - 36px));
+      padding: 13px;
+      color: #cbd5cf;
+      text-align: left;
+      background: rgba(16, 18, 20, 0.84);
+      border: 1px solid rgba(94, 234, 212, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      overflow: hidden;
+    }
+
+    .mini-widget {
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    }
+
+    .mini-widget:hover {
+      background: transparent;
+    }
+
+    .mini-widget span {
+      display: block;
+      margin-bottom: 6px;
+      color: #6b7580;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .mini-widget strong {
+      display: block;
+      color: #f3f5f4;
+      font-size: 1.1rem;
+      line-height: 1.15;
+      word-break: break-word;
+    }
+
+    .mini-widget small {
+      display: block;
+      margin-top: 5px;
+      color: #94a3a6;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+
+    .mini-widget button {
+      min-height: 28px;
+      padding: 0 9px;
+      color: #101214;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #5eead4;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .mini-widget button:hover,
+    .mini-widget button:focus-visible {
+      background: #f5c451;
+      transform: translateY(-1px);
+    }
+
+    .mini-widget button:focus-visible {
+      outline: 2px solid rgba(245, 196, 81, 0.55);
+      outline-offset: 3px;
+    }
+
+    .mini-widget-top {
+      display: grid;
+      grid-template-columns: minmax(110px, 0.8fr) minmax(0, 1.2fr);
+      gap: 12px;
+      align-items: stretch;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .mini-widget-clock,
+    .mini-widget-quote {
+      min-height: 76px;
+    }
+
+    .mini-widget-clock strong {
+      color: #5eead4;
+      font-family: Consolas, "SFMono-Regular", "Microsoft YaHei UI", monospace;
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .mini-widget-quote {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding-left: 12px;
+      border-left: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .mini-widget-quote span {
+      margin-bottom: 4px;
+    }
+
+    .mini-widget-quote strong {
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .mini-widget-page {
+      padding-top: 11px;
+    }
+
+    .mini-widget-page .mini-progress-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mini-progress-track {
+      height: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+    }
+
+    .mini-progress-track i {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #5eead4, #f5c451);
+      border-radius: inherit;
+      transition: width 0.2s ease;
+    }
+
+    @media (max-width: 640px) {
+      .mini-widgets {
+        right: 12px;
+        bottom: 12px;
+        width: min(340px, calc(100vw - 24px));
+      }
+
+      .mini-widget-top {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-widget-quote {
+        padding-top: 10px;
+        padding-left: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        border-left: 0;
+      }
+    }
+
     @keyframes heroFadeUp {
       from { opacity: 0; transform: translateY(28px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -375,27 +540,55 @@
   <!-- 滚动文字 -->
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText1" data-text="学习的第一性原理是自学">学习的第一性原理是自学</div>
-    <img src="https://haowallpaper.com/link//common/file/previewFileImg/18030757596220800" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+    <img src="assets/media/home/wallpaper-18030757596220800.webp" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
   </section>
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText2" data-text="志气要和实力成正比，不然只是一场笑话">志气要和实力成正比，不然只是一场笑话</div>
-    <img src="https://haowallpaper.com/link//common/file/previewFileImg/17395614222634368" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+    <img src="assets/media/home/wallpaper-17395614222634368.webp" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
   </section>
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText2" data-text="通宵写 Exp 不为虚名，只为解开谜题那一刻的释然">通宵写 Exp 不为虚名，只为解开谜题那一刻的释然</div>
-    <img src="https://haowallpaper.com/link//common/file/previewFileImg/17202184696024448" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+    <img src="assets/media/home/wallpaper-17202184696024448.webp" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
 
   </section>
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText1" data-text="这是一条漫长的路">这是一条漫长的路</div>
     <video class="scroll-media" autoplay muted loop playsinline preload="metadata" aria-label="动态壁纸">
-      <source src="https://haowallpaper.com/link//common/file/previewFileImg/19121996127753088" type="video/mp4">
+      <source src="assets/media/home/wallpaper-19121996127753088.mp4" type="video/mp4">
       你的浏览器不支持视频播放。
     </video>
   </section>
   <footer class="home-footer">
     <p>&copy; 2026 XoBear. All rights reserved.</p>
   </footer>
+
+  <aside class="mini-widgets" aria-label="首页小挂件">
+    <div class="mini-widget-top">
+      <div class="mini-widget mini-widget-clock">
+        <div>
+          <span>Clock</span>
+          <strong id="widgetClock">--:--</strong>
+        </div>
+        <small id="widgetDate">Loading date</small>
+      </div>
+      <div class="mini-widget mini-widget-quote">
+        <div>
+          <span>Quote</span>
+          <strong id="widgetQuote">慢一点，但别停。</strong>
+        </div>
+        <button type="button" id="widgetQuoteNext">换一句</button>
+      </div>
+    </div>
+    <div class="mini-widget mini-widget-page">
+      <div class="mini-progress-row">
+        <span>Page</span>
+        <strong id="widgetProgressText">0%</strong>
+      </div>
+      <div class="mini-progress-track" aria-hidden="true">
+        <i id="widgetProgressBar"></i>
+      </div>
+    </div>
+  </aside>
 
   <script>
 
@@ -491,7 +684,19 @@
         '不会就查，查完就记。',
         '每天补一个小漏洞。',
         '把复杂问题拆小。',
-        '今天也别空手下线。'
+        '今天也别空手下线。',
+        '今天也要加油！',
+        '再来一题吧。',
+        '别怕慢，怕停。',
+        '先动手，再优化。',
+        '把坑写成路标。',
+        '小步快跑，稳住节奏。',
+        '卡住时先复现。',
+        '先抓主线，再补细节。',
+        '今天少留一个 TODO。',
+        '让笔记比记忆可靠。',
+        '写清楚，就是进步。',
+        '别急，答案在过程里。'
       ];
 
       let commandIndex = 0;
@@ -524,6 +729,71 @@
 
       shuffleBtn.addEventListener('click', nextNote);
       loopCommands();
+    })();
+
+    (function initMiniWidgets() {
+      const clockTarget = document.getElementById('widgetClock');
+      const dateTarget = document.getElementById('widgetDate');
+      const quoteTarget = document.getElementById('widgetQuote');
+      const quoteBtn = document.getElementById('widgetQuoteNext');
+      const progressText = document.getElementById('widgetProgressText');
+      const progressBar = document.getElementById('widgetProgressBar');
+      if (!clockTarget || !dateTarget || !quoteTarget || !quoteBtn || !progressText || !progressBar) return;
+
+      const quotes = [
+        '慢一点，但别停。',
+        '先记录，再遗忘。',
+        '一个报错，一次升级。',
+        '把复杂问题拆小。',
+        '今天也别空手下线。',
+        '思路清楚，代码就不慌。',
+        '把坑写成路标。',
+        '先复现，再判断。',
+        '小题也认真收尾。',
+        '别让灵感只路过。',
+        '会了也要写下来。',
+        '多问一个为什么。',
+        '保持好奇，保持手感。',
+        '把复杂拆到能开始。',
+        '先完成，再漂亮。',
+        '每次提交都算数。'
+      ];
+      let quoteIndex = Math.floor(Math.random() * quotes.length);
+
+      function updateClock() {
+        const now = new Date();
+        clockTarget.textContent = now.toLocaleTimeString('zh-CN', {
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        dateTarget.textContent = now.toLocaleDateString('zh-CN', {
+          month: 'long',
+          day: 'numeric',
+          weekday: 'short'
+        });
+      }
+
+      function updateProgress() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const percent = Math.round(Math.min(1, Math.max(0, scrollTop / scrollable)) * 100);
+        progressText.textContent = percent + '%';
+        progressBar.style.width = percent + '%';
+      }
+
+      function nextQuote() {
+        quoteIndex = (quoteIndex + 1) % quotes.length;
+        quoteTarget.textContent = quotes[quoteIndex];
+      }
+
+      quoteTarget.textContent = quotes[quoteIndex];
+      quoteBtn.addEventListener('click', nextQuote);
+      updateClock();
+      updateProgress();
+      window.setInterval(updateClock, 1000);
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
     })();
 
 
