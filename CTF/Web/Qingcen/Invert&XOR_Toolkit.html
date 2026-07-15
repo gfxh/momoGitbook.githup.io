@@ -495,6 +495,11 @@
             background: linear-gradient(135deg, #2d2a1a, #252a32);
             border-bottom-color: var(--accent2);
             color: var(--accent2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .xor-results {
             padding: 14px 18px;
@@ -584,6 +589,256 @@
             white-space: nowrap;
         }
         .xor-filter-label input { cursor: pointer; accent-color: var(--accent2); }
+        .xor-filter-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .xor-config-panel {
+            background: #1a1d23;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 18px;
+        }
+        .xor-config-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .xor-config-row + .xor-config-row {
+            margin-top: 8px;
+        }
+        .xor-config-label {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            white-space: nowrap;
+        }
+        .xor-filter-input {
+            flex: 1;
+            min-width: 240px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            outline: none;
+        }
+        .xor-filter-input:focus {
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 3px rgba(229, 192, 123, 0.1);
+        }
+        .xor-preset-btn {
+            background: var(--surface2);
+            border: 1px dashed var(--border);
+            color: var(--text2);
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            padding: 6px 9px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .xor-preset-btn:hover {
+            border-color: var(--accent2);
+            color: var(--accent2);
+        }
+        .xor-decode-panel {
+            border-top: 1px solid var(--border);
+            padding: 14px 18px 16px;
+        }
+        .xor-decode-title {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--accent2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .xor-decode-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .xor-decode-row input {
+            flex: 1;
+            background: #1a1d23;
+            border: 1px solid var(--border);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            outline: none;
+            letter-spacing: 0.2px;
+        }
+        .xor-decode-row input:focus {
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 3px rgba(229, 192, 123, 0.1);
+        }
+        .xor-decode-output {
+            margin-top: 10px;
+        }
+        .xor-result-line {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .xor-result-text {
+            color: var(--green);
+            font-family: var(--font-mono);
+            word-break: break-all;
+        }
+        .xor-error {
+            color: var(--red);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            padding: 8px 0;
+        }
+        .xor-note-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin: 8px 0;
+        }
+        .xor-note {
+            background: #1a1d23;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+            min-width: 0;
+        }
+        .xor-note-title {
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
+        }
+        .xor-note-value {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text);
+            word-break: break-all;
+        }
+        .xor-note-value.good { color: var(--green); }
+        .xor-note-value.bad { color: var(--red); }
+        .xor-note-value.info { color: var(--accent); }
+        .xor-filter-panel {
+            background: #1a1d23;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            margin: 10px 0;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text2);
+        }
+        .xor-filter-panel.good { border-color: rgba(152, 195, 121, 0.45); }
+        .xor-filter-panel.bad { border-color: rgba(224, 108, 117, 0.5); }
+        .xor-filter-title {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .xor-status {
+            display: inline-block;
+            border-radius: 4px;
+            padding: 2px 7px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .xor-status.good { background: rgba(152, 195, 121, 0.14); color: var(--green); }
+        .xor-status.bad { background: rgba(224, 108, 117, 0.14); color: var(--red); }
+        .xor-hit-list {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .xor-hit {
+            background: rgba(224, 108, 117, 0.12);
+            border: 1px solid rgba(224, 108, 117, 0.35);
+            color: var(--red);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+        }
+        .xor-pair-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            margin-top: 10px;
+        }
+        .xor-pair-head {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+        }
+        .xor-pair-role {
+            color: var(--accent2);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .xor-byte-mini {
+            color: var(--text2);
+            font-size: 0.72rem;
+        }
+
+        @media (max-width: 768px) {
+            .xor-section .detail-header {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            .xor-filter-group {
+                width: 100%;
+            }
+            .xor-filter-input {
+                min-width: 0;
+                width: 100%;
+            }
+            .xor-decode-row {
+                flex-wrap: wrap;
+            }
+            .xor-decode-row input,
+            .xor-decode-row .btn {
+                width: 100%;
+            }
+            .xor-copy-row {
+                flex-wrap: wrap;
+            }
+            .xor-copy-row .xor-copy-input {
+                flex-basis: 100%;
+            }
+            .xor-copy-row .btn {
+                flex: 1;
+                min-width: 88px;
+            }
+            .xor-note-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -709,21 +964,61 @@
             <h1>异或构造</h1>
             <span class="subtitle">HEX XOR Construction</span>
             <br>
-            <span class="badge"> WebShell  绕过</span>
-            <span class="badge">只可以控制B侧的字符为字母、数字或符号</span>
+            <span class="badge">字符串异或构造</span>
+            <span class="badge">可配置 XOR 原材料过滤</span>
         </div>
         <div class="detail-section xor-section" id="xorSection">
             <div class="detail-header">
                 🔮 异或构造 <span style="font-weight:400;font-size:0.65rem;color:var(--text2);">HEX XOR Construction</span>
-                <span style="float:right;display:flex;gap:12px;align-items:center;">
-                    <span style="font-size:0.65rem;color:var(--text2);">只用：</span>
+                <span class="xor-filter-group">
+                    <span style="font-size:0.65rem;color:var(--text2);">B侧优先：</span>
                     <label class="xor-filter-label"><input type="checkbox" id="xorAllowLetters"> 字母</label>
                     <label class="xor-filter-label"><input type="checkbox" id="xorAllowDigits"> 数字</label>
                     <label class="xor-filter-label"><input type="checkbox" id="xorAllowSymbols" checked> 符号</label>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowRaw" checked> 原始字节</label>
                 </span>
+            </div>
+            <div class="xor-config-panel">
+                <div class="xor-config-row">
+                    <span class="xor-config-label">过滤字符</span>
+                    <input
+                    class="xor-filter-input"
+                    id="xorFilterInput"
+                    type="text"
+                    placeholder="可填 a-zA-Z0-9+-._|${}~%&;，支持范围、\\xHH、%HH"
+                    spellcheck="false"
+                    autocomplete="off"
+                    >
+                    <button class="xor-preset-btn" id="btnXorFilterPreset" type="button">常见 CTF</button>
+                    <button class="xor-preset-btn" id="btnXorFilterClear" type="button">清空</button>
+                </div>
+                <div class="xor-config-row">
+                    <span class="xor-config-label">生成避开</span>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorAvoidA" checked> A 侧</label>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorAvoidB" checked> B 侧</label>
+                    <span class="xor-config-label">分析检查</span>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorCheckWhole" checked> 整段表达式</label>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorCheckSides" checked> A/B 原材料</label>
+                </div>
             </div>
             <div class="xor-results" id="xorResults">
                 <div class="xor-empty">在上方输入明文后自动生成异或构造…</div>
+            </div>
+            <div class="xor-decode-panel">
+                <div class="xor-decode-title">XOR Decode / Analyze</div>
+                <div class="xor-decode-row">
+                    <input
+                    type="text"
+                    id="xorExprInput"
+                    placeholder="可贴单个 'A'^'B'，也可贴完整表达式：*(('A'^'B')('C'^'D'))*"
+                    spellcheck="false"
+                    autocomplete="off"
+                    >
+                    <button class="btn btn-decode" id="btnXorDecode" title="异或解码">↔ 解码</button>
+                </div>
+                <div class="xor-decode-output" id="xorDecodeOutput">
+                    <div class="xor-empty">粘贴 XOR 表达式后解码…</div>
+                </div>
             </div>
         </div>
 
@@ -754,8 +1049,19 @@
             let currentPlaintext = '';
 
             // ============ 工具函数 ============
+            const utf8Encoder = new TextEncoder();
+            const utf8Decoder = new TextDecoder('utf-8', { fatal: false });
+
+            function stringToBytes(str) {
+                return Array.from(utf8Encoder.encode(str));
+            }
+
+            function bytesToText(bytes) {
+                return utf8Decoder.decode(Uint8Array.from(bytes));
+            }
+
             function byteToBin(b) {
-                return b.toString(2).padStart(8, '0');
+                return (b & 0xFF).toString(2).padStart(8, '0');
             }
 
             function isPrintableAscii(byte) {
@@ -763,15 +1069,15 @@
             }
 
             function byteToDisplayChar(byte) {
-                if (isPrintableAscii(byte)) {
-                    return String.fromCharCode(byte);
-                }
                 // 常见转义
                 if (byte === 0x20) return '␣';
                 if (byte === 0x0a) return '\\n';
                 if (byte === 0x0d) return '\\r';
                 if (byte === 0x09) return '\\t';
                 if (byte === 0x00) return '\\0';
+                if (isPrintableAscii(byte)) {
+                    return String.fromCharCode(byte);
+                }
                 return '\\x' + byte.toString(16).toUpperCase().padStart(2, '0');
             }
 
@@ -810,14 +1116,16 @@
                 if (plain === '') {
                     return { bytes: [], url: '', rawHex: '' };
                 }
+                const plainBytes = stringToBytes(plain);
                 const bytes = [];
                 const results = [];
-                for (let i = 0; i < plain.length; i++) {
-                    const origByte = plain.charCodeAt(i);
+                for (let i = 0; i < plainBytes.length; i++) {
+                    const origByte = plainBytes[i];
                     const invByte = invertByte(origByte);
                     bytes.push(invByte);
                     results.push({
-                        origChar: plain[i],
+                        origChar: byteToDisplayChar(origByte),
+                        origByte: origByte,
                         origDec: origByte,
                         origHex: origByte.toString(16).toUpperCase().padStart(2, '0'),
                         origBin: byteToBin(origByte),
@@ -869,10 +1177,10 @@
                     return { error: parsed.error || '请输入有效的URL编码', results: [], plain: '', rawHex: '' };
                 }
                 const results = [];
-                const plainChars = [];
+                const plainBytes = [];
                 for (const invByte of parsed.bytes) {
                     const origByte = invertByte(invByte);
-                    plainChars.push(String.fromCharCode(origByte));
+                    plainBytes.push(origByte);
                     results.push({
                         invByte: invByte,
                         invHex: invByte.toString(16).toUpperCase().padStart(2, '0'),
@@ -881,11 +1189,11 @@
                         origByte: origByte,
                         origHex: origByte.toString(16).toUpperCase().padStart(2, '0'),
                         origBin: byteToBin(origByte),
-                        origChar: String.fromCharCode(origByte),
+                        origChar: byteToDisplayChar(origByte),
                         origDec: origByte,
                     });
                 }
-                const plain = plainChars.join('');
+                const plain = bytesToText(plainBytes);
                 const rawHex = parsed.bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
                 return { results, plain, rawHex, bytes: parsed.bytes, error: null };
             }
@@ -912,7 +1220,7 @@
                     </tr>`;
                 });
                 detailBody.innerHTML = html;
-                charCount.textContent = `${results.length} 个字符`;
+                charCount.textContent = `${results.length} 个字节`;
             }
 
             function renderDecodeDetail(results) {
@@ -941,8 +1249,16 @@
 
             function escapeHTML(str) {
                 const div = document.createElement('div');
-                div.textContent = str;
+                div.textContent = String(str);
                 return div.innerHTML;
+            }
+
+            function escapeAttr(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
             }
 
             // ============ 更新 PHP 预览 ============
@@ -1178,6 +1494,18 @@
             const xorAllowLetters = document.getElementById('xorAllowLetters');
             const xorAllowDigits  = document.getElementById('xorAllowDigits');
             const xorAllowSymbols = document.getElementById('xorAllowSymbols');
+            const xorAllowRaw = document.getElementById('xorAllowRaw');
+            const xorFilterInput = document.getElementById('xorFilterInput');
+            const xorAvoidA = document.getElementById('xorAvoidA');
+            const xorAvoidB = document.getElementById('xorAvoidB');
+            const xorCheckWhole = document.getElementById('xorCheckWhole');
+            const xorCheckSides = document.getElementById('xorCheckSides');
+            const btnXorFilterPreset = document.getElementById('btnXorFilterPreset');
+            const btnXorFilterClear = document.getElementById('btnXorFilterClear');
+            const xorExprInput = document.getElementById('xorExprInput');
+            const btnXorDecode = document.getElementById('btnXorDecode');
+            const xorDecodeOutput = document.getElementById('xorDecodeOutput');
+            let xorDecodeTimeout;
 
             function isLetter(c)   { return /^[a-zA-Z]$/.test(c); }
             function isDigit(c)    { return /^[0-9]$/.test(c); }
@@ -1199,18 +1527,604 @@
                 return '不可打印';
             }
 
+            function isSafeStringByte(byte) {
+                return byte > 0 && byte <= 255 && byte !== 0x27 && byte !== 0x5C;
+            }
+
+            function isPreferredBByte(byte) {
+                if (!isSafeStringByte(byte) || byte < 32 || byte > 126) return false;
+                return isAllowedType(String.fromCharCode(byte));
+            }
+
+            function isRawBByte(byte) {
+                return xorAllowRaw.checked && isSafeStringByte(byte);
+            }
+
             function findCleanA(targetByte) {
-                // 遍历 A=1..127 所有值，只要 B 侧在允许类型内就选它（A 侧不做限制，可以是控制字符）
-                for (let a = 1; a <= 127; a++) {
-                    const b = a ^ targetByte;
-                    if (b < 32 || b > 126) continue;
-                    const bChar = String.fromCharCode(b);
-                    if (isAllowedType(bChar)) {
-                        return { a, b };
+                const candidates = [];
+                for (let a = 1; a <= 255; a++) {
+                    if (!isSafeStringByte(a) || !bytePassesFilter(a, 'A')) continue;
+                    candidates.push(a);
+                }
+                const passesB = (byte, rawFallback) =>
+                    isSafeStringByte(byte) &&
+                    bytePassesFilter(byte, 'B') &&
+                    (rawFallback ? isRawBByte(byte) : isPreferredBByte(byte));
+
+                for (const rawFallback of [false, true]) {
+                    for (const a of candidates) {
+                        const b = a ^ targetByte;
+                        if (passesB(b, rawFallback)) {
+                            return { a, b, rawFallback };
+                        }
                     }
                 }
                 // 找不到：用递增序列兜底
                 return null;
+            }
+
+            function bytesToHex(bytes) {
+                return bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
+            }
+
+            function bytesToUrl(bytes) {
+                return bytes.map(b => '%' + b.toString(16).toUpperCase().padStart(2, '0')).join('');
+            }
+
+            function bytesToDisplayString(bytes) {
+                return bytes.map(byteToDisplayChar).join('');
+            }
+
+            function byteStringToBytes(str) {
+                const bytes = [];
+                for (let i = 0; i < str.length;) {
+                    const codePoint = str.codePointAt(i);
+                    const rawChar = String.fromCodePoint(codePoint);
+                    if (codePoint <= 0xFF) {
+                        bytes.push(codePoint);
+                    } else {
+                        bytes.push(...stringToBytes(rawChar));
+                    }
+                    i += rawChar.length;
+                }
+                return bytes;
+            }
+
+            function bytesToByteString(bytes) {
+                return bytes.map(byte => String.fromCharCode(byte)).join('');
+            }
+
+            function percentDecodeToByteString(str) {
+                return str.replace(/%([0-9a-fA-F]{2})/g, (_, hex) =>
+                    String.fromCharCode(parseInt(hex, 16))
+                );
+            }
+
+            function urlEncodeByteString(str) {
+                return bytesToUrl(byteStringToBytes(str)).toLowerCase();
+            }
+
+            function parseFilterBytes(source) {
+                const bytes = new Set();
+                const text = source || '';
+                for (let i = 0; i < text.length;) {
+                    const ch = text[i];
+                    if (ch === '\\' && text[i + 1] && text[i + 1].toLowerCase() === 'x') {
+                        const hex = text.slice(i + 2, i + 4);
+                        if (/^[0-9a-fA-F]{2}$/.test(hex)) {
+                            bytes.add(parseInt(hex, 16));
+                            i += 4;
+                            continue;
+                        }
+                    }
+                    if (ch === '%') {
+                        const hex = text.slice(i + 1, i + 3);
+                        if (/^[0-9a-fA-F]{2}$/.test(hex)) {
+                            bytes.add(parseInt(hex, 16));
+                            i += 3;
+                            continue;
+                        }
+                    }
+
+                    const next = text[i + 1];
+                    const end = text[i + 2];
+                    if (next === '-' && end && ch !== '\\') {
+                        const startCode = ch.charCodeAt(0);
+                        const endCode = end.charCodeAt(0);
+                        if (startCode <= 0xFF && endCode <= 0xFF && startCode <= endCode) {
+                            for (let b = startCode; b <= endCode; b++) bytes.add(b);
+                            i += 3;
+                            continue;
+                        }
+                    }
+
+                    const codePoint = text.codePointAt(i);
+                    const rawChar = String.fromCodePoint(codePoint);
+                    byteStringToBytes(rawChar).forEach(byte => bytes.add(byte));
+                    i += rawChar.length;
+                }
+                return bytes;
+            }
+
+            function getXorFilterConfig() {
+                const raw = xorFilterInput.value.trim();
+                return {
+                    raw,
+                    label: raw || '未设置',
+                    bytes: parseFilterBytes(raw),
+                    avoidA: xorAvoidA.checked,
+                    avoidB: xorAvoidB.checked,
+                    checkWhole: xorCheckWhole.checked,
+                    checkSides: xorCheckSides.checked,
+                };
+            }
+
+            function bytePassesFilter(byte, side) {
+                const cfg = getXorFilterConfig();
+                if (side === 'A' && !cfg.avoidA) return true;
+                if (side === 'B' && !cfg.avoidB) return true;
+                return !cfg.bytes.has(byte);
+            }
+
+            function findFilterHits(bytes) {
+                const cfg = getXorFilterConfig();
+                const hits = [];
+                bytes.forEach((byte, index) => {
+                    if (cfg.bytes.has(byte)) {
+                        hits.push({ byte, index });
+                    }
+                });
+                return hits;
+            }
+
+            function renderFilterHits(hits, max = 18) {
+                if (!hits.length) return '<span style="color:var(--green);">未命中黑名单</span>';
+                const visibleHits = hits.slice(0, max).map(hit =>
+                    `<span class="xor-hit">#${hit.index + 1} ${escapeHTML(byteToDisplayChar(hit.byte))} / 0x${hit.byte.toString(16).toUpperCase().padStart(2, '0')}</span>`
+                ).join('');
+                const more = hits.length > max ? `<span class="xor-hit">+${hits.length - max} more</span>` : '';
+                return `<div class="xor-hit-list">${visibleHits}${more}</div>`;
+            }
+
+            function renderXorFilterPanel(decodedExpr, label = '整段表达式') {
+                const cfg = getXorFilterConfig();
+                if (!cfg.raw || !cfg.checkWhole) return '';
+                const hits = findFilterHits(byteStringToBytes(decodedExpr));
+                const ok = hits.length === 0;
+                return `
+                    <div class="xor-filter-panel ${ok ? 'good' : 'bad'}">
+                        <div class="xor-filter-title">
+                            <span>${escapeHTML(label)}过滤检查</span>
+                            <span class="xor-status ${ok ? 'good' : 'bad'}">${ok ? 'PASS' : 'BLOCKED'}</span>
+                        </div>
+                        <div>检查对象：URL 解码后的${escapeHTML(label)}；过滤字符：${escapeHTML(cfg.label)}</div>
+                        ${renderFilterHits(hits)}
+                    </div>`;
+            }
+
+            function readQuotedToken(source, start) {
+                const quote = source[start];
+                let text = '';
+                let escaping = false;
+                for (let i = start + 1; i < source.length; i++) {
+                    const ch = source[i];
+                    if (escaping) {
+                        text += '\\' + ch;
+                        escaping = false;
+                        continue;
+                    }
+                    if (ch === '\\') {
+                        escaping = true;
+                        continue;
+                    }
+                    if (ch === quote) {
+                        return { quote, text, start, end: i + 1 };
+                    }
+                    text += ch;
+                }
+                return { error: '引号没有闭合' };
+            }
+
+            function skipSpaces(source, pos) {
+                while (pos < source.length && /\s/.test(source[pos])) pos++;
+                return pos;
+            }
+
+            function extractQuotedXorPairs(source) {
+                const pairs = [];
+                for (let i = 0; i < source.length; i++) {
+                    const ch = source[i];
+                    if (ch !== "'" && ch !== '"') continue;
+                    const left = readQuotedToken(source, i);
+                    if (left.error) return { error: left.error, pairs: [] };
+                    let pos = skipSpaces(source, left.end);
+                    if (source[pos] !== '^') {
+                        i = left.end - 1;
+                        continue;
+                    }
+                    pos = skipSpaces(source, pos + 1);
+                    if (source[pos] !== "'" && source[pos] !== '"') {
+                        i = left.end - 1;
+                        continue;
+                    }
+                    const right = readQuotedToken(source, pos);
+                    if (right.error) return { error: right.error, pairs: [] };
+                    pairs.push({ left, right, start: left.start, end: right.end });
+                    i = right.end - 1;
+                }
+                return { error: null, pairs };
+            }
+
+            function stripOperandQuotes(raw) {
+                const part = raw.trim();
+                if (part.length >= 2) {
+                    const first = part[0];
+                    const last = part[part.length - 1];
+                    if ((first === "'" && last === "'") || (first === '"' && last === '"')) {
+                        return { text: part.slice(1, -1), quoted: true };
+                    }
+                }
+                return { text: part, quoted: false };
+            }
+
+            function parseXorSource(sourceRaw, quoted, label) {
+                const source = quoted ? sourceRaw : sourceRaw.trim();
+                if (!source) {
+                    return { error: `${label} 为空`, bytes: [] };
+                }
+
+                if (!quoted) {
+                    const compactHex = source.replace(/[\s,]+/g, '');
+                    if (/^[0-9a-fA-F]+$/.test(compactHex)) {
+                        if (compactHex.length % 2 !== 0) {
+                            return { error: `${label} 的 HEX 长度必须为偶数`, bytes: [] };
+                        }
+                        const bytes = [];
+                        for (let i = 0; i < compactHex.length; i += 2) {
+                            bytes.push(parseInt(compactHex.slice(i, i + 2), 16));
+                        }
+                        return { error: null, bytes };
+                    }
+                }
+
+                const bytes = [];
+                for (let i = 0; i < source.length;) {
+                    const ch = source[i];
+                    if (!quoted && /[\s,]/.test(ch)) {
+                        i++;
+                        continue;
+                    }
+                    if (ch === '%') {
+                        const hex = source.slice(i + 1, i + 3);
+                        if (!/^[0-9a-fA-F]{2}$/.test(hex)) {
+                            return { error: `${label} 中存在无效的 %XX 字节`, bytes: [] };
+                        }
+                        bytes.push(parseInt(hex, 16));
+                        i += 3;
+                        continue;
+                    }
+                    if (ch === '\\' && source[i + 1] && source[i + 1].toLowerCase() === 'x') {
+                        const hex = source.slice(i + 2, i + 4);
+                        if (!/^[0-9a-fA-F]{2}$/.test(hex)) {
+                            return { error: `${label} 中存在无效的 \\xHH 字节`, bytes: [] };
+                        }
+                        bytes.push(parseInt(hex, 16));
+                        i += 4;
+                        continue;
+                    }
+
+                    const codePoint = source.codePointAt(i);
+                    const rawChar = String.fromCodePoint(codePoint);
+                    if (codePoint <= 0xFF) {
+                        bytes.push(codePoint);
+                    } else {
+                        bytes.push(...stringToBytes(rawChar));
+                    }
+                    i += rawChar.length;
+                }
+
+                return { error: null, bytes };
+            }
+
+            function parseXorOperand(raw, label) {
+                const stripped = stripOperandQuotes(raw);
+                return parseXorSource(stripped.text, stripped.quoted, label);
+            }
+
+            function splitXorExpression(expr) {
+                const source = expr.trim();
+                if (!source) {
+                    return { error: '请输入 XOR 表达式' };
+                }
+
+                const parts = [];
+                let current = '';
+                let quote = null;
+                let escaping = false;
+
+                for (let i = 0; i < source.length; i++) {
+                    const ch = source[i];
+                    if (quote) {
+                        current += ch;
+                        if (escaping) {
+                            escaping = false;
+                            continue;
+                        }
+                        if (ch === '\\') {
+                            escaping = true;
+                            continue;
+                        }
+                        if (ch === quote) {
+                            quote = null;
+                        }
+                        continue;
+                    }
+                    if (ch === "'" || ch === '"') {
+                        quote = ch;
+                        current += ch;
+                        continue;
+                    }
+                    if (ch === '^') {
+                        parts.push(current);
+                        current = '';
+                        continue;
+                    }
+                    current += ch;
+                }
+
+                if (quote) {
+                    return { error: '引号没有闭合' };
+                }
+                parts.push(current);
+                if (parts.length !== 2) {
+                    return { error: '表达式需要且只需要一个 ^' };
+                }
+                return { error: null, left: parts[0], right: parts[1] };
+            }
+
+            function renderXorDecodeEmpty() {
+                xorDecodeOutput.innerHTML = '<div class="xor-empty">粘贴 XOR 表达式后解码…</div>';
+            }
+
+            function renderXorDecodeError(message) {
+                xorDecodeOutput.innerHTML = `<div class="xor-error">⚠ ${escapeHTML(message)}</div>`;
+            }
+
+            function renderXorDecodeResult(aBytes, bBytes, resultBytes) {
+                const text = bytesToText(resultBytes);
+                const displayText = bytesToDisplayString(resultBytes);
+                const resultHex = bytesToHex(resultBytes);
+                const resultUrl = bytesToUrl(resultBytes).toLowerCase();
+                let tableHtml =
+                    '<div style="overflow-x:auto;margin-top:4px;"><table class="detail-table" style="min-width:760px;font-size:0.78rem;">' +
+                    '<thead><tr>' +
+                    '<th>#</th><th>A</th><th>A 字符</th><th>B</th><th>B 字符</th><th>A ^ B</th><th>结果字符</th>' +
+                    '</tr></thead><tbody>';
+
+                for (let i = 0; i < resultBytes.length; i++) {
+                    const resultByte = resultBytes[i];
+                    tableHtml +=
+                        `<tr>
+                            <td class="col-dec">${i + 1}</td>
+                            <td class="col-url" style="color:var(--accent);">%${aBytes[i].toString(16).toUpperCase().padStart(2, '0')}</td>
+                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(aBytes[i]))}</td>
+                            <td class="col-url" style="color:var(--accent2);">%${bBytes[i].toString(16).toUpperCase().padStart(2, '0')}</td>
+                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(bBytes[i]))}</td>
+                            <td class="col-hex" style="color:var(--green);">0x${resultByte.toString(16).toUpperCase().padStart(2, '0')}</td>
+                            <td style="font-weight:700;color:var(--green);">${escapeHTML(byteToDisplayChar(resultByte))}</td>
+                        </tr>`;
+                }
+                tableHtml += '</tbody></table></div>';
+
+                xorDecodeOutput.innerHTML = `
+                    <div class="xor-result-line">
+                        <span class="output-badge">结果: <strong class="xor-result-text">${escapeHTML(displayText)}</strong></span>
+                        <span class="output-badge">HEX: <strong>${escapeHTML(resultHex)}</strong></span>
+                        <span class="output-badge">URL: <strong>${escapeHTML(resultUrl)}</strong></span>
+                    </div>
+                    <div class="xor-copy-row">
+                        <input class="xor-copy-input" id="xorDecodedTextInput" type="text" value="${escapeAttr(text)}" readonly spellcheck="false">
+                        <button class="btn btn-copy btn-sm" id="btnCopyXorText">📋 结果</button>
+                        <button class="btn btn-copy btn-sm" id="btnCopyXorHex">HEX</button>
+                    </div>
+                    ${tableHtml}`;
+
+                document.getElementById('btnCopyXorText').addEventListener('click', function() {
+                    copyToClipboard(text, this);
+                });
+                document.getElementById('btnCopyXorHex').addEventListener('click', function() {
+                    copyToClipboard(resultHex, this);
+                });
+            }
+
+            function guessPairRole(index) {
+                if (index === 0) return '函数名';
+                if (index === 1) return '参数';
+                return `片段 ${index + 1}`;
+            }
+
+            function renderMiniBytes(bytes) {
+                return bytes.map(byte =>
+                    `%${byte.toString(16).toUpperCase().padStart(2, '0')}`
+                ).join('');
+            }
+
+            function renderPairFilterLine(label, bytes) {
+                const cfg = getXorFilterConfig();
+                if (!cfg.raw || !cfg.checkSides) return '';
+                const hits = findFilterHits(bytes);
+                const ok = hits.length === 0;
+                return `
+                    <div class="xor-note">
+                        <div class="xor-note-title">${escapeHTML(label)} 原材料</div>
+                        <div class="xor-note-value ${ok ? 'good' : 'bad'}">${ok ? 'PASS' : 'BLOCKED'}</div>
+                        ${renderFilterHits(hits, 8)}
+                    </div>`;
+            }
+
+            function renderXorPairCard(pair, index) {
+                const left = parseXorSource(pair.left.text, true, `${guessPairRole(index)} A 侧`);
+                if (left.error) return { error: left.error };
+                const right = parseXorSource(pair.right.text, true, `${guessPairRole(index)} B 侧`);
+                if (right.error) return { error: right.error };
+                if (left.bytes.length !== right.bytes.length) {
+                    return { error: `${guessPairRole(index)} A/B 长度不一致：${left.bytes.length} vs ${right.bytes.length} 字节` };
+                }
+
+                const resultBytes = left.bytes.map((byte, idx) => byte ^ right.bytes[idx]);
+                const resultDisplay = bytesToDisplayString(resultBytes);
+                const resultText = bytesToText(resultBytes);
+                const resultUrl = bytesToUrl(resultBytes).toLowerCase();
+                const rowHtml = resultBytes.map((resultByte, idx) =>
+                    `<tr>
+                        <td class="col-dec">${idx + 1}</td>
+                        <td class="col-url" style="color:var(--accent);">${renderMiniBytes([left.bytes[idx]])}</td>
+                        <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(left.bytes[idx]))}</td>
+                        <td class="col-url" style="color:var(--accent2);">${renderMiniBytes([right.bytes[idx]])}</td>
+                        <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(right.bytes[idx]))}</td>
+                        <td class="col-hex" style="color:var(--green);">0x${resultByte.toString(16).toUpperCase().padStart(2, '0')}</td>
+                        <td style="font-weight:700;color:var(--green);">${escapeHTML(byteToDisplayChar(resultByte))}</td>
+                    </tr>`
+                ).join('');
+
+                return {
+                    text: resultText,
+                    html: `
+                    <div class="xor-pair-card">
+                        <div class="xor-pair-head">
+                            <span class="xor-pair-role">${escapeHTML(guessPairRole(index))}</span>
+                            <span class="xor-byte-mini">A ^ B =></span>
+                            <span class="xor-result-text">${escapeHTML(resultDisplay)}</span>
+                            <span class="xor-byte-mini">HEX ${escapeHTML(bytesToHex(resultBytes))}</span>
+                        </div>
+                        <div class="xor-note-grid">
+                            <div class="xor-note">
+                                <div class="xor-note-title">A 侧字节</div>
+                                <div class="xor-note-value info">${escapeHTML(renderMiniBytes(left.bytes))}</div>
+                            </div>
+                            <div class="xor-note">
+                                <div class="xor-note-title">B 侧字节</div>
+                                <div class="xor-note-value">${escapeHTML(renderMiniBytes(right.bytes))}</div>
+                            </div>
+                            <div class="xor-note">
+                                <div class="xor-note-title">XOR 后结果</div>
+                                <div class="xor-note-value good">${escapeHTML(resultDisplay)}</div>
+                            </div>
+                            ${renderPairFilterLine('A 侧', left.bytes)}
+                            ${renderPairFilterLine('B 侧', right.bytes)}
+                            <div class="xor-note">
+                                <div class="xor-note-title">结果 URL</div>
+                                <div class="xor-note-value">${escapeHTML(resultUrl)}</div>
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto;margin-top:4px;">
+                            <table class="detail-table" style="min-width:760px;font-size:0.78rem;">
+                                <thead><tr>
+                                    <th>#</th><th>A</th><th>A 字符</th><th>B</th><th>B 字符</th><th>A ^ B</th><th>结果字符</th>
+                                </tr></thead>
+                                <tbody>${rowHtml}</tbody>
+                            </table>
+                        </div>
+                    </div>`
+                };
+            }
+
+            function renderFullXorAnalysis(originalExpr, decodedExpr, pairs) {
+                const renderedPairs = [];
+                const resultTexts = [];
+                for (let i = 0; i < pairs.length; i++) {
+                    const rendered = renderXorPairCard(pairs[i], i);
+                    if (rendered.error) {
+                        renderXorDecodeError(rendered.error);
+                        return null;
+                    }
+                    renderedPairs.push(rendered.html);
+                    resultTexts.push(rendered.text);
+                }
+
+                const decodedUrlValue = urlEncodeByteString(decodedExpr);
+                xorDecodeOutput.innerHTML = `
+                    ${renderXorFilterPanel(decodedExpr, '整段表达式')}
+                    <div class="xor-note-grid">
+                        <div class="xor-note">
+                            <div class="xor-note-title">你粘贴的内容</div>
+                            <div class="xor-note-value">${escapeHTML(originalExpr)}</div>
+                        </div>
+                        <div class="xor-note">
+                            <div class="xor-note-title">URL 解码后的表达式</div>
+                            <div class="xor-note-value">${escapeHTML(bytesToDisplayString(byteStringToBytes(decodedExpr)))}</div>
+                        </div>
+                        <div class="xor-note">
+                            <div class="xor-note-title">可复制的 URL 参数值</div>
+                            <div class="xor-note-value">${escapeHTML(decodedUrlValue)}</div>
+                        </div>
+                    </div>
+                    <div class="xor-result-line">
+                        <span class="output-badge">XOR 对数: <strong>${pairs.length}</strong></span>
+                        <span class="output-badge">运行时结果: <strong class="xor-result-text">${escapeHTML(resultTexts.join(' | '))}</strong></span>
+                    </div>
+                    <div class="xor-copy-row">
+                        <input class="xor-copy-input" id="xorUrlValueInput" type="text" value="${escapeAttr(decodedUrlValue)}" readonly spellcheck="false">
+                        <button class="btn btn-copy btn-sm" id="btnCopyXorUrlValue">📋 URL值</button>
+                        <button class="btn btn-copy btn-sm" id="btnCopyRuntimeText">运行时结果</button>
+                    </div>
+                    ${renderedPairs.join('')}`;
+
+                document.getElementById('btnCopyXorUrlValue').addEventListener('click', function() {
+                    copyToClipboard(decodedUrlValue, this);
+                });
+                document.getElementById('btnCopyRuntimeText').addEventListener('click', function() {
+                    copyToClipboard(resultTexts.join(''), this);
+                });
+
+                return { text: resultTexts.join(''), url: decodedUrlValue };
+            }
+
+            function decodeXorExpression() {
+                const expr = xorExprInput.value.trim();
+                if (!expr) {
+                    renderXorDecodeEmpty();
+                    return null;
+                }
+
+                const decodedExpr = percentDecodeToByteString(expr);
+                const extracted = extractQuotedXorPairs(decodedExpr);
+                if (extracted.error) {
+                    renderXorDecodeError(extracted.error);
+                    return null;
+                }
+                if (extracted.pairs.length > 0) {
+                    return renderFullXorAnalysis(expr, decodedExpr, extracted.pairs);
+                }
+
+                const split = splitXorExpression(expr);
+                if (split.error) {
+                    renderXorDecodeError(split.error);
+                    return null;
+                }
+
+                const left = parseXorOperand(split.left, 'A 侧');
+                if (left.error) {
+                    renderXorDecodeError(left.error);
+                    return null;
+                }
+                const right = parseXorOperand(split.right, 'B 侧');
+                if (right.error) {
+                    renderXorDecodeError(right.error);
+                    return null;
+                }
+                if (left.bytes.length !== right.bytes.length) {
+                    renderXorDecodeError(`A/B 长度不一致：${left.bytes.length} vs ${right.bytes.length} 字节`);
+                    return null;
+                }
+                if (left.bytes.length === 0) {
+                    renderXorDecodeError('A/B 不能为空');
+                    return null;
+                }
+
+                const resultBytes = left.bytes.map((byte, idx) => byte ^ right.bytes[idx]);
+                renderXorDecodeResult(left.bytes, right.bytes, resultBytes);
+                return { bytes: resultBytes, text: bytesToText(resultBytes) };
             }
 
             function buildXorHtml(plain) {
@@ -1219,17 +2133,20 @@
                     return;
                 }
 
+                const plainBytes = stringToBytes(plain);
                 let hexPayloadA = '';
                 let hexPayloadB = '';
-                let allCleanA = true, allCleanB = true;
+                const payloadABytes = [];
+                const payloadBBytes = [];
+                let allCleanB = true;
                 let tableHtml =
-                    '<div style="overflow-x:auto;margin-top:4px;"><table class="detail-table" style="min-width:auto;font-size:0.78rem;">' +
+                    '<div style="overflow-x:auto;margin-top:4px;"><table class="detail-table" style="min-width:900px;font-size:0.78rem;">' +
                     '<thead><tr>' +
-                    '<th>字符</th><th>A (%hex)</th><th>A 二进制</th><th>A 字符</th><th>B (%hex)</th><th>B 二进制</th><th>B 字符</th><th>结果</th>' +
+                    '<th>目标字节</th><th>A (%HEX)</th><th>A 二进制</th><th>A 字符</th><th>B (%HEX)</th><th>B 二进制</th><th>B 字符</th><th>结果</th>' +
                     '</tr></thead><tbody>';
 
-                for (let i = 0; i < plain.length; i++) {
-                    const targetByte = plain.charCodeAt(i);
+                for (let i = 0; i < plainBytes.length; i++) {
+                    const targetByte = plainBytes[i];
                     const found = findCleanA(targetByte);
                     let a, b;
                     if (found) {
@@ -1240,39 +2157,53 @@
                         a = (i % 127) + 1;
                         b = a ^ targetByte;
                     }
-                    const aChar = String.fromCharCode(a);
                     const bChar = String.fromCharCode(b);
                     const hexAStr = a.toString(16).toUpperCase().padStart(2, '0');
                     const hexBStr = b.toString(16).toUpperCase().padStart(2, '0');
                     hexPayloadA += '%' + hexAStr;
                     hexPayloadB += '%' + hexBStr;
+                    payloadABytes.push(a);
+                    payloadBBytes.push(b);
 
-                    const bOk = isAllowedType(bChar);
-                    const bKind = bOk ? null : getBlockedKind(bChar);
+                    const bPreferred = isPreferredBByte(b);
+                    const bRawOk = !bPreferred && isRawBByte(b) && bytePassesFilter(b, 'B');
+                    const bOk = bPreferred || bRawOk;
+                    const bKind = bRawOk ? '原始字节' : (bOk ? null : getBlockedKind(bChar));
                     if (!bOk) allCleanB = false;
 
                     tableHtml +=
                         `<tr>
-                            <td class="col-char" style="font-weight:700;color:#fff;">${escapeHTML(plain[i])}</td>
+                            <td class="col-char" style="font-weight:700;color:#fff;">${escapeHTML(byteToDisplayChar(targetByte))}</td>
                             <td class="col-url" style="color:var(--accent);">%${hexAStr}</td>
                             <td class="col-binary">${renderBits(a, 'original')}</td>
-                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(aChar === ' ' ? '␣' : aChar)}</td>
+                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(a))}</td>
                             <td class="col-url" style="color:var(--accent2);">%${hexBStr}</td>
                             <td class="col-binary">${renderBits(b, 'flipped')}</td>
-                            <td style="font-weight:700;color:${bOk ? 'var(--green)' : 'var(--red)'};">${escapeHTML(bChar)}${bKind ? ' ⚠'+bKind : ''}</td>
-                            <td style="font-weight:700;color:var(--green);">${escapeHTML(plain[i])}</td>
+                            <td style="font-weight:700;color:${bOk ? 'var(--green)' : 'var(--red)'};">${escapeHTML(byteToDisplayChar(b))}${bKind ? ' · '+bKind : ''}</td>
+                            <td style="font-weight:700;color:var(--green);">${escapeHTML(byteToDisplayChar(targetByte))}</td>
                         </tr>`;
                 }
                 const allClean = allCleanB;
                 tableHtml +=
                     '<tr style="border-top:2px solid var(--border);">' +
                     '<td colspan="8" style="font-size:0.7rem;color:var(--text2);padding:8px;">' +
-                    '<span style="color:var(--accent);">蓝色=1（A侧-控制字符）</span> &nbsp; <span style="color:var(--red);">红色=1（B侧）</span> &nbsp;|&nbsp; 相同位=0，不同位=1 → A ^ B = 目标字符' +
-                    (allClean ? ' &nbsp;|&nbsp; <span style="color:var(--green);">✓ B 侧均在允许类型内</span>' : ' &nbsp;|&nbsp; <span style="color:var(--red);">⚠ B 侧存在不在允许类型内的字符</span>') +
+                    '<span style="color:var(--accent);">A侧</span> 与 <span style="color:var(--accent2);">B侧</span> 逐字节异或；相同位=0，不同位=1 → A ^ B = 目标字节' +
+                    (allClean ? ' &nbsp;|&nbsp; <span style="color:var(--green);">✓ B 侧符合候选/过滤设置</span>' : ' &nbsp;|&nbsp; <span style="color:var(--red);">⚠ B 侧存在不符合设置的字节</span>') +
                     '</td></tr>';
                 tableHtml += '</tbody></table></div>';
 
                 const phpPayload = `'${hexPayloadA}'^'${hexPayloadB}'`;
+                const rawPayloadBytes = [
+                    0x27,
+                    ...payloadABytes,
+                    0x27,
+                    0x5E,
+                    0x27,
+                    ...payloadBBytes,
+                    0x27,
+                ];
+                const rawPayload = bytesToByteString(rawPayloadBytes);
+                const urlPayload = bytesToUrl(rawPayloadBytes).toLowerCase();
                 const payloadStr = `<span class="xor-a">'${escapeHTML(hexPayloadA)}'</span><span class="xor-op"> ^ </span><span class="xor-b">'${escapeHTML(hexPayloadB)}'</span>`;
 
                 const html = `
@@ -1280,9 +2211,25 @@
                     <span class="xor-card-label symbols">HEX</span>
                     <div class="xor-card-body">
                         <div class="xor-payload-display">${payloadStr}</div>
+                        <div class="xor-note-grid">
+                            <div class="xor-note">
+                                <div class="xor-note-title">展示表达式</div>
+                                <div class="xor-note-value">${escapeHTML(phpPayload)}</div>
+                            </div>
+                            <div class="xor-note">
+                                <div class="xor-note-title">URL 参数值</div>
+                                <div class="xor-note-value good">${escapeHTML(urlPayload)}</div>
+                            </div>
+                            <div class="xor-note">
+                                <div class="xor-note-title">XOR 后结果</div>
+                                <div class="xor-note-value good">${escapeHTML(plain)}</div>
+                            </div>
+                        </div>
+                        ${renderXorFilterPanel(rawPayload, '生成表达式')}
                         <div class="xor-copy-row">
-                            <input class="xor-copy-input" id="xorCopyInput" type="text" value="${escapeHTML(phpPayload)}" readonly spellcheck="false">
-                            <button class="btn btn-copy btn-sm xor-copy-btn-inline">📋 复制</button>
+                            <input class="xor-copy-input" id="xorBuildExprInput" type="text" value="${escapeAttr(phpPayload)}" readonly spellcheck="false">
+                            <button class="btn btn-copy btn-sm" id="btnCopyBuildExpr">📋 表达式</button>
+                            <button class="btn btn-copy btn-sm" id="btnCopyBuildUrl">URL值</button>
                         </div>
                         ${tableHtml}
                     </div>
@@ -1290,14 +2237,60 @@
 
                 xorResultsEl.innerHTML = html;
 
-                document.querySelector('.xor-copy-btn-inline').addEventListener('click', function() {
-                    copyToClipboard(document.getElementById('xorCopyInput').value, this);
+                document.getElementById('btnCopyBuildExpr').addEventListener('click', function() {
+                    copyToClipboard(document.getElementById('xorBuildExprInput').value, this);
                 });
+                document.getElementById('btnCopyBuildUrl').addEventListener('click', function() {
+                    copyToClipboard(urlPayload, this);
+                });
+
+                xorExprInput.value = phpPayload;
+                decodeXorExpression();
             }
 
+            btnXorDecode.addEventListener('click', function() {
+                clearTimeout(xorDecodeTimeout);
+                decodeXorExpression();
+            });
+
+            xorExprInput.addEventListener('input', function() {
+                clearTimeout(xorDecodeTimeout);
+                xorDecodeTimeout = setTimeout(decodeXorExpression, 180);
+            });
+
+            btnXorFilterPreset.addEventListener('click', function() {
+                xorFilterInput.value = 'a-zA-Z0-9+-._|${}~%&;';
+                buildXorHtml(plainInput.value);
+                decodeXorExpression();
+            });
+
+            btnXorFilterClear.addEventListener('click', function() {
+                xorFilterInput.value = '';
+                buildXorHtml(plainInput.value);
+                decodeXorExpression();
+            });
+
+            xorFilterInput.addEventListener('input', function() {
+                clearTimeout(xorDecodeTimeout);
+                xorDecodeTimeout = setTimeout(() => {
+                    buildXorHtml(plainInput.value);
+                    decodeXorExpression();
+                }, 180);
+            });
+
             // checkbox 变化时刷新
-            [xorAllowLetters, xorAllowDigits, xorAllowSymbols].forEach(cb => {
+            [
+                xorAllowLetters,
+                xorAllowDigits,
+                xorAllowSymbols,
+                xorAllowRaw,
+                xorAvoidA,
+                xorAvoidB,
+                xorCheckWhole,
+                xorCheckSides,
+            ].forEach(cb => {
                 cb.addEventListener('change', () => buildXorHtml(plainInput.value));
+                cb.addEventListener('change', decodeXorExpression);
             });
 
             // 在 doEncode 和 doDecode 中调用 buildXorHtml

