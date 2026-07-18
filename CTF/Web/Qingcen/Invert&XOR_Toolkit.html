@@ -414,6 +414,81 @@
             color: var(--accent2);
         }
 
+        /* ---- 普通 URL 编码工具 ---- */
+        .url-tool-body {
+            padding: 14px 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .url-tool-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .url-tool-row input {
+            flex: 1;
+            min-width: 0;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            outline: none;
+            letter-spacing: 0.2px;
+        }
+        .url-tool-row input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(152, 195, 121, 0.1);
+        }
+        .url-output-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .url-output-card {
+            background: #1a1d23;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+            min-width: 0;
+        }
+        .url-output-title {
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+        .url-output-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .url-output-row input {
+            flex: 1;
+            min-width: 0;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            padding: 7px 8px;
+            border-radius: 4px;
+            outline: none;
+            word-break: break-all;
+        }
+        .url-output-row input.is-error {
+            color: var(--red);
+        }
+        .url-output-row .btn-copy {
+            flex-shrink: 0;
+            padding: 6px 9px;
+        }
+
         /* ---- PHP 代码预览 ---- */
         .php-preview {
             background: #1e2229;
@@ -484,6 +559,17 @@
             .arrow-down,
             .arrow-up {
                 font-size: 1.2rem;
+            }
+            .url-tool-row,
+            .url-output-row {
+                flex-wrap: wrap;
+            }
+            .url-output-grid {
+                grid-template-columns: 1fr;
+            }
+            .url-output-row input,
+            .url-output-row .btn-copy {
+                flex-basis: 100%;
             }
         }
 
@@ -869,12 +955,55 @@
             <div class="output-extra" style="margin-top:8px;">
                 <span style="font-size:0.7rem;color:var(--text2);">快捷示例：</span>
                 <button class="btn-example" data-plain="system">system</button>
+                <button class="btn-example" data-plain="ls">ls</button>
+                <button class="btn-example" data-plain="cat f*">cat f*</button>
                 <button class="btn-example" data-plain="cat /flag">cat /flag</button>
                 <button class="btn-example" data-plain="assert">assert</button>
                 <button class="btn-example" data-plain="phpinfo">phpinfo</button>
                 <button class="btn-example" data-plain="exec">exec</button>
                 <button class="btn-example" data-plain="_GET">_GET</button>
                 <button class="btn-example" data-plain="ls -la">ls -la</button>
+            </div>
+        </div>
+
+        <!-- ========== 普通 URL 编码工具 ========== -->
+        <div class="detail-section" id="urlToolSection">
+            <div class="detail-header">
+                🌐 普通 URL 编码 <span style="font-weight:400;font-size:0.65rem;color:var(--text2);">Plain URL Encode / Decode</span>
+            </div>
+            <div class="url-tool-body">
+                <div class="url-tool-row">
+                    <input
+                    type="text"
+                    id="urlToolInput"
+                    placeholder="例如：system、cat /flag、readfile('flag.php') 或 %63%61%74%20%2f%66%6c%61%67"
+                    spellcheck="false"
+                    autocomplete="off"
+                    >
+                </div>
+                <div class="url-output-grid">
+                    <div class="url-output-card">
+                        <div class="url-output-title">标准 URL 编码</div>
+                        <div class="url-output-row">
+                            <input id="urlToolStandard" type="text" readonly spellcheck="false">
+                            <button class="btn btn-copy btn-sm" id="btnCopyUrlToolStandard">📋</button>
+                        </div>
+                    </div>
+                    <div class="url-output-card">
+                        <div class="url-output-title">全字节 %XX</div>
+                        <div class="url-output-row">
+                            <input id="urlToolFull" type="text" readonly spellcheck="false">
+                            <button class="btn btn-copy btn-sm" id="btnCopyUrlToolFull">📋</button>
+                        </div>
+                    </div>
+                    <div class="url-output-card">
+                        <div class="url-output-title">URL 解码结果</div>
+                        <div class="url-output-row">
+                            <input id="urlToolDecoded" type="text" readonly spellcheck="false">
+                            <button class="btn btn-copy btn-sm" id="btnCopyUrlToolDecoded">📋</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1042,6 +1171,13 @@
             const badgeLen = document.getElementById('badgeLen');
             const badgePayload = document.getElementById('badgePayload');
             const detailSection = document.getElementById('detailSection');
+            const urlToolInput = document.getElementById('urlToolInput');
+            const urlToolStandard = document.getElementById('urlToolStandard');
+            const urlToolFull = document.getElementById('urlToolFull');
+            const urlToolDecoded = document.getElementById('urlToolDecoded');
+            const btnCopyUrlToolStandard = document.getElementById('btnCopyUrlToolStandard');
+            const btnCopyUrlToolFull = document.getElementById('btnCopyUrlToolFull');
+            const btnCopyUrlToolDecoded = document.getElementById('btnCopyUrlToolDecoded');
 
             let lastPlain = '';
             let lastUrl = '';
@@ -1083,6 +1219,61 @@
 
             function invertByte(b) {
                 return (~b) & 0xFF;
+            }
+
+            function fullUrlEncode(str) {
+                return stringToBytes(str)
+                    .map(b => '%' + b.toString(16).toUpperCase().padStart(2, '0'))
+                    .join('')
+                    .toLowerCase();
+            }
+
+            function standardUrlEncode(str) {
+                return encodeURIComponent(str)
+                    .replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase())
+                    .toLowerCase();
+            }
+
+            function urlDecodeText(str) {
+                return decodeURIComponent(str.replace(/\+/g, '%20'));
+            }
+
+            function updateUrlToolOutputs() {
+                const raw = urlToolInput.value;
+                if (raw === '') {
+                    urlToolStandard.value = '';
+                    urlToolFull.value = '';
+                    urlToolDecoded.value = '';
+                    urlToolStandard.classList.remove('is-error');
+                    urlToolFull.classList.remove('is-error');
+                    urlToolDecoded.classList.remove('is-error');
+                    return;
+                }
+
+                try {
+                    urlToolStandard.value = standardUrlEncode(raw);
+                    urlToolFull.value = fullUrlEncode(raw);
+                    urlToolStandard.classList.remove('is-error');
+                    urlToolFull.classList.remove('is-error');
+                } catch (err) {
+                    urlToolStandard.value = '编码失败：输入里可能有不完整的 Unicode 字符';
+                    urlToolFull.value = '';
+                    urlToolStandard.classList.add('is-error');
+                    urlToolFull.classList.add('is-error');
+                }
+
+                try {
+                    urlToolDecoded.value = urlDecodeText(raw);
+                    urlToolDecoded.classList.remove('is-error');
+                } catch (err) {
+                    urlToolDecoded.value = '解码失败：URL 编码格式或 UTF-8 字节不完整';
+                    urlToolDecoded.classList.add('is-error');
+                }
+            }
+
+            function syncUrlToolFromPlain() {
+                urlToolInput.value = plainInput.value;
+                updateUrlToolOutputs();
             }
 
             // 渲染二进制位（带颜色）
@@ -1298,6 +1489,7 @@
                 const plain = plainInput.value;
                 lastPlain = plain;
                 const { results, url, rawHex } = encode(plain);
+                syncUrlToolFromPlain();
                 if (url) {
                     urlInput.value = url.toLowerCase();
                     lastUrl = url.toLowerCase();
@@ -1333,6 +1525,7 @@
                 }
                 plainInput.value = plain;
                 lastPlain = plain;
+                syncUrlToolFromPlain();
                 const urlFormatted = bytes.map(b => '%' + b.toString(16).toUpperCase().padStart(2, '0')).join('');
                 urlInput.value = urlFormatted.toLowerCase();
                 lastUrl = urlFormatted.toLowerCase();
@@ -1364,6 +1557,8 @@
                 decodeTimeout = setTimeout(doDecode, 180);
             });
 
+            urlToolInput.addEventListener('input', updateUrlToolOutputs);
+
             // 回车触发
             plainInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
@@ -1375,6 +1570,11 @@
                 if (e.key === 'Enter') {
                     clearTimeout(decodeTimeout);
                     doDecode();
+                }
+            });
+            urlToolInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    updateUrlToolOutputs();
                 }
             });
 
@@ -1402,6 +1602,18 @@
                 if (!currentUrlEncoded) return;
                 const payload = `(~'${currentUrlEncoded}')`;
                 copyToClipboard(payload, btnCopyPayload);
+            });
+            btnCopyUrlToolStandard.addEventListener('click', function() {
+                if (!urlToolStandard.value || urlToolStandard.classList.contains('is-error')) return;
+                copyToClipboard(urlToolStandard.value, btnCopyUrlToolStandard);
+            });
+            btnCopyUrlToolFull.addEventListener('click', function() {
+                if (!urlToolFull.value || urlToolFull.classList.contains('is-error')) return;
+                copyToClipboard(urlToolFull.value, btnCopyUrlToolFull);
+            });
+            btnCopyUrlToolDecoded.addEventListener('click', function() {
+                if (!urlToolDecoded.value || urlToolDecoded.classList.contains('is-error')) return;
+                copyToClipboard(urlToolDecoded.value, btnCopyUrlToolDecoded);
             });
 
             function copyToClipboard(text, btn) {
@@ -1456,7 +1668,9 @@
             // ============ 初始加载：预填示例 ============
             function initExample() {
                 plainInput.value = 'system';
+                urlToolInput.value = 'system';
                 doEncode();
+                updateUrlToolOutputs();
             }
 
             // 页面加载后自动展示示例
