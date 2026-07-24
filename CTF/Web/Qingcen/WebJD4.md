@@ -10,6 +10,7 @@
 
 ## EZFL_1
 还是上一题的位置
+
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1783666483575_image.png)
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1783667212802_image.png)
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1783667168391_image.png)
@@ -77,7 +78,7 @@ data伪协议
 
 
 
-
+# 文件上传
 
 
 

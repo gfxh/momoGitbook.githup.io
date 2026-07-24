@@ -219,22 +219,156 @@ public class House {
 一个类对象可以被实例化成多个实例，每个实例都可以被同样的方法、属性来操作
 
 
+
+
+
+## 7.7构造函数
 **构造函数**
 构造函数其实就是一个特殊的对象方法
+
 1.构造函数的名字和类名一样
+
 2.构造函数没有返回值
+```
+public class House {
+    // 房子的颜色是绿色
+    public String color = "green"; //默认绿色
+
+    // 自定义一个带 color 参数的构造函数
+    public House(String color){
+      this.color = color;
+    }
+}
+
+```
+`House myHouse = new House("red");`
+
+
+this和myHouse 同等，也就是说 this 代表的是实例化后的对象
+
+
+##7.8 数组Arraylist
+Arraylist就是一个动态数组对象
+
+
+```
+import java.util.ArrayList;
+// 这里的 Java 对象类型可以是任意的对象类型
+// 比如 String、Integer、House 等
+// 这里的 <> 是 Java 泛型的规范,记住这个语法就行了
+ArrayList<Java 对象类型> list = new ArrayList<>();
+
+```
+
+
+**1.add**
+```
+public static void main(String[] args){
+
+    // 创建一个 ArrayList 存储字符串集合
+    ArrayList<String> strs = new ArrayList<>();
+
+    // 添加数据到 ArrayList 实例里
+    strs.add("张三");
+    strs.add("李四");
 
 
 
+```
+
+**2.get/size**
+`size()`获得数组长度
+`get()`数组索引获得值
+
+
+**3.for遍历数组**
+```
+
+for( 集合变量的类型 变量名称 : 集合变量 ){
+}
+
+ public static void main(String[] args){
+
+    // 创建一个 ArrayList 存储字符串集合
+    ArrayList<String> strs = new ArrayList<>();
+
+    // 添加数据到 ArrayList 实例里
+    strs.add("张三");
+    strs.add("李四");
+
+    // 获取集合的长度
+    int size = strs.size();
+
+    // 使用 for 循环迭代每一条记录
+    for(String str : strs){
+       System.out.println(str);
+    }
+
+  }
+```
+
+**4.List ArrayList**
+List 是接口，ArrayList是其中一个常用的实现类。当然还有其它一些不常用的实现类。
+```
+ArrayList<String> strs = new ArrayList<>();
+
+写作成       
+
+import java.util.List;
+List<String> strs = new ArrayList<>();
+
+会更好
+```
 
 
 
+## 8.map映射
+对比项 |	Java Map(HashMap) 映射|	Python dict 字典
+------|------|------
+类型约束	|泛型强类型，键值类型固定|	动态弱类型，可混合存放不同类型键值|
+插入顺序	|HashMap 无序，LinkedHashMap 才可保留顺序	|3.7 及以上版本默认保留插入顺序|
+空键允许	|HashMap 允许一个 null 键，多个 null 值	|不允许None以外的空键，None 可以作为普通 key|
+取值容错	|get无键返回 null，getOrDefault支持默认值	|[]取值无键抛异常，get返回默认值更常用|
+键要求	|自定义类作键必须重写 hashCode、equals	|key 必须可哈希，可变类型（list）不能用作 key|
+`map.put(key,value)`这个方法存数据
+```
+import java.util.Map;
+import java.util.HashMap;
 
+// key value 得是 Java 类型
+Map<key, value> map = new HashMap<>();
+-----------------------------------------
+// 实例化Map对象
+Map<Integer,String> map = new HashMap<>();
 
+map.put(1, "Monday");
+map.put(2, "Tuesday");
+map.put(3, "Wednesday");
+map.put(4, "Thursday");
+map.put(5, "Friday");
+map.put(6, "Saturday");	
+map.put(7, "Sunday");
+```
 
+**4.2读数据**
+```
+String weekText = map.get(3);
+System.out.println(weekText);
 
+int size = map.size();
+System.out.println(size);
+```
+**4.3遍历数据**
 
+Map 的遍历相对麻烦一点，因为是 key：value 格式，所以我们一般先得到这个数据格式的集合（entrySet），完整的例子如下：
+```
+ for (Map.Entry<Integer,String> entry : map.entrySet()){
 
+   System.out.println("Key = " + entry.getKey() +
+                  ", Value = " + entry.getValue());
+ }
 
+```
+key的类型不限，可以是int也可以是string
 
 

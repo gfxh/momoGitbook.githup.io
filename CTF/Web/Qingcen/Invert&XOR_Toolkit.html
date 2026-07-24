@@ -719,6 +719,43 @@
             border-color: var(--accent2);
             box-shadow: 0 0 0 3px rgba(229, 192, 123, 0.1);
         }
+        .xor-config-help {
+            background: rgba(97, 175, 239, 0.06);
+            border: 1px solid rgba(97, 175, 239, 0.24);
+            border-top: 0;
+            padding: 10px 18px 12px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text2);
+        }
+        .xor-config-help strong {
+            color: var(--accent);
+        }
+        .xor-config-help code {
+            color: var(--orange);
+            font-family: var(--font-mono);
+        }
+        .xor-byte-explain {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            margin-top: 9px;
+        }
+        .xor-byte-explain-item {
+            background: #1a1d23;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 6px 8px;
+            min-width: 0;
+        }
+        .xor-byte-explain-title {
+            color: var(--accent2);
+            margin-bottom: 3px;
+        }
+        .xor-byte-explain-value {
+            word-break: break-all;
+            color: var(--text);
+        }
         .xor-preset-btn {
             background: var(--surface2);
             border: 1px dashed var(--border);
@@ -903,6 +940,9 @@
             .xor-filter-input {
                 min-width: 0;
                 width: 100%;
+            }
+            .xor-byte-explain {
+                grid-template-columns: 1fr;
             }
             .xor-decode-row {
                 flex-wrap: wrap;
@@ -1099,36 +1139,61 @@
         <div class="detail-section xor-section" id="xorSection">
             <div class="detail-header">
                 🔮 异或构造 <span style="font-weight:400;font-size:0.65rem;color:var(--text2);">HEX XOR Construction</span>
-                <span class="xor-filter-group">
-                    <span style="font-size:0.65rem;color:var(--text2);">B侧优先：</span>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowLetters"> 字母</label>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowDigits"> 数字</label>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowSymbols" checked> 符号</label>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorAllowRaw" checked> 原始字节</label>
-                </span>
+                <span style="font-size:0.65rem;color:var(--text2);">A/B 独立候选集与黑名单</span>
             </div>
             <div class="xor-config-panel">
                 <div class="xor-config-row">
-                    <span class="xor-config-label">过滤字符</span>
+                    <span class="xor-config-label">A 候选范围</span>
                     <input
                     class="xor-filter-input"
-                    id="xorFilterInput"
+                    id="xorRangeA"
                     type="text"
-                    placeholder="可填 a-zA-Z0-9+-._|${}~%&;，支持范围、\\xHH、%HH"
+                    value="\x01-\xFF"
+                    placeholder="例如：20-7E,80-FF；支持范围、\xHH、%HH、0xHH"
                     spellcheck="false"
                     autocomplete="off"
                     >
-                    <button class="xor-preset-btn" id="btnXorFilterPreset" type="button">常见 CTF</button>
-                    <button class="xor-preset-btn" id="btnXorFilterClear" type="button">清空</button>
+                    <span class="xor-config-label">A 黑名单</span>
+                    <input class="xor-filter-input" id="xorBlacklistA" type="text"
+                    placeholder="例如：00,27,5C 或 a-z,A-Z" spellcheck="false" autocomplete="off">
                 </div>
                 <div class="xor-config-row">
-                    <span class="xor-config-label">生成避开</span>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorAvoidA" checked> A 侧</label>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorAvoidB" checked> B 侧</label>
-                    <span class="xor-config-label">分析检查</span>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorCheckWhole" checked> 整段表达式</label>
-                    <label class="xor-filter-label"><input type="checkbox" id="xorCheckSides" checked> A/B 原材料</label>
+                    <span class="xor-config-label">B 候选范围</span>
+                    <input
+                    class="xor-filter-input"
+                    id="xorRangeB"
+                    type="text"
+                    value="\x20-\x7E,\x80-\xFF"
+                    placeholder="例如：20-7E,80-FF；支持范围、\xHH、%HH、0xHH"
+                    spellcheck="false"
+                    autocomplete="off"
+                    >
+                    <span class="xor-config-label">B 黑名单</span>
+                    <input class="xor-filter-input" id="xorBlacklistB" type="text"
+                    placeholder="例如：00,27,5C 或 a-z,A-Z" spellcheck="false" autocomplete="off">
                 </div>
+                <div class="xor-config-row">
+                    <span class="xor-config-label">整段黑名单</span>
+                    <input class="xor-filter-input" id="xorWholeBlacklist" type="text"
+                    placeholder="检查引号、^ 等所有 URL 解码后的表达式字节" spellcheck="false" autocomplete="off">
+                    <span class="xor-config-label">字符串引号</span>
+                    <select class="xor-filter-input" id="xorQuote" style="flex:0 0 auto;min-width:110px;">
+                        <option value="'">单引号 '...'</option>
+                        <option value="&quot;">双引号 "..."</option>
+                    </select>
+                    <button class="xor-preset-btn" id="btnXorFilterPreset" type="button">常见 CTF</button>
+                    <button class="xor-preset-btn" id="btnXorFilterClear" type="button">清空黑名单</button>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorCheckWhole" checked> 检查整段</label>
+                    <label class="xor-filter-label"><input type="checkbox" id="xorCheckSides" checked> 检查 A/B</label>
+                </div>
+            </div>
+            <div class="xor-config-help">
+                <strong>格式说明：</strong>
+                <code>80</code>、<code>%80</code>、<code>\x80</code>、<code>0x80</code> 都表示字节 <code>0x80</code>；
+                <code>20-7E</code> 表示一个范围；用逗号分隔多项，如 <code>20-7E,80-FF</code>。
+                <code>a-z</code> 是 ASCII 字母范围。逗号、空格、短横线等要作为“字符本身”时，请写成
+                <code>2C</code>、<code>20</code>、<code>2D</code>。
+                <div class="xor-byte-explain" id="xorByteExplain"></div>
             </div>
             <div class="xor-results" id="xorResults">
                 <div class="xor-empty">在上方输入明文后自动生成异或构造…</div>
@@ -1705,13 +1770,13 @@
 
             // ============ XOR 异或构造 ============
             const xorResultsEl = document.getElementById('xorResults');
-            const xorAllowLetters = document.getElementById('xorAllowLetters');
-            const xorAllowDigits  = document.getElementById('xorAllowDigits');
-            const xorAllowSymbols = document.getElementById('xorAllowSymbols');
-            const xorAllowRaw = document.getElementById('xorAllowRaw');
-            const xorFilterInput = document.getElementById('xorFilterInput');
-            const xorAvoidA = document.getElementById('xorAvoidA');
-            const xorAvoidB = document.getElementById('xorAvoidB');
+            const xorRangeA = document.getElementById('xorRangeA');
+            const xorBlacklistA = document.getElementById('xorBlacklistA');
+            const xorRangeB = document.getElementById('xorRangeB');
+            const xorBlacklistB = document.getElementById('xorBlacklistB');
+            const xorWholeBlacklist = document.getElementById('xorWholeBlacklist');
+            const xorQuote = document.getElementById('xorQuote');
+            const xorByteExplain = document.getElementById('xorByteExplain');
             const xorCheckWhole = document.getElementById('xorCheckWhole');
             const xorCheckSides = document.getElementById('xorCheckSides');
             const btnXorFilterPreset = document.getElementById('btnXorFilterPreset');
@@ -1721,60 +1786,8 @@
             const xorDecodeOutput = document.getElementById('xorDecodeOutput');
             let xorDecodeTimeout;
 
-            function isLetter(c)   { return /^[a-zA-Z]$/.test(c); }
-            function isDigit(c)    { return /^[0-9]$/.test(c); }
-            function isSymbol(c)   { const code = c.charCodeAt(0); return code >= 32 && code <= 126 && !isLetter(c) && !isDigit(c); }
-
-            function isAllowedType(c) {
-                const code = c.charCodeAt(0);
-                if (code < 32 || code > 126) return false; // 控制字符不可用
-                if (xorAllowLetters.checked && isLetter(c)) return true;
-                if (xorAllowDigits.checked  && isDigit(c))  return true;
-                if (xorAllowSymbols.checked && isSymbol(c)) return true;
-                return false;
-            }
-
-            function getBlockedKind(c) {
-                if (isLetter(c)) return '字母';
-                if (isDigit(c))  return '数字';
-                if (isSymbol(c)) return '符号';
-                return '不可打印';
-            }
-
-            function isSafeStringByte(byte) {
-                return byte > 0 && byte <= 255 && byte !== 0x27 && byte !== 0x5C;
-            }
-
-            function isPreferredBByte(byte) {
-                if (!isSafeStringByte(byte) || byte < 32 || byte > 126) return false;
-                return isAllowedType(String.fromCharCode(byte));
-            }
-
-            function isRawBByte(byte) {
-                return xorAllowRaw.checked && isSafeStringByte(byte);
-            }
-
-            function findCleanA(targetByte) {
-                const candidates = [];
-                for (let a = 1; a <= 255; a++) {
-                    if (!isSafeStringByte(a) || !bytePassesFilter(a, 'A')) continue;
-                    candidates.push(a);
-                }
-                const passesB = (byte, rawFallback) =>
-                    isSafeStringByte(byte) &&
-                    bytePassesFilter(byte, 'B') &&
-                    (rawFallback ? isRawBByte(byte) : isPreferredBByte(byte));
-
-                for (const rawFallback of [false, true]) {
-                    for (const a of candidates) {
-                        const b = a ^ targetByte;
-                        if (passesB(b, rawFallback)) {
-                            return { a, b, rawFallback };
-                        }
-                    }
-                }
-                // 找不到：用递增序列兜底
-                return null;
+            function isSafeStringByte(byte, quoteByte) {
+                return byte > 0 && byte <= 255 && byte !== quoteByte && byte !== 0x5C;
             }
 
             function bytesToHex(bytes) {
@@ -1818,75 +1831,161 @@
                 return bytesToUrl(byteStringToBytes(str)).toLowerCase();
             }
 
-            function parseFilterBytes(source) {
+            function skipByteSpecSeparators(source, position) {
+                let nextPosition = position;
+                while (nextPosition < source.length && /[\s,]/.test(source[nextPosition])) nextPosition++;
+                return nextPosition;
+            }
+
+            function readByteSpecToken(source, position) {
+                if (position >= source.length) return null;
+                const hexPrefix = source.slice(position, position + 2).toLowerCase();
+                if ((hexPrefix === '\\x' || hexPrefix === '0x') && /^[0-9a-fA-F]{2}$/.test(source.slice(position + 2, position + 4))) {
+                    return { bytes: [parseInt(source.slice(position + 2, position + 4), 16)], end: position + 4 };
+                }
+                if (source[position] === '%' && /^[0-9a-fA-F]{2}$/.test(source.slice(position + 1, position + 3))) {
+                    return { bytes: [parseInt(source.slice(position + 1, position + 3), 16)], end: position + 3 };
+                }
+                if (/^[0-9a-fA-F]{2}$/.test(source.slice(position, position + 2))) {
+                    const nextChar = source[position + 2];
+                    if (!nextChar || /[\s,\-]/.test(nextChar)) {
+                        return { bytes: [parseInt(source.slice(position, position + 2), 16)], end: position + 2 };
+                    }
+                }
+                const codePoint = source.codePointAt(position);
+                const rawChar = String.fromCodePoint(codePoint);
+                return { bytes: byteStringToBytes(rawChar), end: position + rawChar.length };
+            }
+
+            function parseByteSpec(source) {
                 const bytes = new Set();
                 const text = source || '';
-                for (let i = 0; i < text.length;) {
-                    const ch = text[i];
-                    if (ch === '\\' && text[i + 1] && text[i + 1].toLowerCase() === 'x') {
-                        const hex = text.slice(i + 2, i + 4);
-                        if (/^[0-9a-fA-F]{2}$/.test(hex)) {
-                            bytes.add(parseInt(hex, 16));
-                            i += 4;
+                let position = 0;
+                while (position < text.length) {
+                    position = skipByteSpecSeparators(text, position);
+                    if (position >= text.length) break;
+                    const startToken = readByteSpecToken(text, position);
+                    if (!startToken) break;
+                    const dashPosition = skipByteSpecSeparators(text, startToken.end);
+                    if (text[dashPosition] === '-') {
+                        const endPosition = skipByteSpecSeparators(text, dashPosition + 1);
+                        const endToken = readByteSpecToken(text, endPosition);
+                        if (endToken && startToken.bytes.length === 1 && endToken.bytes.length === 1 && startToken.bytes[0] <= endToken.bytes[0]) {
+                            for (let byte = startToken.bytes[0]; byte <= endToken.bytes[0]; byte++) bytes.add(byte);
+                            position = endToken.end;
                             continue;
                         }
                     }
-                    if (ch === '%') {
-                        const hex = text.slice(i + 1, i + 3);
-                        if (/^[0-9a-fA-F]{2}$/.test(hex)) {
-                            bytes.add(parseInt(hex, 16));
-                            i += 3;
-                            continue;
-                        }
-                    }
-
-                    const next = text[i + 1];
-                    const end = text[i + 2];
-                    if (next === '-' && end && ch !== '\\') {
-                        const startCode = ch.charCodeAt(0);
-                        const endCode = end.charCodeAt(0);
-                        if (startCode <= 0xFF && endCode <= 0xFF && startCode <= endCode) {
-                            for (let b = startCode; b <= endCode; b++) bytes.add(b);
-                            i += 3;
-                            continue;
-                        }
-                    }
-
-                    const codePoint = text.codePointAt(i);
-                    const rawChar = String.fromCodePoint(codePoint);
-                    byteStringToBytes(rawChar).forEach(byte => bytes.add(byte));
-                    i += rawChar.length;
+                    startToken.bytes.forEach(byte => bytes.add(byte));
+                    position = startToken.end;
                 }
                 return bytes;
             }
 
             function getXorFilterConfig() {
-                const raw = xorFilterInput.value.trim();
+                const quote = xorQuote.value;
+                const quoteByte = quote.charCodeAt(0);
+                const makeSideConfig = (rangeInput, blacklistInput) => {
+                    const rangeRaw = rangeInput.value.trim();
+                    const blacklistRaw = blacklistInput.value.trim();
+                    const candidates = [...parseByteSpec(rangeRaw)].filter(byte => isSafeStringByte(byte, quoteByte));
+                    const blacklist = parseByteSpec(blacklistRaw);
+                    return {
+                        rangeRaw,
+                        rangeLabel: rangeRaw || '未设置',
+                        blacklistRaw,
+                        blacklistLabel: blacklistRaw || '未设置',
+                        candidates,
+                        blacklist,
+                    };
+                };
+                const wholeRaw = xorWholeBlacklist.value.trim();
                 return {
-                    raw,
-                    label: raw || '未设置',
-                    bytes: parseFilterBytes(raw),
-                    avoidA: xorAvoidA.checked,
-                    avoidB: xorAvoidB.checked,
+                    quote,
+                    quoteByte,
+                    a: makeSideConfig(xorRangeA, xorBlacklistA),
+                    b: makeSideConfig(xorRangeB, xorBlacklistB),
+                    wholeRaw,
+                    wholeLabel: wholeRaw || '未设置',
+                    wholeBlacklist: parseByteSpec(wholeRaw),
                     checkWhole: xorCheckWhole.checked,
                     checkSides: xorCheckSides.checked,
                 };
             }
 
-            function bytePassesFilter(byte, side) {
-                const cfg = getXorFilterConfig();
-                if (side === 'A' && !cfg.avoidA) return true;
-                if (side === 'B' && !cfg.avoidB) return true;
-                return !cfg.bytes.has(byte);
+            function describeByte(byte) {
+                const hex = `0x${byte.toString(16).toUpperCase().padStart(2, '0')}`;
+                const decimal = `${byte}`;
+                if (byte === 0x00) return `${hex} (${decimal}, NUL)`;
+                if (byte === 0x20) return `${hex} (${decimal}, 空格)`;
+                if (isPrintableAscii(byte)) return `${hex} (${decimal}, '${byteToDisplayChar(byte)}')`;
+                if (byte >= 0x80) return `${hex} (${decimal}, 高位字节)`;
+                return `${hex} (${decimal}, ${byteToDisplayChar(byte)})`;
             }
 
-            function findFilterHits(bytes) {
-                const cfg = getXorFilterConfig();
+            function summarizeByteSet(byteSet) {
+                const sortedBytes = [...byteSet].sort((leftByte, rightByte) => leftByte - rightByte);
+                if (!sortedBytes.length) return '未设置 / 无有效字节';
+                if (sortedBytes.length <= 12) return sortedBytes.map(describeByte).join('，');
+
+                const ranges = [];
+                let rangeStart = sortedBytes[0];
+                let previousByte = sortedBytes[0];
+                for (const byte of sortedBytes.slice(1)) {
+                    if (byte === previousByte + 1) {
+                        previousByte = byte;
+                        continue;
+                    }
+                    ranges.push([rangeStart, previousByte]);
+                    rangeStart = byte;
+                    previousByte = byte;
+                }
+                ranges.push([rangeStart, previousByte]);
+                const rangeText = ranges.slice(0, 6).map(([startByte, endByte]) => {
+                    if (startByte === endByte) return describeByte(startByte);
+                    const startHex = startByte.toString(16).toUpperCase().padStart(2, '0');
+                    const endHex = endByte.toString(16).toUpperCase().padStart(2, '0');
+                    return `0x${startHex}–0x${endHex}（${endByte - startByte + 1} 个字节）`;
+                }).join('，');
+                const more = ranges.length > 6 ? `；另有 ${ranges.length - 6} 段` : '';
+                return `${rangeText}${more}；共 ${sortedBytes.length} 个字节`;
+            }
+
+            function renderByteExplain() {
+                const config = getXorFilterConfig();
+                const entries = [
+                    ['A 可用候选', getAvailableCandidates(config.a)],
+                    ['A 黑名单', config.a.blacklist],
+                    ['B 可用候选', getAvailableCandidates(config.b)],
+                    ['B 黑名单', config.b.blacklist],
+                    ['整段黑名单', config.wholeBlacklist],
+                ];
+                xorByteExplain.innerHTML = entries.map(([title, bytes]) =>
+                    `<div class="xor-byte-explain-item">
+                        <div class="xor-byte-explain-title">${escapeHTML(title)}</div>
+                        <div class="xor-byte-explain-value">${escapeHTML(summarizeByteSet(bytes))}</div>
+                    </div>`
+                ).join('');
+            }
+
+            function getAvailableCandidates(sideConfig) {
+                return sideConfig.candidates.filter(byte => !sideConfig.blacklist.has(byte));
+            }
+
+            function findCleanPair(targetByte, config) {
+                const aCandidates = getAvailableCandidates(config.a);
+                const bCandidates = new Set(getAvailableCandidates(config.b));
+                for (const aByte of aCandidates) {
+                    const bByte = aByte ^ targetByte;
+                    if (bCandidates.has(bByte)) return { a: aByte, b: bByte };
+                }
+                return null;
+            }
+
+            function findFilterHits(bytes, blacklist) {
                 const hits = [];
                 bytes.forEach((byte, index) => {
-                    if (cfg.bytes.has(byte)) {
-                        hits.push({ byte, index });
-                    }
+                    if (blacklist.has(byte)) hits.push({ byte, index });
                 });
                 return hits;
             }
@@ -1902,8 +2001,8 @@
 
             function renderXorFilterPanel(decodedExpr, label = '整段表达式') {
                 const cfg = getXorFilterConfig();
-                if (!cfg.raw || !cfg.checkWhole) return '';
-                const hits = findFilterHits(byteStringToBytes(decodedExpr));
+                if (!cfg.wholeRaw || !cfg.checkWhole) return '';
+                const hits = findFilterHits(byteStringToBytes(decodedExpr), cfg.wholeBlacklist);
                 const ok = hits.length === 0;
                 return `
                     <div class="xor-filter-panel ${ok ? 'good' : 'bad'}">
@@ -1911,7 +2010,7 @@
                             <span>${escapeHTML(label)}过滤检查</span>
                             <span class="xor-status ${ok ? 'good' : 'bad'}">${ok ? 'PASS' : 'BLOCKED'}</span>
                         </div>
-                        <div>检查对象：URL 解码后的${escapeHTML(label)}；过滤字符：${escapeHTML(cfg.label)}</div>
+                        <div>检查对象：URL 解码后的${escapeHTML(label)}；整段黑名单：${escapeHTML(cfg.wholeLabel)}</div>
                         ${renderFilterHits(hits)}
                     </div>`;
             }
@@ -2104,6 +2203,10 @@
                 xorDecodeOutput.innerHTML = `<div class="xor-error">⚠ ${escapeHTML(message)}</div>`;
             }
 
+            function renderXorBuildError(message) {
+                xorResultsEl.innerHTML = `<div class="xor-error">⚠ ${escapeHTML(message)}</div>`;
+            }
+
             function renderXorDecodeResult(aBytes, bBytes, resultBytes) {
                 const text = bytesToText(resultBytes);
                 const displayText = bytesToDisplayString(resultBytes);
@@ -2163,15 +2266,17 @@
                 ).join('');
             }
 
-            function renderPairFilterLine(label, bytes) {
+            function renderPairFilterLine(label, bytes, side) {
                 const cfg = getXorFilterConfig();
-                if (!cfg.raw || !cfg.checkSides) return '';
-                const hits = findFilterHits(bytes);
+                const sideConfig = side === 'A' ? cfg.a : cfg.b;
+                if (!sideConfig.blacklistRaw || !cfg.checkSides) return '';
+                const hits = findFilterHits(bytes, sideConfig.blacklist);
                 const ok = hits.length === 0;
                 return `
                     <div class="xor-note">
                         <div class="xor-note-title">${escapeHTML(label)} 原材料</div>
                         <div class="xor-note-value ${ok ? 'good' : 'bad'}">${ok ? 'PASS' : 'BLOCKED'}</div>
+                        <div class="xor-byte-mini">黑名单：${escapeHTML(sideConfig.blacklistLabel)}</div>
                         ${renderFilterHits(hits, 8)}
                     </div>`;
             }
@@ -2224,8 +2329,8 @@
                                 <div class="xor-note-title">XOR 后结果</div>
                                 <div class="xor-note-value good">${escapeHTML(resultDisplay)}</div>
                             </div>
-                            ${renderPairFilterLine('A 侧', left.bytes)}
-                            ${renderPairFilterLine('B 侧', right.bytes)}
+                            ${renderPairFilterLine('A 侧', left.bytes, 'A')}
+                            ${renderPairFilterLine('B 侧', right.bytes, 'B')}
                             <div class="xor-note">
                                 <div class="xor-note-title">结果 URL</div>
                                 <div class="xor-note-value">${escapeHTML(resultUrl)}</div>
@@ -2342,17 +2447,31 @@
             }
 
             function buildXorHtml(plain) {
+                renderByteExplain();
                 if (!plain) {
                     xorResultsEl.innerHTML = '<div class="xor-empty">在上方输入明文后自动生成异或构造…</div>';
                     return;
                 }
 
                 const plainBytes = stringToBytes(plain);
+                const config = getXorFilterConfig();
+                const aCandidates = getAvailableCandidates(config.a);
+                const bCandidates = getAvailableCandidates(config.b);
+                if (aCandidates.length === 0 || bCandidates.length === 0) {
+                    const emptySides = [
+                        ...(aCandidates.length === 0 ? ['A'] : []),
+                        ...(bCandidates.length === 0 ? ['B'] : []),
+                    ];
+                    renderXorBuildError(`${emptySides.join('/')} 侧没有可用候选字节。请检查候选范围、黑名单或字符串引号。`);
+                    xorExprInput.value = '';
+                    renderXorDecodeEmpty();
+                    return;
+                }
                 let hexPayloadA = '';
                 let hexPayloadB = '';
                 const payloadABytes = [];
                 const payloadBBytes = [];
-                let allCleanB = true;
+                const failures = [];
                 let tableHtml =
                     '<div style="overflow-x:auto;margin-top:4px;"><table class="detail-table" style="min-width:900px;font-size:0.78rem;">' +
                     '<thead><tr>' +
@@ -2361,64 +2480,78 @@
 
                 for (let i = 0; i < plainBytes.length; i++) {
                     const targetByte = plainBytes[i];
-                    const found = findCleanA(targetByte);
-                    let a, b;
+                    const found = findCleanPair(targetByte, config);
+                    let aByte, bByte;
                     if (found) {
-                        a = found.a;
-                        b = found.b;
+                        aByte = found.a;
+                        bByte = found.b;
                     } else {
-                        // 实在找不到就用递增序列
-                        a = (i % 127) + 1;
-                        b = a ^ targetByte;
+                        failures.push({ index: i, targetByte });
+                        continue;
                     }
-                    const bChar = String.fromCharCode(b);
-                    const hexAStr = a.toString(16).toUpperCase().padStart(2, '0');
-                    const hexBStr = b.toString(16).toUpperCase().padStart(2, '0');
+                    const hexAStr = aByte.toString(16).toUpperCase().padStart(2, '0');
+                    const hexBStr = bByte.toString(16).toUpperCase().padStart(2, '0');
                     hexPayloadA += '%' + hexAStr;
                     hexPayloadB += '%' + hexBStr;
-                    payloadABytes.push(a);
-                    payloadBBytes.push(b);
-
-                    const bPreferred = isPreferredBByte(b);
-                    const bRawOk = !bPreferred && isRawBByte(b) && bytePassesFilter(b, 'B');
-                    const bOk = bPreferred || bRawOk;
-                    const bKind = bRawOk ? '原始字节' : (bOk ? null : getBlockedKind(bChar));
-                    if (!bOk) allCleanB = false;
+                    payloadABytes.push(aByte);
+                    payloadBBytes.push(bByte);
 
                     tableHtml +=
                         `<tr>
                             <td class="col-char" style="font-weight:700;color:#fff;">${escapeHTML(byteToDisplayChar(targetByte))}</td>
                             <td class="col-url" style="color:var(--accent);">%${hexAStr}</td>
-                            <td class="col-binary">${renderBits(a, 'original')}</td>
-                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(a))}</td>
+                            <td class="col-binary">${renderBits(aByte, 'original')}</td>
+                            <td style="color:var(--text2);font-size:0.7rem;">${escapeHTML(byteToDisplayChar(aByte))}</td>
                             <td class="col-url" style="color:var(--accent2);">%${hexBStr}</td>
-                            <td class="col-binary">${renderBits(b, 'flipped')}</td>
-                            <td style="font-weight:700;color:${bOk ? 'var(--green)' : 'var(--red)'};">${escapeHTML(byteToDisplayChar(b))}${bKind ? ' · '+bKind : ''}</td>
+                            <td class="col-binary">${renderBits(bByte, 'flipped')}</td>
+                            <td style="font-weight:700;color:var(--green);">${escapeHTML(byteToDisplayChar(bByte))}</td>
                             <td style="font-weight:700;color:var(--green);">${escapeHTML(byteToDisplayChar(targetByte))}</td>
                         </tr>`;
                 }
-                const allClean = allCleanB;
+                if (failures.length) {
+                    const preview = failures.slice(0, 8).map(failure =>
+                        `#${failure.index + 1} ${byteToDisplayChar(failure.targetByte)} (0x${failure.targetByte.toString(16).toUpperCase().padStart(2, '0')})`
+                    ).join('，');
+                    const more = failures.length > 8 ? `；另有 ${failures.length - 8} 个字节` : '';
+                    renderXorBuildError(`无解：${preview}${more}。当前 A/B 候选范围与黑名单下不存在合法异或对。`);
+                    xorExprInput.value = '';
+                    renderXorDecodeEmpty();
+                    return;
+                }
                 tableHtml +=
                     '<tr style="border-top:2px solid var(--border);">' +
                     '<td colspan="8" style="font-size:0.7rem;color:var(--text2);padding:8px;">' +
                     '<span style="color:var(--accent);">A侧</span> 与 <span style="color:var(--accent2);">B侧</span> 逐字节异或；相同位=0，不同位=1 → A ^ B = 目标字节' +
-                    (allClean ? ' &nbsp;|&nbsp; <span style="color:var(--green);">✓ B 侧符合候选/过滤设置</span>' : ' &nbsp;|&nbsp; <span style="color:var(--red);">⚠ B 侧存在不符合设置的字节</span>') +
+                    ' &nbsp;|&nbsp; <span style="color:var(--green);">✓ A/B 均符合独立候选范围与黑名单</span>' +
                     '</td></tr>';
                 tableHtml += '</tbody></table></div>';
 
-                const phpPayload = `'${hexPayloadA}'^'${hexPayloadB}'`;
+                const phpPayload = `${config.quote}${hexPayloadA}${config.quote}^${config.quote}${hexPayloadB}${config.quote}`;
                 const rawPayloadBytes = [
-                    0x27,
+                    config.quoteByte,
                     ...payloadABytes,
-                    0x27,
+                    config.quoteByte,
                     0x5E,
-                    0x27,
+                    config.quoteByte,
                     ...payloadBBytes,
-                    0x27,
+                    config.quoteByte,
                 ];
                 const rawPayload = bytesToByteString(rawPayloadBytes);
                 const urlPayload = bytesToUrl(rawPayloadBytes).toLowerCase();
-                const payloadStr = `<span class="xor-a">'${escapeHTML(hexPayloadA)}'</span><span class="xor-op"> ^ </span><span class="xor-b">'${escapeHTML(hexPayloadB)}'</span>`;
+                const wholeHits = config.wholeRaw
+                    ? findFilterHits(rawPayloadBytes, config.wholeBlacklist)
+                    : [];
+                if (wholeHits.length) {
+                    const blockedBytes = wholeHits.slice(0, 8).map(hit =>
+                        `#${hit.index + 1} ${describeByte(hit.byte)}`
+                    ).join('，');
+                    const more = wholeHits.length > 8 ? `；另有 ${wholeHits.length - 8} 处` : '';
+                    renderXorBuildError(`生成表达式命中整段黑名单：${blockedBytes}${more}。请更换引号、调整 A/B 候选范围，或确认该题不能直接使用字符串 XOR。`);
+                    xorExprInput.value = '';
+                    renderXorDecodeEmpty();
+                    return;
+                }
+                const payloadStr = `<span class="xor-a">${escapeHTML(config.quote)}${escapeHTML(hexPayloadA)}${escapeHTML(config.quote)}</span><span class="xor-op"> ^ </span><span class="xor-b">${escapeHTML(config.quote)}${escapeHTML(hexPayloadB)}${escapeHTML(config.quote)}</span>`;
 
                 const html = `
                 <div class="xor-card">
@@ -2427,7 +2560,7 @@
                         <div class="xor-payload-display">${payloadStr}</div>
                         <div class="xor-note-grid">
                             <div class="xor-note">
-                                <div class="xor-note-title">展示表达式</div>
+                                <div class="xor-note-title">分析表达式（%XX 表示原始字节）</div>
                                 <div class="xor-note-value">${escapeHTML(phpPayload)}</div>
                             </div>
                             <div class="xor-note">
@@ -2442,8 +2575,8 @@
                         ${renderXorFilterPanel(rawPayload, '生成表达式')}
                         <div class="xor-copy-row">
                             <input class="xor-copy-input" id="xorBuildExprInput" type="text" value="${escapeAttr(phpPayload)}" readonly spellcheck="false">
-                            <button class="btn btn-copy btn-sm" id="btnCopyBuildExpr">📋 表达式</button>
-                            <button class="btn btn-copy btn-sm" id="btnCopyBuildUrl">URL值</button>
+                            <button class="btn btn-copy btn-sm" id="btnCopyBuildExpr">📋 分析式</button>
+                            <button class="btn btn-copy btn-sm" id="btnCopyBuildUrl">可提交 URL 值</button>
                         </div>
                         ${tableHtml}
                     </div>
@@ -2473,38 +2606,47 @@
             });
 
             btnXorFilterPreset.addEventListener('click', function() {
-                xorFilterInput.value = 'a-zA-Z0-9+-._|${}~%&;';
+                const commonCtfBlacklist = 'a-z,A-Z,0-9,_,%,|,~,\\x27,\\x2C,.,:,@,&,*,+,\\x2D,\\x20,5C';
+                xorBlacklistA.value = commonCtfBlacklist;
+                xorBlacklistB.value = commonCtfBlacklist;
+                xorWholeBlacklist.value = commonCtfBlacklist;
+                xorQuote.value = '"';
                 buildXorHtml(plainInput.value);
                 decodeXorExpression();
             });
 
             btnXorFilterClear.addEventListener('click', function() {
-                xorFilterInput.value = '';
+                xorBlacklistA.value = '';
+                xorBlacklistB.value = '';
+                xorWholeBlacklist.value = '';
                 buildXorHtml(plainInput.value);
                 decodeXorExpression();
             });
 
-            xorFilterInput.addEventListener('input', function() {
+            [
+                xorRangeA,
+                xorBlacklistA,
+                xorRangeB,
+                xorBlacklistB,
+                xorWholeBlacklist,
+            ].forEach(input => input.addEventListener('input', function() {
                 clearTimeout(xorDecodeTimeout);
                 xorDecodeTimeout = setTimeout(() => {
                     buildXorHtml(plainInput.value);
                     decodeXorExpression();
                 }, 180);
-            });
+            }));
 
-            // checkbox 变化时刷新
             [
-                xorAllowLetters,
-                xorAllowDigits,
-                xorAllowSymbols,
-                xorAllowRaw,
-                xorAvoidA,
-                xorAvoidB,
                 xorCheckWhole,
                 xorCheckSides,
             ].forEach(cb => {
                 cb.addEventListener('change', () => buildXorHtml(plainInput.value));
                 cb.addEventListener('change', decodeXorExpression);
+            });
+            xorQuote.addEventListener('change', () => {
+                buildXorHtml(plainInput.value);
+                decodeXorExpression();
             });
 
             // 在 doEncode 和 doDecode 中调用 buildXorHtml
