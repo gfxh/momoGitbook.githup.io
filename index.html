@@ -27,31 +27,43 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      text-align: center;
-      padding: 100px 20px 80px;
+      text-align: left;
+      padding: 148px 10vw 110px;
+      box-sizing: border-box;
       position: relative;
+      isolation: isolate;
+      background: #0b1111 url('assets/media/home/W1.jpg') center / cover no-repeat;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(8, 15, 15, 0.7);
     }
 
     .hero-avatar {
-      width: 140px;
-      height: 140px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
-      margin-bottom: 36px;
+      margin: 0 0 22px;
       border: 2px solid rgba(94, 234, 212, 0.35);
-      box-shadow: 0 0 40px rgba(94, 234, 212, 0.15);
+      box-shadow: 0 0 28px rgba(94, 234, 212, 0.18);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
       object-fit: cover;
     }
 
     .hero-avatar:hover {
       transform: translateY(-4px);
-      box-shadow: 0 0 56px rgba(94, 234, 212, 0.28);
+      box-shadow: 0 0 38px rgba(94, 234, 212, 0.32);
     }
 
     .hero-title {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      max-width: 760px;
+      font-size: clamp(3rem, 6vw, 5.4rem);
       font-weight: 700;
       color: #f3f5f4;
       margin: 0 0 12px;
@@ -60,9 +72,25 @@
       animation-delay: 0.15s;
     }
 
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      .hero-title {
+        color: transparent;
+        background: linear-gradient(100deg, #f3f5f4 35%, #5eead4 50%, #f3f5f4 65%);
+        background-size: 220% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: heroFadeUp 0.8s ease-out 0.15s both, titleShimmer 6s ease-in-out 1.1s infinite;
+      }
+    }
+
+    @keyframes titleShimmer {
+      0%, 55% { background-position: 100% 0; }
+      100% { background-position: -120% 0; }
+    }
+
     .hero-subtitle {
-      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-      color: #94a3a6;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      color: #c5d0cf;
       font-weight: 400;
       margin: 0 0 10px;
       animation: heroFadeUp 0.8s ease-out both;
@@ -71,7 +99,7 @@
 
     .hero-desc {
       font-size: clamp(1rem, 2vw, 1.15rem);
-      color: #6b7580;
+      color: #9aa9a8;
       font-weight: 300;
       line-height: 1.85;
       max-width: 560px;
@@ -79,322 +107,98 @@
       animation-delay: 0.45s;
     }
 
-    .hero-console {
-      width: min(620px, calc(100vw - 40px));
-      margin-top: 28px;
-      text-align: left;
-      color: #cbd5cf;
-      background: rgba(16, 18, 20, 0.82);
-      border: 1px solid rgba(94, 234, 212, 0.18);
-      border-radius: 8px;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.32);
-      overflow: hidden;
-      animation: heroFadeUp 0.8s ease-out both;
-      animation-delay: 0.6s;
-    }
-
-    .console-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 10px 14px;
-      color: #6b7580;
-      font-size: 0.82rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .console-status {
-      color: #5eead4;
-      font-weight: 600;
-    }
-
-    .console-body {
-      padding: 16px;
-    }
-
-    .console-line {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      min-height: 24px;
-      font-family: Consolas, "SFMono-Regular", "Microsoft YaHei UI", monospace;
-      font-size: 0.95rem;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .console-prompt {
-      flex: 0 0 auto;
-      color: #5eead4;
-    }
-
-    .console-cursor {
-      display: inline-block;
-      width: 8px;
-      height: 1em;
-      background: #f5c451;
-      vertical-align: -0.15em;
-      animation: cursorBlink 1s step-end infinite;
-    }
-
-    @keyframes cursorBlink {
-      50% { opacity: 0; }
-    }
-
-    .console-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .console-stat {
-      padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
-    }
-
-    .console-stat span {
-      display: block;
-      margin-bottom: 4px;
-      color: #6b7580;
-      font-size: 0.76rem;
-    }
-
-    .console-stat strong {
-      display: block;
-      color: #f3f5f4;
-      font-size: 0.92rem;
-      font-weight: 600;
-    }
-
-    .console-note {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-top: 14px;
-      color: #94a3a6;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    .console-note strong {
-      color: #f3f5f4;
-      font-weight: 500;
-    }
-
-    .console-shuffle {
-      flex: 0 0 auto;
-      padding: 6px 10px;
-      color: #101214;
-      font: inherit;
-      font-size: 0.82rem;
-      font-weight: 700;
-      background: #5eead4;
-      border: 0;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .console-shuffle:hover,
-    .console-shuffle:focus-visible {
-      background: #f5c451;
-      transform: translateY(-1px);
-    }
-
-    .console-shuffle:focus-visible {
-      outline: 2px solid rgba(245, 196, 81, 0.55);
-      outline-offset: 3px;
-    }
-
-    @media (max-width: 640px) {
-      .hero-console {
-        margin-top: 22px;
-      }
-
-      .console-stats {
-        grid-template-columns: 1fr;
-      }
-
-      .console-note {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-
     .mini-widgets {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 20;
-      width: min(390px, calc(100vw - 36px));
-      padding: 13px;
-      color: #cbd5cf;
-      text-align: left;
-      background: rgba(16, 18, 20, 0.84);
-      border: 1px solid rgba(94, 234, 212, 0.2);
-      border-radius: 8px;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
-      backdrop-filter: blur(10px) saturate(120%);
-      -webkit-backdrop-filter: blur(10px) saturate(120%);
-      overflow: hidden;
+      position: absolute;
+      z-index: 1;
+      top: 136px;
+      right: max(32px, 7vw);
+      width: 168px;
+      padding: 16px 18px 17px;
+      color: #d9e6e4;
+      background: rgba(10, 18, 18, 0.62);
+      border: 1px solid rgba(166, 234, 223, 0.28);
+      border-radius: 6px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px) saturate(130%);
+      -webkit-backdrop-filter: blur(12px) saturate(130%);
     }
 
-    .mini-widget {
-      padding: 0;
-      background: transparent;
-      overflow: hidden;
-      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    .mini-widgets::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 16px;
+      width: 42px;
+      height: 2px;
+      background: #5eead4;
+      box-shadow: 0 0 14px rgba(94, 234, 212, 0.7);
     }
 
-    .mini-widget:hover {
-      background: transparent;
-    }
-
-    .mini-widget span {
+    .mini-widget-label {
       display: block;
-      margin-bottom: 6px;
-      color: #6b7580;
-      font-size: 0.72rem;
-      font-weight: 800;
+      margin-bottom: 8px;
+      color: #8ea5a2;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0;
       text-transform: uppercase;
     }
 
-    .mini-widget strong {
+    .mini-widget-clock {
       display: block;
       color: #f3f5f4;
-      font-size: 1.1rem;
-      line-height: 1.15;
-      word-break: break-word;
-    }
-
-    .mini-widget small {
-      display: block;
-      margin-top: 5px;
-      color: #94a3a6;
-      font-size: 0.76rem;
-      line-height: 1.45;
-    }
-
-    .mini-widget button {
-      min-height: 28px;
-      padding: 0 9px;
-      color: #101214;
-      font: inherit;
-      font-size: 0.78rem;
-      font-weight: 800;
-      background: #5eead4;
-      border: 0;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .mini-widget button:hover,
-    .mini-widget button:focus-visible {
-      background: #f5c451;
-      transform: translateY(-1px);
-    }
-
-    .mini-widget button:focus-visible {
-      outline: 2px solid rgba(245, 196, 81, 0.55);
-      outline-offset: 3px;
-    }
-
-    .mini-widget-top {
-      display: grid;
-      grid-template-columns: minmax(110px, 0.8fr) minmax(0, 1.2fr);
-      gap: 12px;
-      align-items: stretch;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .mini-widget-clock,
-    .mini-widget-quote {
-      min-height: 76px;
-    }
-
-    .mini-widget-clock strong {
-      color: #5eead4;
       font-family: Consolas, "SFMono-Regular", "Microsoft YaHei UI", monospace;
-      font-size: 1.45rem;
+      font-size: 1.7rem;
+      font-weight: 700;
       line-height: 1;
     }
 
-    .mini-widget-quote {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: center;
-      padding-left: 12px;
-      border-left: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .mini-widget-quote span {
-      margin-bottom: 4px;
-    }
-
-    .mini-widget-quote strong {
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-
-    .mini-widget-page {
-      padding-top: 11px;
-    }
-
-    .mini-widget-page .mini-progress-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .mini-progress-track {
-      height: 4px;
-      margin-top: 8px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 999px;
-    }
-
-    .mini-progress-track i {
+    .mini-widget-date {
       display: block;
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #5eead4, #f5c451);
-      border-radius: inherit;
-      transition: width 0.2s ease;
+      margin-top: 9px;
+      color: #aab9b7;
+      font-size: 0.78rem;
+      line-height: 1.2;
     }
 
     @media (max-width: 640px) {
+      .hero-section {
+        min-height: 78vh;
+        padding: 126px 24px 84px;
+        background-position: 58% center;
+      }
+
+      .hero-avatar {
+        width: 58px;
+        height: 58px;
+        margin-bottom: 18px;
+      }
+
+      .hero-title {
+        font-size: clamp(2.6rem, 13vw, 3.8rem);
+      }
+
       .mini-widgets {
-        right: 12px;
-        bottom: 12px;
-        width: min(340px, calc(100vw - 24px));
+        top: auto;
+        right: 24px;
+        bottom: 70px;
+        width: 144px;
+        padding: 13px 15px 14px;
       }
 
-      .mini-widget-top {
-        grid-template-columns: 1fr;
-      }
+      .mini-widget-clock { font-size: 1.45rem; }
 
-      .mini-widget-quote {
-        padding-top: 10px;
-        padding-left: 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.07);
-        border-left: 0;
-      }
     }
 
     @keyframes heroFadeUp {
       from { opacity: 0; transform: translateY(28px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-title {
+        animation: none;
+      }
     }
 
     /* 滚动指示器 */
@@ -421,22 +225,39 @@
      * ======================================== */
 
     .scroll-text-section {
-      min-height: 60vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-      padding: 120px 20px;
+      display: grid;
+      grid-template: minmax(500px, 78vh) / minmax(0, 1fr);
+      width: 100%;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      border-top: 1px solid rgba(121, 165, 158, 0.2);
     }
 
     .scroll-text {
-      text-align: center;
-      font-size: clamp(1.6rem, 4vw, 3.2rem);
+      grid-area: 1 / 1;
+      align-self: end;
+      z-index: 2;
+      max-width: 850px;
+      padding: 0 10vw 11vh;
+      text-align: left;
+      font-size: clamp(2rem, 4.8vw, 4.4rem);
       font-weight: 700;
       color: #f3f5f4;
       user-select: none;
       line-height: 1.8;
+      text-shadow: 0 4px 28px rgba(0, 0, 0, 0.62);
+    }
+
+    .scroll-text-section::after {
+      content: '';
+      grid-area: 1 / 1;
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(4, 10, 10, 0.8) 0%, rgba(5, 12, 12, 0.46) 52%, rgba(5, 12, 12, 0.2) 100%), linear-gradient(0deg, rgba(4, 9, 9, 0.66) 0%, transparent 58%);
+      pointer-events: none;
     }
 
     .scroll-text span {
@@ -451,25 +272,43 @@
 
     /* 区段媒体：静默融入，不抢夺文字注意力 */
     .scroll-media {
+      grid-area: 1 / 1;
       display: block;
-      max-width: 960px;
+      max-width: none;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 12px;
-      opacity: 0.12;
-      filter: saturate(0.5);
+      height: 100%;
+      aspect-ratio: auto;
+      z-index: 0;
+      border-radius: 0;
+      opacity: 1;
+      filter: saturate(0.7) contrast(0.92) brightness(0.68);
       object-fit: cover;
       background: #101214;
-      transition: opacity 0.6s ease, filter 0.6s ease;
+      transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s ease;
     }
 
     .scroll-media:hover {
-      opacity: 0.5;
-      filter: saturate(1);
+      filter: saturate(0.84) contrast(0.98) brightness(0.74);
+      transform: scale(1.015);
     }
 
+    .scroll-text-section:nth-of-type(2) .scroll-media { object-position: center center; }
+    .scroll-text-section:nth-of-type(3) .scroll-media { object-position: 45% center; }
+    .scroll-text-section:nth-of-type(4) .scroll-media { object-position: center center; }
+    .scroll-text-section:nth-of-type(5) .scroll-media { object-position: center 38%; }
+
     @media (max-width: 640px) {
-      .scroll-media { max-width: 95%; }
+      .scroll-text-section {
+        grid-template-rows: minmax(460px, 68vh);
+        padding: 0;
+      }
+
+      .scroll-text {
+        padding: 0 28px 66px;
+        font-size: clamp(1.8rem, 9vw, 3rem);
+      }
+
+      .scroll-media { max-width: none; }
     }
 
     /* ========================================
@@ -503,92 +342,37 @@
     <h1 class="hero-title">Hi, I Am XoBear</h1>
     <p class="hero-subtitle">Aspiring Cybersecurity Developer</p>
     <p class="hero-desc">The first principle of learning is self-study.</p>
-    <div class="hero-console" aria-label="站点状态">
-      <div class="console-bar">
-        <span>xobear@home</span>
-        <span class="console-status">online</span>
-      </div>
-      <div class="console-body">
-        <div class="console-line">
-          <span class="console-prompt">~/notes $</span>
-          <span id="heroTypewriter">scan --focus web-security</span>
-          <span class="console-cursor" aria-hidden="true"></span>
-        </div>
-        <div class="console-stats" aria-label="当前状态">
-          <div class="console-stat">
-            <span>Now</span>
-            <strong>CTF / Java</strong>
-          </div>
-          <div class="console-stat">
-            <span>Mode</span>
-            <strong>Self-study</strong>
-          </div>
-          <div class="console-stat">
-            <span>Next</span>
-            <strong>Write notes</strong>
-          </div>
-        </div>
-        <div class="console-note">
-          <span>Today: <strong id="focusNote">先跑通，再优雅。</strong></span>
-          <button class="console-shuffle" type="button" id="focusShuffle">换一句</button>
-        </div>
-      </div>
-    </div>
+    <aside class="mini-widgets" aria-label="当前日期和时间">
+      <span class="mini-widget-label">Local time</span>
+      <strong id="widgetClock" class="mini-widget-clock">--:--</strong>
+      <span id="widgetDate" class="mini-widget-date">Loading date</span>
+    </aside>
     <div class="hero-scroll-hint" id="heroScrollHint" aria-hidden="true"></div>
   </section>
 
   <!-- 滚动文字 -->
   <section class="scroll-text-section">
     <div class="scroll-text" id="scrollText1" data-text="学习的第一性原理是自学">学习的第一性原理是自学</div>
-    <img src="assets/media/home/wallpaper-18030757596220800.webp" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+    <img src="assets/media/home/W3.jpg" alt="2" class="scroll-media" loading="lazy" decoding="async">
   </section>
   <section class="scroll-text-section">
-    <div class="scroll-text" id="scrollText2" data-text="志气要和实力成正比，不然只是一场笑话">志气要和实力成正比，不然只是一场笑话</div>
-    <img src="assets/media/home/wallpaper-17395614222634368.webp" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+    <div class="scroll-text" id="scrollText2" data-text="志气要和实力成正比，   不然只是一场笑话">志气要和实力成正比，   不然只是一场笑话</div>
+    <img src="assets/media/home/W4.jpg" alt="3" class="scroll-media" loading="lazy" decoding="async">
   </section>
   <section class="scroll-text-section">
-    <div class="scroll-text" id="scrollText2" data-text="通宵写 Exp 不为虚名，只为解开谜题那一刻的释然">通宵写 Exp 不为虚名，只为解开谜题那一刻的释然</div>
-    <img src="assets/media/home/wallpaper-17202184696024448.webp" alt="壁纸" class="scroll-media" loading="lazy" decoding="async">
+    <div class="scroll-text" id="scrollText3" data-text="通宵写 Exp 不为虚名，   只为解开谜题那一刻的释然">通宵写 Exp 不为虚名，    只为解开谜题那一刻的释然</div>
+    <img src="assets/media/home/W5.jpg" alt="4" class="scroll-media" loading="lazy" decoding="async">
 
   </section>
   <section class="scroll-text-section">
-    <div class="scroll-text" id="scrollText1" data-text="这是一条漫长的路">这是一条漫长的路</div>
-    <video class="scroll-media" autoplay muted loop playsinline preload="metadata" aria-label="动态壁纸">
-      <source src="assets/media/home/wallpaper-19121996127753088.mp4" type="video/mp4">
-      你的浏览器不支持视频播放。
+    <div class="scroll-text" id="scrollText4" data-text="这是一条漫长的路">这是一条漫长的路</div>
+    <video class="scroll-media" autoplay muted loop playsinline preload="metadata" aria-label="深夜的多屏工作台背景视频">
+      <source src="assets/media/home/M1.mp4" type="video/mp4">
     </video>
   </section>
   <footer class="home-footer">
     <p>&copy; 2026 XoBear. All rights reserved.</p>
   </footer>
-
-  <aside class="mini-widgets" aria-label="首页小挂件">
-    <div class="mini-widget-top">
-      <div class="mini-widget mini-widget-clock">
-        <div>
-          <span>Clock</span>
-          <strong id="widgetClock">--:--</strong>
-        </div>
-        <small id="widgetDate">Loading date</small>
-      </div>
-      <div class="mini-widget mini-widget-quote">
-        <div>
-          <span>Quote</span>
-          <strong id="widgetQuote">慢一点，但别停。</strong>
-        </div>
-        <button type="button" id="widgetQuoteNext">换一句</button>
-      </div>
-    </div>
-    <div class="mini-widget mini-widget-page">
-      <div class="mini-progress-row">
-        <span>Page</span>
-        <strong id="widgetProgressText">0%</strong>
-      </div>
-      <div class="mini-progress-track" aria-hidden="true">
-        <i id="widgetProgressBar"></i>
-      </div>
-    </div>
-  </aside>
 
   <script>
 
@@ -667,98 +451,10 @@
       }, { passive: true });
     })();
 
-    (function initHeroConsole() {
-      const typeTarget = document.getElementById('heroTypewriter');
-      const noteTarget = document.getElementById('focusNote');
-      const shuffleBtn = document.getElementById('focusShuffle');
-      if (!typeTarget || !noteTarget || !shuffleBtn) return;
-
-      const commands = [
-        'scan --focus web-security',
-        'open ./CTF/Web/PHP',
-        'git commit -m "keep learning"',
-        'java --practice daily'
-      ];
-      const notes = [
-        '先跑通，再优雅。',
-        '不会就查，查完就记。',
-        '每天补一个小漏洞。',
-        '把复杂问题拆小。',
-        '今天也别空手下线。',
-        '今天也要加油！',
-        '再来一题吧。',
-        '别怕慢，怕停。',
-        '先动手，再优化。',
-        '把坑写成路标。',
-        '小步快跑，稳住节奏。',
-        '卡住时先复现。',
-        '先抓主线，再补细节。',
-        '今天少留一个 TODO。',
-        '让笔记比记忆可靠。',
-        '写清楚，就是进步。',
-        '别急，答案在过程里。'
-      ];
-
-      let commandIndex = 0;
-      let noteIndex = 0;
-
-      function typeCommand(text, done) {
-        let charIndex = 0;
-        typeTarget.textContent = '';
-        const timer = window.setInterval(function () {
-          typeTarget.textContent = text.slice(0, charIndex);
-          charIndex += 1;
-          if (charIndex > text.length) {
-            window.clearInterval(timer);
-            window.setTimeout(done, 1300);
-          }
-        }, 58);
-      }
-
-      function loopCommands() {
-        typeCommand(commands[commandIndex], function () {
-          commandIndex = (commandIndex + 1) % commands.length;
-          loopCommands();
-        });
-      }
-
-      function nextNote() {
-        noteIndex = (noteIndex + 1) % notes.length;
-        noteTarget.textContent = notes[noteIndex];
-      }
-
-      shuffleBtn.addEventListener('click', nextNote);
-      loopCommands();
-    })();
-
-    (function initMiniWidgets() {
+    (function initClockWidget() {
       const clockTarget = document.getElementById('widgetClock');
       const dateTarget = document.getElementById('widgetDate');
-      const quoteTarget = document.getElementById('widgetQuote');
-      const quoteBtn = document.getElementById('widgetQuoteNext');
-      const progressText = document.getElementById('widgetProgressText');
-      const progressBar = document.getElementById('widgetProgressBar');
-      if (!clockTarget || !dateTarget || !quoteTarget || !quoteBtn || !progressText || !progressBar) return;
-
-      const quotes = [
-        '慢一点，但别停。',
-        '先记录，再遗忘。',
-        '一个报错，一次升级。',
-        '把复杂问题拆小。',
-        '今天也别空手下线。',
-        '思路清楚，代码就不慌。',
-        '把坑写成路标。',
-        '先复现，再判断。',
-        '小题也认真收尾。',
-        '别让灵感只路过。',
-        '会了也要写下来。',
-        '多问一个为什么。',
-        '保持好奇，保持手感。',
-        '把复杂拆到能开始。',
-        '先完成，再漂亮。',
-        '每次提交都算数。'
-      ];
-      let quoteIndex = Math.floor(Math.random() * quotes.length);
+      if (!clockTarget || !dateTarget) return;
 
       function updateClock() {
         const now = new Date();
@@ -774,28 +470,9 @@
         });
       }
 
-      function updateProgress() {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-        const percent = Math.round(Math.min(1, Math.max(0, scrollTop / scrollable)) * 100);
-        progressText.textContent = percent + '%';
-        progressBar.style.width = percent + '%';
-      }
-
-      function nextQuote() {
-        quoteIndex = (quoteIndex + 1) % quotes.length;
-        quoteTarget.textContent = quotes[quoteIndex];
-      }
-
-      quoteTarget.textContent = quotes[quoteIndex];
-      quoteBtn.addEventListener('click', nextQuote);
       updateClock();
-      updateProgress();
       window.setInterval(updateClock, 1000);
-      window.addEventListener('scroll', updateProgress, { passive: true });
-      window.addEventListener('resize', updateProgress);
     })();
-
 
   </script>
 
