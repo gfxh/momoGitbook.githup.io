@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>POST数据包上传</title>
+
+</head>
+
+<body>
+
+    <label for="actionUrl">Action地址：</label>
+    <input type="text" id="actionUrl" name="actionUrl" placeholder="请输入action地址">
+
+    <form action="" method="post" enctype="multipart/form-data" id="uploadForm">
+        <label for="file">文件名：</label>
+        <p><input type="file" name="file" id="file"></p>
+        <p><input type="submit" name="submit" value="上传"></p>
+
+    </form>
+
+    <script>
+        document.getElementById('actionUrl').addEventListener('input', function(e) {
+            document.getElementById('uploadForm').action = e.target.value;
+        });
+    </script>
+
+</body>
+
+</html>
