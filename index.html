@@ -107,6 +107,63 @@
       animation-delay: 0.45s;
     }
 
+    .hero-title.is-typing::after,
+    .hero-subtitle.is-typing::after,
+    .hero-desc.is-typing::after {
+      content: '|';
+      display: inline-block;
+      margin-left: 0.12em;
+      vertical-align: 0.04em;
+      font-weight: 300;
+      line-height: 1;
+      animation: typingCursor 0.82s steps(1) infinite;
+    }
+
+    .hero-title.is-typing::after {
+      color: #5eead4;
+    }
+
+    .hero-subtitle.is-typing::after,
+    .hero-desc.is-typing::after {
+      color: #5eead4;
+    }
+
+    .hero-title.is-typing {
+      color: #f3f5f4;
+      background: none;
+      -webkit-text-fill-color: #f3f5f4;
+    }
+
+    .hero-title.is-color-cycling,
+    .hero-subtitle.is-color-cycling,
+    .hero-desc.is-color-cycling {
+      color: #5eead4;
+    }
+
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      .hero-title.is-color-cycling,
+      .hero-subtitle.is-color-cycling,
+      .hero-desc.is-color-cycling {
+        color: transparent;
+        background: linear-gradient(100deg, #f3f5f4 18%, #5eead4 40%, #93c5fd 58%, #f3f5f4 82%);
+        background-size: 220% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textColorFlow 4.4s linear infinite;
+      }
+    }
+
+    @keyframes typingCursor {
+      0%, 48% { opacity: 1; }
+      49%, 100% { opacity: 0; }
+    }
+
+    @keyframes textColorFlow {
+      from { background-position: 100% 0; }
+      to { background-position: -120% 0; }
+    }
+
     .mini-widgets {
       position: absolute;
       z-index: 1;
@@ -196,7 +253,15 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-title {
+      .hero-title,
+      .hero-subtitle,
+      .hero-desc,
+      .hero-title.is-typing::after,
+      .hero-subtitle.is-typing::after,
+      .hero-desc.is-typing::after,
+      .hero-title.is-color-cycling,
+      .hero-subtitle.is-color-cycling,
+      .hero-desc.is-color-cycling {
         animation: none;
       }
     }
@@ -339,9 +404,11 @@
   <!-- Hero -->
   <section class="hero-section">
     <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" alt="Avatar" class="hero-avatar" loading="eager" fetchpriority="high">
-    <h1 class="hero-title">Hi, I Am XoBear</h1>
-    <p class="hero-subtitle">Aspiring Cybersecurity Developer</p>
-    <p class="hero-desc">The first principle of learning is self-study.</p>
+    
+    <h1 class="hero-title" data-typewriter data-type-speed="72">Hi, I Am XoBear</h1>
+    <p class="hero-subtitle" data-typewriter data-type-speed="42">Aspiring Cybersecurity Developer</p>
+    <p class="hero-desc" data-typewriter data-type-speed="42">Little by little accumulation.</p>
+    <p class="hero-desc" data-typewriter data-type-speed="42">The first principle of learning is self-study.</p>
     <aside class="mini-widgets" aria-label="当前日期和时间">
       <span class="mini-widget-label">Local time</span>
       <strong id="widgetClock" class="mini-widget-clock">--:--</strong>
@@ -375,6 +442,88 @@
   </footer>
 
   <script>
+
+    (function initHeroTypewriter() {
+      const targets = document.querySelectorAll('[data-typewriter]');
+      if (targets.length === 0) return;
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduceMotion) return;
+
+      const items = Array.from(targets).map(function (target) {
+        const text = target.textContent.trim();
+        target.setAttribute('aria-label', text);
+        target.textContent = '';
+        return {
+          target: target,
+          chars: Array.from(text),
+          speed: Number(target.dataset.typeSpeed) || 45
+        };
+      });
+
+      function wait(duration) {
+        return new Promise(function (resolve) {
+          window.setTimeout(resolve, duration);
+        });
+      }
+
+      function setCursor(target) {
+        items.forEach(function (item) {
+          item.target.classList.toggle('is-typing', item.target === target);
+        });
+      }
+
+      function setColorCycle(active) {
+        items.forEach(function (item) {
+          item.target.classList.toggle('is-color-cycling', active);
+        });
+      }
+
+      function type(item) {
+        return new Promise(function (resolve) {
+          let index = 0;
+          setCursor(null);
+          const timer = window.setInterval(function () {
+            item.target.textContent += item.chars[index];
+            index += 1;
+            setCursor(item.target);
+            if (index >= item.chars.length) {
+              window.clearInterval(timer);
+              resolve();
+            }
+          }, item.speed);
+        });
+      }
+
+      function erase(item) {
+        return new Promise(function (resolve) {
+          setCursor(item.target);
+          const timer = window.setInterval(function () {
+            item.target.textContent = item.target.textContent.slice(0, -1);
+            if (item.target.textContent.length === 0) {
+              window.clearInterval(timer);
+              setCursor(null);
+              resolve();
+            }
+          }, Math.max(22, item.speed * 0.55));
+        });
+      }
+
+      (async function loopTypewriter() {
+        await wait(180);
+        while (true) {
+          setColorCycle(false);
+          for (const item of items) await type(item);
+          setColorCycle(true);
+          setCursor(items[items.length - 1].target);
+          await wait(2600);
+          setColorCycle(false);
+          for (const item of items.slice().reverse()) await erase(item);
+          await wait(480);
+        }
+      })();
+    })();
 
     (function initScrollTexts() {
       const sections = document.querySelectorAll('.scroll-text');
