@@ -482,6 +482,294 @@ Map中get()
 ![image.png](https://img.xobear.cn/file/JAVA/1785140695646_image.png)
 [json格式化工具](https://www.bejson.com/jsonviewernew/#google_vignette)
 
+4.1 User-Agent
+-
+
+UA，我们在做日志包含的题目时经常使用。很多时候在UA上传 一句话木马
+
+现在，我需要详细学一下User-Agent
+
+HTTP
+消息头
+Headers
+是
+HTTP
+协议的一项重要内容，作用是在发起请求
+的时候，除了请求参数外，可以附加更多的信息。
+[Headers文档](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Reference/Headers)
+
+User-Agent是存放在
+Headers
+中的一种数据信息。作用是，在指定
+URL
+发送请求的时候，告诉服务端当前用户的浏览器类型、版本，甚至操作系
+统、CPU等非隐私的技术信息
+
+Okhttp3
+库已经支持
+Headers
+了，只需要在构建
+Request对象的时候，调用
+`addHeader()`
+方法即可：
+
+```
+Request request = new Request.Builder()
+    .url(url)
+    .addHeader("User-Agent", "")
+    .build();
+```
+
+`addHeader()`方法第一个参数是名称，第二个参数是值。
+
+4.2 Referer
+-
+
+说白了，就是“假装”
+
+一个图片网站A，允许网站B访问图片，不许网站C访问图片
+
+C去请求A的网站，响应了403，C就在请求头上加一个`Referer:B的网站`假装是B去访问A的图片
+
+**Referer 表示的是“我声称自己从哪个网页来的”，不是“请求者实际是谁”。**
+
+4.3 Host
+-
+Host表示当前请求的域名。虽然这个域名已经存在于UL中，但遇到复杂的场景，例如使用代理服务器、或者URL中不写域名而是写IP地址进
+行请求等，设置Host就非常有用了。
+[Host](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Reference/Headers/Host)
+
+跟
+User-Agent和
+Referer一样，Host
+也是属于
+He aders数据的字段
+之一
+```
+Request request = new Request.Builder()
+    .url(url)
+    .addHeader("Host", "www.douban.com")
+    .build();
+```
+Host
+的值一定是一个域名且不带协议头。
+
+5.1 下载文件
+-
+
+
+5.1 下载文件
+console
+```
+Java
+
+创建文件对象
+   ↓
+写入内容
+   ↓
+关闭写入操作
+```
+**写入文本文件**
+
+```
+import java.io.File;
+import java.io.FileWriter;
+
+// 文件对象
+File file = new File("foo.txt");
+
+// 写入内容
+FileWriter fileWritter = new FileWriter(file.getName());
+fileWritter.write(content);
+
+// 关闭
+fileWritter.close();
+```
+
+File
+是文件类
+FileWriter是用来给文件写入内容的类。再次强调
+写入文件类必须执行关闭操作。
+
+**写入二进制文件**
+```
+import java.io.File;
+import java.io.FileOutputStream;
+
+// 文件对象
+File file = new File("china-city-list.xlsx");
+
+// 写文件
+FileOutputStream fos = new FileOutputStream(file);
+fos.write(data);
+
+// 必须刷新并关闭
+fos.flush();
+fos.close();
+```
+
+5.2 下载图片
+-
+与写入二进制文件一样
+```
+package com.youkeda.test.http;
+
+import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class ImageAsker {
+
+  /**
+   * 根据输入的url，读取页面内容并返回
+   */
+  public byte[] getContent(String url) {
+    // okHttpClient 实例
+    OkHttpClient okHttpClient = new OkHttpClient();
+    // 定义一个request
+    Request request = new Request.Builder()
+        .url(url)
+        .addHeader("Referer","http://photo.yupoo.com/")
+        .addHeader("Host","http://photo.yupoo.com/")
+        .addHeader("User-Agent","http://photo.yupoo.com/")
+        .build();
+    byte[] bytes = null;
+    try {
+      // 执行请求
+      Response response = okHttpClient.newCall(request).execute();
+      bytes = response.body().bytes();
+    } catch (IOException e) {
+      System.out.println("request " + url + " error . ");
+      e.printStackTrace();
+    }
+
+    return bytes;
+  }
+
+  public static void main(String[] args) {
+    String url = "http://photo.yupoo.com/vibius/GkRSowXr/medish.jpg";
+    ImageAsker asker = new ImageAsker();
+    byte[] data = asker.getContent(url);
+
+    try {
+      File file = new File("medish.jpg");
+      // 写入图片文件
+      FileOutputStream fileOutputStream=new FileOutputStream(file);
+      fileOutputStream.write(data);
+      fileOutputStream.flush();
+      fileOutputStream.close();
+
+      System.out.println("Download complete");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+
+```
+
+5.3 解析excel
+-
+**依赖库**
+easyexcel是阿里巴巴出品的快速、简单操作
+exce1文件的库。使用前必
+须在
+pom.xml
+文件中加入对库的依赖。
+```
+<dependency>
+  <groupId>com.alibaba</groupId>
+  <artifactId>easyexcel</artifactId>
+  <version>3.1.1</version>
+</dependency>
+```
+exce1文件是多
+sheet模式的，每个sheet实际上是一个
+表格，表格又分为行和列。
+
+所以解析数据的路径一定是：sheet->行->列
+第一个sheet，第一行，第一列  （0，0，0）
+
+
+```
+import com.alibaba.excel.EasyExcel;
+import java.util.Map;
+import java.util.List;
+
+// 读取第一个sheet
+List<Map<Integer, String>> sheetDatas = EasyExcel.read("xzq_201907.xlsx").sheet(0).doReadSync();
+// List 中每个元素表示一行
+for (Map<Integer, String> rowData : sheetDatas) {
+  // Map 中用序号指代每一列
+  for (Integer index : rowData.keySet()) {
+    // 列值
+    String columnValue = rowData.get(index);
+  }
+}
+```
+解析文件的第一个步骤是读取文件内容，调用EasyExce1.read()方法，传
+入文件名称。然后这里解析的第一个工作表，所以调用
+sheet()方法，传
+入参数0。最后的doReadsync()表示同步方式读取文件内容，返回一个读
+取到的内容集合
+List。这是一个连贯的写法。
+
+返回的
+List集合中，系统用
+Map
+类表示一行数据（因为系统不知道
+excel
+对应什么具体的对象，其实Map
+可以当做一种通用的对象)
+
+![image.png](https://img.xobear.cn/file/JAVA/1785490381583_image.png)
+
+
+自动转换为类
+
+
+在不能提前确定excel文件每一列的含义时，或者复杂场景下exce1文件的列经常变化，用Map表示每一列的数据比较好。
+但是如果知道excel文件每一列的含义，用自定义类来表示，会更加直观。
+
+
+```
+import com.alibaba.excel.EasyExcel;
+import java.util.List;
+
+// 读取第一个sheet
+List<DemoData> sheetDatas = EasyExcel.read("xzq_201907.xlsx").head(DemoData.class).sheet(0).doReadSync();
+```
+注意这里多调用了一个方法：`.head(DemoData.class)`,`DemoData`就是自定义的类，表示一行数据，类的每个属性都表示一列的值。
+MCP更灵活，自定义类更直观易理解。一般列数不太多（不超过10个）、不会变化，用自定义类
+返回值为List<DemoData>就表示把每一行都转换为一个DemoData的实例对象，放入List集合中。
+
+
+6.1 cookie
+-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -8,6 +8,8 @@
     textarea, input[type="text"] { width: 100%; font-size: 16px; padding: 8px; box-sizing: border-box; }
     textarea { height: 100px; resize: vertical; }
     input[type="text"] { margin-top: 4px; }
+    .base-output { font-family: Consolas, Monaco, monospace; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
+    .base-output.is-source-base { background: #fff3cd; border: 2px solid #d39e00; color: #5c4300; box-shadow: 0 0 0 3px rgba(211, 158, 0, 0.14); font-weight: bold; }
     button { margin: 10px 4px 10px 0; padding: 10px 24px; font-size: 16px; cursor: pointer; }
     label { font-weight: bold; display: block; margin-top: 16px; }
     hr { margin: 30px 0; }
@@ -73,8 +75,8 @@
   <textarea id="ac_output" readonly placeholder="转换结果..."></textarea>
   <button onclick="ac_to_octal()" style="background:#e8f0fe; border:1px solid #999;">⬇️\xHH → \NNN⬇️</button>
   <button onclick="octal_to_hex()" style="background:#e8f0fe; border:1px solid #999;">⬆️\NNN → \xHH⬆️</button>
-  <label for="ac_octal_output">八进制 \NNN 输出：</label>
-  <textarea id="ac_octal_output" readonly placeholder="点击 \xHH → \NNN 或粘贴 \NNN 序列点反向按钮..."></textarea>
+  <label for="ac_octal_output">八进制 \NNN 输出/输入：</label>
+  <textarea id="ac_octal_output" placeholder="点击 \xHH → \NNN，或在此粘贴 \NNN 序列后点击反向按钮..."></textarea>
   <section class="ascii-reference" aria-labelledby="ascii-reference-title">
     <h2 id="ascii-reference-title">ASCII 编码表</h2>
     <p>包含控制字符、可打印字符和扩展 ASCII（ISO-8859-1）字符。各表均列出十进制、八进制、十六进制、二进制、HTML 实体及字符说明。</p>
@@ -119,16 +121,16 @@
     <label><input type="radio" name="base_from" value="2"> 二进制</label>
   </div>
   <label for="base_input">输入（源进制）：</label>
-  <input type="text" id="base_input" placeholder="请输入数值...">
+  <input type="text" id="base_input" placeholder="请输入 0 1 2 3 4 5 6 7 8 9 A B C D E F">
   <button onclick="base_convert()">转换</button>
   <label for="base_hex">十六进制：</label>
-  <input type="text" id="base_hex" readonly>
+  <input type="text" id="base_hex" class="base-output" readonly>
   <label for="base_dec">十进制：</label>
-  <input type="text" id="base_dec" readonly>
+  <input type="text" id="base_dec" class="base-output" readonly>
   <label for="base_oct">八进制：</label>
-  <input type="text" id="base_oct" readonly>
+  <input type="text" id="base_oct" class="base-output" readonly>
   <label for="base_bin">二进制：</label>
-  <input type="text" id="base_bin" readonly>
+  <input type="text" id="base_bin" class="base-output" readonly>
   <div id="base_error" class="error"></div>
 
   <script>
@@ -240,6 +242,7 @@
       for (var i = 0; i < radios.length; i++) {
         if (radios[i].checked) { fromBase = parseInt(radios[i].value); break; }
       }
+      updateBaseOutputHighlight(fromBase);
 
       if (!input) {
         errDiv.textContent = '请输入数值';
@@ -280,6 +283,39 @@
       document.getElementById('base_oct').value = '';
       document.getElementById('base_bin').value = '';
     }
+
+    function updateBaseOutputHighlight(fromBase) {
+      var outputs = {
+        16: 'base_hex',
+        10: 'base_dec',
+        8: 'base_oct',
+        2: 'base_bin'
+      };
+      var outputIds = Object.keys(outputs);
+      for (var i = 0; i < outputIds.length; i++) {
+        document.getElementById(outputs[outputIds[i]]).classList.remove('is-source-base');
+      }
+      document.getElementById(outputs[fromBase]).classList.add('is-source-base');
+      updateBaseInputPlaceholder(fromBase);
+    }
+
+    function updateBaseInputPlaceholder(fromBase) {
+      var placeholders = {
+        16: '请输入 0 1 2 3 4 5 6 7 8 9 A B C D E F',
+        10: '请输入 0 1 2 3 4 5 6 7 8 9',
+        8: '请输入 0 1 2 3 4 5 6 7',
+        2: '请输入 0 或 1'
+      };
+      document.getElementById('base_input').placeholder = placeholders[fromBase];
+    }
+
+    var baseRadios = document.getElementsByName('base_from');
+    for (var radioIndex = 0; radioIndex < baseRadios.length; radioIndex++) {
+      baseRadios[radioIndex].addEventListener('change', function () {
+        updateBaseOutputHighlight(parseInt(this.value));
+      });
+    }
+    updateBaseOutputHighlight(16);
 
     var asciiControlCharacters = [
       ['NUL', 'Null character', '空字符'], ['SOH', 'Start of Heading', '标题开始'],

