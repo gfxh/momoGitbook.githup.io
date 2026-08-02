@@ -128,8 +128,8 @@ async function loadMarkdown(filePath) {
     // 阅读时间估算
     addReadingTime(markdownText);
 
-    // 代码复制按钮
-    initCopyButtons();
+    // 代码块工具栏
+    initCodeBlockControls();
 
     // 图片 Lightbox
     initLightbox();
@@ -379,26 +379,166 @@ function addReadingTime(text) {
   if (firstChild) firstChild.prepend(el);
 }
 
-/** 代码块复制按钮 */
-function initCopyButtons() {
+/** 代码块复制、全屏与长代码折叠 */
+function initCodeBlockControls() {
   document.querySelectorAll('#content pre code').forEach(function (block) {
     var pre = block.parentElement;
-    if (pre.querySelector('.copy-btn')) return; // 避免重复
+    if (pre.dataset.codeControlsReady) return;
+    pre.dataset.codeControlsReady = 'true';
 
-    var btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.textContent = 'Copy';
-    btn.addEventListener('click', function () {
-      navigator.clipboard.writeText(block.textContent).then(function () {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
+    var actions = document.createElement('div');
+    actions.className = 'code-actions';
+
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'code-action-btn copy-btn';
+    copyBtn.type = 'button';
+    copyBtn.textContent = '复制';
+    copyBtn.setAttribute('aria-label', '复制代码');
+    copyBtn.addEventListener('click', function () {
+      var codeToCopy = pre.dataset.codeText || block.textContent;
+      var copyPromise = navigator.clipboard && window.isSecureContext
+        ? navigator.clipboard.writeText(codeToCopy)
+        : Promise.reject(new Error('Clipboard API unavailable'));
+
+      copyPromise.catch(function () {
+        var textarea = document.createElement('textarea');
+        textarea.value = codeToCopy;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }).then(function () {
+        copyBtn.textContent = '已复制';
+        copyBtn.classList.add('copied');
         setTimeout(function () {
-          btn.textContent = 'Copy';
-          btn.classList.remove('copied');
+          copyBtn.textContent = '复制';
+          copyBtn.classList.remove('copied');
         }, 1800);
       });
     });
-    pre.appendChild(btn);
+
+    var fullscreenBtn = document.createElement('button');
+    fullscreenBtn.className = 'code-action-btn code-fullscreen-btn';
+    fullscreenBtn.type = 'button';
+    fullscreenBtn.textContent = '全屏';
+    fullscreenBtn.setAttribute('aria-label', '全屏查看代码');
+    fullscreenBtn.addEventListener('click', function () {
+      var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+      if (fullscreenElement === pre) {
+        var exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exitFullscreen) exitFullscreen.call(document);
+        return;
+      }
+
+      var requestFullscreen = pre.requestFullscreen || pre.webkitRequestFullscreen;
+      if (requestFullscreen) requestFullscreen.call(pre);
+    });
+
+    var wasFullscreen = false;
+    function updateFullscreenButton() {
+      var isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement) === pre;
+      fullscreenBtn.textContent = isFullscreen ? '退出全屏' : '全屏';
+      fullscreenBtn.setAttribute('aria-label', isFullscreen ? '退出代码全屏' : '全屏查看代码');
+      if (wasFullscreen && !isFullscreen) {
+        pre.scrollTop = 0;
+        pre.scrollLeft = 0;
+      }
+      wasFullscreen = isFullscreen;
+    }
+
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(fullscreenBtn);
+    pre.insertBefore(actions, block);
+
+    var codeText = block.textContent.replace(/\r\n/g, '\n');
+    if (codeText.endsWith('\n')) codeText = codeText.slice(0, -1);
+    var lineCount = codeText ? codeText.split('\n').length : 1;
+    pre.dataset.codeText = codeText;
+    pre.classList.add('has-line-numbers');
+    wrapCodeLines(block, lineCount);
+
+    if (lineCount > 20) {
+      var expandBtn = document.createElement('button');
+      expandBtn.className = 'code-expand-btn';
+      expandBtn.type = 'button';
+      pre.classList.add('is-collapsed');
+
+      function updateExpandButton() {
+        var isCollapsed = pre.classList.contains('is-collapsed');
+        expandBtn.textContent = isCollapsed ? '展开全部（' + lineCount + ' 行）' : '收起代码';
+        expandBtn.setAttribute('aria-expanded', String(!isCollapsed));
+      }
+
+      expandBtn.addEventListener('click', function () {
+        pre.classList.toggle('is-collapsed');
+        updateExpandButton();
+      });
+
+      updateExpandButton();
+      pre.appendChild(expandBtn);
+    }
+  });
+}
+
+function wrapCodeLines(block, lineCount) {
+  var lines = [''];
+
+  function escapeCodeText(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function serializeNode(node, openTags) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      var textParts = node.nodeValue.split('\n');
+      textParts.forEach(function (textPart, index) {
+        lines[lines.length - 1] += escapeCodeText(textPart);
+        if (index < textParts.length - 1) {
+          for (var tagIndex = openTags.length - 1; tagIndex >= 0; tagIndex--) {
+            lines[lines.length - 1] += openTags[tagIndex].close;
+          }
+          lines.push(openTags.map(function (tag) { return tag.open; }).join(''));
+        }
+      });
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+    var outerHtml = node.outerHTML;
+    var openingTag = outerHtml.slice(0, outerHtml.indexOf('>') + 1);
+    var tag = {
+      open: openingTag,
+      close: '</' + node.tagName.toLowerCase() + '>'
+    };
+    lines[lines.length - 1] += tag.open;
+    openTags.push(tag);
+    Array.from(node.childNodes).forEach(function (child) {
+      serializeNode(child, openTags);
+    });
+    openTags.pop();
+    lines[lines.length - 1] += tag.close;
+  }
+
+  Array.from(block.childNodes).forEach(function (node) {
+    serializeNode(node, []);
+  });
+
+  lines = lines.slice(0, lineCount);
+  block.innerHTML = '';
+  lines.forEach(function (lineHtml) {
+    var line = document.createElement('span');
+    line.className = 'code-line';
+    line.innerHTML = lineHtml || ' ';
+    block.appendChild(line);
   });
 }
 

