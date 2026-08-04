@@ -10,6 +10,8 @@
   <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" type="image/png">
 
   <link rel="stylesheet" href="assets/css/main.css?v=20260617j">
+  <link rel="manifest" href="site.webmanifest">
+  <script src="assets/js/mobile-landscape.js?v=20260804" defer></script>
 
   <style>
     html, body {
@@ -218,35 +220,6 @@
       line-height: 1.2;
     }
 
-    @media (max-width: 640px) {
-      .hero-section {
-        min-height: 78vh;
-        padding: 126px 24px 84px;
-        background-position: 58% center;
-      }
-
-      .hero-avatar {
-        width: 58px;
-        height: 58px;
-        margin-bottom: 18px;
-      }
-
-      .hero-title {
-        font-size: clamp(2.6rem, 13vw, 3.8rem);
-      }
-
-      .mini-widgets {
-        top: auto;
-        right: 24px;
-        bottom: 70px;
-        width: 144px;
-        padding: 13px 15px 14px;
-      }
-
-      .mini-widget-clock { font-size: 1.45rem; }
-
-    }
-
     @keyframes heroFadeUp {
       from { opacity: 0; transform: translateY(28px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -361,20 +334,6 @@
     .scroll-text-section:nth-of-type(3) .scroll-media { object-position: 45% center; }
     .scroll-text-section:nth-of-type(4) .scroll-media { object-position: center center; }
     .scroll-text-section:nth-of-type(5) .scroll-media { object-position: center 38%; }
-
-    @media (max-width: 640px) {
-      .scroll-text-section {
-        grid-template-rows: minmax(460px, 68vh);
-        padding: 0;
-      }
-
-      .scroll-text {
-        padding: 0 28px 66px;
-        font-size: clamp(1.8rem, 9vw, 3rem);
-      }
-
-      .scroll-media { max-width: none; }
-    }
 
     /* ========================================
      * Footer
