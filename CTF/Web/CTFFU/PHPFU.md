@@ -513,6 +513,91 @@ imagepng($img,'./1.png');
 ![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785637823793_image.png)
 
 
+166
+-
+
+直接在zip包后面加入一句话
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785639892684_image.png)
+
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785640038621_image.png)
+167
+----
+httpd 是 Apache HTTP Server 的简称.是一款功能强大、灵活性高的 Web 服务器，适用于各种规模的 Web 应用场景。
+
+什么是htaccess文件
+
+`.htaccess`是一个配置文件，用于运行Apache网络服务器  软件的网络服务器上。当`.htaccess`文件被放置在一个 "通过Apache Web服务器加载 "的目录中时，`.htaccess`文件会被Apache Web服务器软件检测并执行。这些`.htaccess`文件可以用来改变Apache Web服务器软件的配置，以启用/禁用Apache Web服务器软件所提供的额外功能和特性。 
+
+`.htaccess`文件提供了针对目录改变配置的方法， 即在一个特定的文档目录中放置一个包含一条或多条指令的文件， 以作用于此目录及其所有子目录。作为用户，所能使用的命令受到限制。管理员可以通过 Apache 的 AllowOverride 指令来设置。
+
+`.htaccess` 中有 # 单行注释符, 且支持 \拼接上下两行
+
+`.htaccess`文件所在的目录及其所有子目录，若要启动.htaccess配置文件，我们需要在服务器的主配置文件将 `AllowOverride` 设置为 `All`
+`AllowOverride All  #启动.htaccess文件的使用`
+
+
+
+`AddType application/x-httpd-php .jpg `
+
+```
+AddType：给指定文件后缀绑定一个解析 MIME 类型
+application/x-httpd-php：Apache 交给 PHP 解释器执行的脚本类型
+.jpg：图片后缀
+让服务器把后缀为 .jpg 的文件，当成 PHP 代码解析执行。
+```
+
+----
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785810680309_image.png)
+jpg的图片马，用上一题的即可。
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785810747493_image.png)
+
+flag在“../"
+
+168
+-
+基础免杀。上传png抓包改名字和内容，在upload目录下。就动态函数
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785811488080_image.png)
+
+
+``<?=`cat ../flagaa.php`?>``
+
+
+169
+-
+高级免杀
+抓包，先传index.php内容任意。再传.user.ini 包含日志文件
+
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785815164806_image.png)
+![image.png](https://img.xobear.cn/file/CTF/WEB/CTFShow/1785815259930_image.png)
+
+访问/upload/  给UA一句话。然后就是RCE了，
+
+170
+-
+操作与上题一样
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
