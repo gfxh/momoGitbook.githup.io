@@ -5,5 +5,13 @@
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#101214",
-  "theme_color": "#101214"
+  "theme_color": "#101214",
+  "icons": [
+    {
+      "src": "assets/media/home/TOU.jpg",
+      "sizes": "1024x1024",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
 }

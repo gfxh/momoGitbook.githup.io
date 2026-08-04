@@ -26,7 +26,14 @@
       return;
     }
 
-    var requestResult = requestFullscreen.call(root);
+    var requestResult;
+    try {
+      requestResult = requestFullscreen.call(root, { navigationUI: 'hide' });
+    } catch (error) {
+      lockLandscape();
+      return;
+    }
+
     if (requestResult && typeof requestResult.then === 'function') {
       requestResult.then(lockLandscape).catch(function () {});
     } else {
@@ -34,16 +41,31 @@
     }
   }
 
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+
   function initMobileLandscape() {
     if (!isMobileDevice()) return;
 
     lockLandscape();
+    registerServiceWorker();
     document.addEventListener('fullscreenchange', lockLandscape);
     document.addEventListener('webkitfullscreenchange', lockLandscape);
 
-    // Browsers only allow fullscreen from a user gesture. The first interaction fulfils it.
-    document.addEventListener('pointerdown', requestFullscreenAndLandscape, { once: true, passive: true });
-    document.addEventListener('keydown', requestFullscreenAndLandscape, { once: true });
+    // Browsers only allow fullscreen from a user gesture. Support the common mobile gesture events.
+    var interactionEvents = ['pointerup', 'touchend', 'click', 'keydown'];
+    function onFirstInteraction() {
+      interactionEvents.forEach(function (eventName) {
+        document.removeEventListener(eventName, onFirstInteraction, true);
+      });
+      requestFullscreenAndLandscape();
+    }
+
+    interactionEvents.forEach(function (eventName) {
+      document.addEventListener(eventName, onFirstInteraction, true);
+    });
   }
 
   if (document.readyState === 'loading') {
