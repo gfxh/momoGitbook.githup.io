@@ -750,33 +750,235 @@ MCP更灵活，自定义类更直观易理解。一般列数不太多（不超�
 
 6.1 cookie
 -
+cookie ，是存储在客户端浏览器中的一段文本内容。以  key=value（数据名称、数据值）的格式存储一条数据；多条数据之间用分号 `;`
+
+由于各种浏览器都对cookie有大小和数量限制，所以目前cookie主要用于**存储登录数据**。
+
+
+6.2 session
+-
+Session是服务器端用于保存用户状态的机制，通过唯一的Session ID将客户端与服务器端的会话关联起来。
+
+Session的基本概念
+Session（会话）是服务器为每个客户端创建的唯一对象，用于在客户端与服务器之间保持状态信息。由于HTTP协议是无状态的，服务器无法自动识别客户端身份，因此Session用于存储用户登录状态、购物车信息等数据，实现跨请求的数据共享和状态保持 
+
+Session与Cookie的区别
+
+	存储位置：Cookie保存在客户端浏览器中，而Session保存在服务器端 
+	安全性：Session数据存储在服务器端，相对更安全；Cookie容易被篡改。
+	容量：Session可以存储大量数据，而Cookie受浏览器限制，存储量有限。
+
+Session的工作原理
+
+	创建Session：客户端首次访问服务器时，服务器为其创建一个Session对象，并生成唯一的Session ID（如JSESSIONID） 
+
+	关联客户端：Session ID通过Cookie发送到客户端，客户端在后续请求中携带该ID，服务器根据ID找到对应的Session对象 
+
+	存取数据：服务器端可以通过键值对方式在Session中存储数据，例如session.setAttribute("username", "张三")，并可通过getAttribute获取 
+
+	生命周期：Session通常在浏览器关闭或超时后失效，也可以通过服务器端配置延长或手动销毁。
+
+Session在不同环境中的实现
+
+	Java：通过HttpServletRequest.getSession()创建Session，服务器自动生成Session ID并通过Cookie返回客户端 
+
+	Node.js：可使用express-session模块创建和管理Session，支持设置Cookie名称、过期时间和滚动更新等选项 
+
+	Electron：通过session模块创建新的Session对象或访问现有页面的Session，可选择持久化或内存Session 
+
+6.3 复用session
 
 
 
+static
+表示类变量，意味着无论
+new出多少个
+PageLoginer对
+象，PageLoginer.okHttpClient
+都只有一个。
+final
+表示
+okHttpC1ient一旦第一次
+new
+出对象后，不能再次
+new
+新对象。
+
+7.1 SMTP
+-
+SMTP是一个简单的基于文本的邮件传输协议，全称为(Simple Mail
+Transfer Protocol-简单邮件传输协议)。在这个协议上我们可以指定一
+条邮件消息和一个或多个邮件接收者，然后进行邮件输出。
+
+通过地址和协议，我们便具有发送邮件的基础通道。使用Java或其它编
+程语言，可以使用SMTP
+完成邮件的发送，不必打开网页登录邮箱发送邮件了。
+
+先添加依赖pom
+
+javamail
+```
+	<dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4</version>
+	</dependency>
+```
+发送邮件的代码较为固定
+
+![image.png](https://img.xobear.cn/file/JAVA/1785971310495_image.png)
 
 
+```
+import java.security.Security;
+import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+public class MailClient {
+  public static void main(String[] args) {
+    try {
+      final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+
+      //配置邮箱信息
+      Properties props = System.getProperties();
+      //邮件服务器
+      props.setProperty("mail.smtp.host", "smtp.qq.com");
+      props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+      props.setProperty("mail.smtp.socketFactory.fallback", "false");
+      //邮件服务器端口
+      props.setProperty("mail.smtp.port", "465");
+      props.setProperty("mail.smtp.socketFactory.port", "465");
+      //鉴权信息
+      props.setProperty("mail.smtp.auth", "true");
+      //建立邮件会话
+      Session session = Session.getDefaultInstance(props, new Authenticator() {
+        //身份认证
+        protected PasswordAuthentication getPasswordAuthentication() {
+          //1.账户 授权码需要自己获得
+          return new PasswordAuthentication("xxxxxxx@qq.com", "xxxx");
+        }
+      });
+      //建立邮件对象
+      MimeMessage message = new MimeMessage(session);
+      //设置邮件的发件人
+      message.setFrom(new InternetAddress("xxxxxxx@qq.com"));
+      //2.设置邮件的收件人
+      message.setRecipients(Message.RecipientType.TO, "xxxxxxx@qq.com");
+      //设置邮件的主题
+      message.setSubject("通过javamail发出！！！");
+      //文本部分
+      message.setContent("文本邮件测试", "text/html;charset=UTF-8");
+      message.saveChanges();
+      //发送邮件
+      Transport.send(message);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+8.1 查询城市天气
+-
+https://api.seniverse.com/v3/weather/daily.json?key=SCYrvkytJze9qyzOh&location=杭州
 
 
+APi的第二个参数location就是指定城市名称，可以用汉字（杭州）或
+拼音(hangzhou)
+第一个参数key是此APi接口需要的认证码。使用的是统一认证码。
+[json格式化工具](https://www.bejson.com/jsonviewernew/)
+```
+{
+  "results": [
+    {
+      "location": {
+        "id": "WWH1780CEFBR",
+        "name": "宿迁",
+        "country": "CN",
+        "path": "宿迁,宿迁,江苏,中国",
+        "timezone": "Asia/Shanghai",
+        "timezone_offset": "+08:00"
+      },
+      "daily": [
+        {
+          "date": "2026-08-06",
+          "text_day": "晴",
+          "code_day": "0",
+          "text_night": "晴",
+          "code_night": "1",
+          "high": "35",
+          "low": "26",
+          "rainfall": "0.00",
+          "precip": "0.00",
+          "wind_direction": "东北",
+          "wind_direction_degree": "45",
+          "wind_speed": "8.4",
+          "wind_scale": "2",
+          "humidity": "84"
+        },
+        {
+          "date": "2026-08-07",
+          "text_day": "晴",
+          "code_day": "0",
+          "text_night": "晴",
+          "code_night": "1",
+          "high": "35",
+          "low": "28",
+          "rainfall": "0.00",
+          "precip": "0.00",
+          "wind_direction": "东北",
+          "wind_direction_degree": "45",
+          "wind_speed": "23.4",
+          "wind_scale": "4",
+          "humidity": "78"
+        },
+        {
+          "date": "2026-08-08",
+          "text_day": "小雨",
+          "code_day": "13",
+          "text_night": "小雨",
+          "code_night": "13",
+          "high": "33",
+          "low": "26",
+          "rainfall": "0.50",
+          "precip": "0.33",
+          "wind_direction": "东北",
+          "wind_direction_degree": "45",
+          "wind_speed": "23.4",
+          "wind_scale": "4",
+          "humidity": "78"
+        }
+      ],
+      "last_update": "2026-08-06T07:06:45+08:00"
+    }
+  ]
+}
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+| 单元格 | 说明 |
+| ---- | ---- |
+| location | 城市区域基本信息 |
+| daily | 每日天气内容 |
+| date | 日期 |
+| text_day | 白天天气现象文字 |
+| code_day | 白天天气现象代码 |
+| text_night | 晚间天气现象文字 |
+| code_night | 晚间天气现象代码 |
+| high | 当天最高温度 |
+| low | 当天最低温度 |
+| precip | 降水概率，范围0~100，单位百分比 |
+| wind_direction | 风向文字 |
+| wind_direction_degree | 风向角度，范围0~360 |
+| wind_speed | 风速，单位km/h |
+| wind_scale | 风力等级 |
+| rainfall | 降水量，单位mm |
+| humidity | 相对湿度，0~100，单位为百分比 |
+| last_update | 数据最近的更新时间。没有做特别的格式化，输出系统默认的格式。 |
 
 
 
