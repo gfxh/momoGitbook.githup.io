@@ -1,0 +1,18 @@
+PS D:\git开发路径\momoGitbook.githup.io\assets\media\music> py .\extract_flac_assets.py ".\music\悬溺 - 葛东琪 (超清母带).flac"
+Title: 悬溺
+Artist: 葛东琪
+Lyrics: D:/git开发路径/momoGitbook.githup.io/assets/media/music/lyrics/悬溺 - 葛东琪 (超清母带).lrc
+Cover: D:/git开发路径/momoGitbook.githup.io/assets/media/music/covers/悬溺 - 葛东琪 (超清母带).jpg
+Playlist: added D:/git开发路径/momoGitbook.githup.io/assets/media/music/playlist.json
+PS D:\git开发路径\momoGitbook.githup.io\assets\media\music>
+
+
+
+# 0：仅提取歌词、封面，保留 FLAC，默认模式
+py .\extract_flac_assets.py ".\music\歌曲.flac"
+
+# 1：转为 320 kbps MP3，提取歌词、封面，更新歌单，删除 FLAC
+py .\extract_flac_assets.py ".\music\歌曲.flac" --mode 1
+
+# 2：转为 256 kbps AAC（.m4a），提取歌词、封面，更新歌单，删除 FLAC
+py .\extract_flac_assets.py ".\music\歌曲.flac" --mode 2

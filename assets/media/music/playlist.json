@@ -1,0 +1,32 @@
+{
+  "tracks": [
+    {
+      "title": "悬溺",
+      "artist": "葛东琪",
+      "audio": "assets/media/music/music/悬溺 - 葛东琪 (超清母带).m4a",
+      "lrc": "assets/media/music/lyrics/悬溺 - 葛东琪 (超清母带).lrc",
+      "cover": "assets/media/music/covers/悬溺 - 葛东琪 (超清母带).jpg"
+    },
+    {
+      "title": "四季予你",
+      "artist": "程响",
+      "audio": "assets/media/music/music/四季予你 - 程响 (臻品母带).m4a",
+      "lrc": "assets/media/music/lyrics/四季予你 - 程响 (臻品母带).lrc",
+      "cover": "assets/media/music/covers/四季予你 - 程响 (臻品母带).jpg"
+    },
+    {
+      "title": "3 Strikes (Explicit)",
+      "artist": "Terror Jr",
+      "audio": "assets/media/music/music/3 Strikes (Explicit) - Terror Jr (臻品母带).m4a",
+      "lrc": "assets/media/music/lyrics/3 Strikes (Explicit) - Terror Jr (臻品母带).lrc",
+      "cover": "assets/media/music/covers/3 Strikes (Explicit) - Terror Jr (臻品母带).jpg"
+    },
+    {
+      "title": "All Falls Down",
+      "artist": "Alan Walker / Noah Cyrus / Digital Farm Animals / Juliander",
+      "audio": "assets/media/music/music/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).m4a",
+      "lrc": "assets/media/music/lyrics/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).lrc",
+      "cover": "assets/media/music/covers/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).jpg"
+    }
+  ]
+}

@@ -715,6 +715,10 @@ function initTocSearch() {
 
   var input = searchWrap.querySelector('.toc-search-input');
   var links = tocContainer.querySelectorAll('a');
+  var groups = tocContainer.querySelectorAll(
+    '.toc-level-1, .toc-level-2, .toc-level-3, .toc-level-4, .toc-level-5, .toc-level-6'
+  );
+  var headers = tocContainer.querySelectorAll('.toc-header');
   var noResultMsg = null;
 
   input.addEventListener('input', function () {
@@ -726,6 +730,17 @@ function initTocSearch() {
       var match = !keyword || text.indexOf(keyword) !== -1;
       link.classList.toggle('is-filtered-hidden', !match);
       if (match) visibleCount++;
+    });
+
+    groups.forEach(function (group) {
+      var hasVisibleLink = !keyword || group.querySelector('a:not(.is-filtered-hidden)');
+      group.style.display = hasVisibleLink ? '' : 'none';
+    });
+
+    headers.forEach(function (header) {
+      var group = header.nextElementSibling;
+      var hasVisibleLink = !keyword || (group && group.querySelector('a:not(.is-filtered-hidden)'));
+      header.style.display = hasVisibleLink ? '' : 'none';
     });
 
     if (!noResultMsg) {
@@ -790,6 +805,7 @@ function initBlogInteractions() {
 
   // 目录折叠
   initTocCollapse();
+
 }
 
 /** 友链页面：从 friends.json 加载并渲染（分组 + 本站信息 + 申请） */
