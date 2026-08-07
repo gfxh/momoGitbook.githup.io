@@ -27,6 +27,14 @@
       "audio": "assets/media/music/music/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).m4a",
       "lrc": "assets/media/music/lyrics/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).lrc",
       "cover": "assets/media/music/covers/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).jpg"
+    },
+    
+    {
+      "title": "窗",
+      "artist": "虎二",
+      "audio": "assets/media/music/music/窗 - 虎二 (超清母带).m4a",
+      "lrc": "assets/media/music/lyrics/窗 - 虎二 (超清母带).lrc",
+      "cover": "assets/media/music/covers/窗 - 虎二 (超清母带).jpg"
     }
   ]
 }
