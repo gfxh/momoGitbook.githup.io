@@ -28,13 +28,47 @@
       "lrc": "assets/media/music/lyrics/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).lrc",
       "cover": "assets/media/music/covers/All Falls Down - Alan Walker & Noah Cyrus & Digital Farm Animals & Juliander (超清母带).jpg"
     },
-    
     {
       "title": "窗",
       "artist": "虎二",
       "audio": "assets/media/music/music/窗 - 虎二 (超清母带).m4a",
       "lrc": "assets/media/music/lyrics/窗 - 虎二 (超清母带).lrc",
       "cover": "assets/media/music/covers/窗 - 虎二 (超清母带).jpg"
+    },
+    {
+      "title": "春娇与志明",
+      "artist": "街道办GDC / 欧阳耀莹",
+      "audio": "assets/media/music/music/春娇与志明 - 街道办GDC & 欧阳耀莹 (臻品母带).m4a",
+      "lrc": "assets/media/music/lyrics/春娇与志明 - 街道办GDC & 欧阳耀莹 (臻品母带).lrc",
+      "cover": "assets/media/music/covers/春娇与志明 - 街道办GDC & 欧阳耀莹 (臻品母带).jpg"
+    },
+    {
+      "title": "吹梦到西洲",
+      "artist": "恋恋故人难 / 黄诗扶 / 王敬轩（妖扬）",
+      "audio": "assets/media/music/music/吹梦到西洲 - 恋恋故人难 & 黄诗扶 & 王敬轩（妖扬） (超清母带).m4a",
+      "lrc": "assets/media/music/lyrics/吹梦到西洲 - 恋恋故人难 & 黄诗扶 & 王敬轩（妖扬） (超清母带).lrc",
+      "cover": "assets/media/music/covers/吹梦到西洲 - 恋恋故人难 & 黄诗扶 & 王敬轩（妖扬） (超清母带).jpg"
+    },
+    {
+      "title": "侧脸",
+      "artist": "于果",
+      "audio": "assets/media/music/music/侧脸 - 于果 (臻品母带).m4a",
+      "lrc": "assets/media/music/lyrics/侧脸 - 于果 (臻品母带).lrc",
+      "cover": "assets/media/music/covers/侧脸 - 于果 (臻品母带).jpg"
+    },
+    {
+      "title": "半壶纱",
+      "artist": "刘珂矣",
+      "audio": "assets/media/music/music/半壶纱 - 刘珂矣 (超清母带).m4a",
+      "lrc": "assets/media/music/lyrics/半壶纱 - 刘珂矣 (超清母带).lrc",
+      "cover": "assets/media/music/covers/半壶纱 - 刘珂矣 (超清母带).jpg"
+    },
+    {
+      "title": "Asphyxia",
+      "artist": "逆时针向",
+      "audio": "assets/media/music/music/Asphyxia - 逆时针向 (超清母带).m4a",
+      "lrc": "assets/media/music/lyrics/Asphyxia - 逆时针向 (超清母带).lrc",
+      "cover": "assets/media/music/covers/Asphyxia - 逆时针向 (超清母带).jpg"
     }
   ]
 }

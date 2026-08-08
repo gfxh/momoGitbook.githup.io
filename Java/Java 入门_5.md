@@ -168,41 +168,181 @@ public class Find {
   }
 }
 ```
+3.1 计算机内存管理
+-
+
+内存，所有程序都是在内存中运行
 
 
+计算机内存储和处理信息的最小单位是位（bit,或比特），一个比特值可以是0或1，不能再分割
+1bit = 一个二进制位
+01011110 = 表示一个8位的字（比特）表示8位的二进制 数
+
+通常8个二进制位为一个字节（byte）
+
+8个二进制位 （bit）= 1字节（byte）
+
+四、与16进制的关系
+1、通常一个字节 =两个16进制位
+过程解析：  1个16进制数 = 4个二进制数位，
+           2个16进制数 = 8个二进制数位 = 1字节
+
+![image.png](https://img.xobear.cn/file/JAVA/1786144282636_image.png)
 
 
+3.2 数组-存储和读取
+-
+
+![image.png](https://img.xobear.cn/file/JAVA/1786144663419_image.png)
+后面还会用到。
+
+**数组（Array）** 是一种**线性表数据结构**。它用一组**连续的内存空间**，来存储一组具有**相同类型**的数据
 
 
+**线性数据结构**：表示数组中数据都是按前后这种线性顺序排列的。
 
+**相同数据类型**：数组中的每个值的数据类型都相同。
+![image.png](https://img.xobear.cn/file/JAVA/1786144752659_image.png)
 
+连续性，就如同下面的座位一般。
+![image.png](https://img.xobear.cn/file/JAVA/1786144948210_image.png)
+知道数组开始地址，数组每个元素的大小，就可以算出各个元素在内存中的地址
+```
+// 第一个元素地址
+start_address
+// 第二个元素地址
+start_address + item_size * 1
+// 第三个元素地址
+start_address + item_size * 2
+// 第N个元素地址
+start_address + item_size * (N - 1)
+```
+1.从中可以看出，数组的索引从0开始
 
+2.数组的索引访问的时间复杂度是O(1)
+![image.png](https://img.xobear.cn/file/JAVA/1786144534839_image.png)
 
+3.3 数组-插入和删除
+-
+**尾插**
+![image.png](https://img.xobear.cn/file/JAVA/1786146075252_image.png)
+`start_address + item_size * n  // n 为当前数组的个数` 只需要一步
+```
+public class Schedule {
+  ......
+  // 末尾插入
+  public void add(String task){
+    this.array[this.size] = task;
+    this.size++;
+  }
+}
+```
+**中间插**
+![image.png](https://img.xobear.cn/file/JAVA/1786146195180_image.png)
+![image.png](https://img.xobear.cn/file/JAVA/1786146214041_image.png)
+一共需要3步
+```
+// 第三个位置插入
+public void insert3Position(String task) {
+  // 索引值为3的地方
+  int index = 3;
+  // 第一步：从右侧开始依次右移
+  for (int i = this.size - 1; i >= index; i--) {
+    this.array[i + 1] = this.array[i];
+  }
+  // 第二步：插入元素
+  this.array[index] = task;
+  // 调整size
+  this.size++;
+}
+```
+如果数组长度为N，新数据要插入在第一位（0）则需要N+1步，时间复杂度O(N)
 
+```
+public class YKDArrayList {
 
+  // 底层存储数组
+  int[] array = new int[20];
+  int size = 0;
 
+  public YKDArrayList() {
+  }
 
+  // 获取实际元素数量
+  public int size() {
+    return this.size;
+  }
 
+  // 获取指定索引的元素
+  public int get(int index) {
+    return this.array[index];
+  }
 
+  // 在末尾添加元素
+  public void add(int element) {
+    this.add(this.size, element);
+  }
 
+  // 在指定位置添加元素
+  public void add(int index, int element) {
+    if (index < 0 || index > this.size) {
+      return;
+    }
 
+    // 数组满时扩容为原来的两倍
+    if (this.size == this.array.length) {
+      int[] newArray = new int[this.array.length * 2];
 
+      for (int i = 0; i < this.array.length; i++) {
+        newArray[i] = this.array[i];
+      }
 
+      this.array = newArray;
+    }
 
+    // 元素依次右移
+    for (int i = this.size - 1; i >= index; i--) {
+      this.array[i + 1] = this.array[i];
+    }
 
+    // 插入元素并更新长度
+    this.array[index] = element;
+    this.size++;
+  }
 
+  // 删除指定索引的元素
+  public void remove(int index) {
+    if (index < 0 || index >= this.size) {
+      return;
+    }
 
+    // 后续元素依次左移
+    for (int i = index; i < this.size - 1; i++) {
+      this.array[i] = this.array[i + 1];
+    }
 
+    // 清空最后一个有效位置并更新长度
+    this.array[this.size - 1] = 0;
+    this.size--;
+  }
 
+  public static void main(String[] args) {
+    YKDArrayList ykdArrayList = new YKDArrayList();
 
+    ykdArrayList.add(1);
+    ykdArrayList.add(2);
+    ykdArrayList.add(3);
+    ykdArrayList.add(4);
 
+    ykdArrayList.add(0, 5);
+    ykdArrayList.remove(3);
 
+    System.out.println(ykdArrayList.size()); // 4
+    System.out.println(ykdArrayList.get(0)); // 5
+    System.out.println(ykdArrayList.get(3)); // 4
+  }
 
-
-
-
-
-
+```
 
 
 
