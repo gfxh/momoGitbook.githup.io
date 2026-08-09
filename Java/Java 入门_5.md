@@ -1,6 +1,21 @@
 数据结构 与 算法
 -
-算法+数据结构=程序设计
+----
+下面是学习数据结构的课件，主代码是C语言
+
+[第1章 绪论](/Book/数据结构/第1章%20绪论.pdf)/
+[第2章 线性表](/Book/数据结构/第2章%20线性表.pdf)/
+[第3章 栈和队列](/Book/数据结构/第3章%20栈和队列.pdf)/
+[第4章 串、数组和广义表](/Book/数据结构/第4章%20串、数组和广义表.pdf)/
+[第5章 树和二叉树](/Book/数据结构/第5章%20树和二叉树.pdf)/
+[第6章 图](/Book/数据结构/第6章%20图.pdf)/
+[第7章 查找](/Book/数据结构/第7章%20查找.pdf)/
+[第8章 排序](/Book/数据结构/第8章%20排序.pdf)
+
+----
+
+
+**算法+数据结构=程序设计**
 
 
 ●算法是一个处理数据的计算过程,当其运行时能从一个
@@ -343,29 +358,215 @@ public class YKDArrayList {
   }
 
 ```
+4.1 冒泡排序
+-
+
+核心规则
+
+1.指向数组中两个相邻的元素（最开始是数组的头两个元素），并且**比较他们的大小**
+
+2.如果前者比后者大，则**交换他们的位置**
+
+3.如果后者比前者大，则**不交换**
+
+4.然后依次后移，每次循环将最大元素移动最后一个位置。
+![image.png](https://img.xobear.cn/file/JAVA/1786234622711_image.png)
+```
+#JAVA
+// 冒泡排序
+public static void bubbleSort(int[] array) {
+    // 1. 每次循环，都能冒泡出剩余元素中最大的元素，因此需要循环 array.length 次
+    for (int i = 0; i < array.length; i++) {
+        // 2. 每次遍历，只需要遍历 0 到 array.length - i - 1中元素，因此之后的元素都已经是最大的了
+        for (int j = 0; j < array.length - i - 1; j++) {
+            //3. 交换元素
+            if (array[j] > array[j + 1]) {         //这里是升序，降序只需要改为 <
+                int temp = array[j + 1];
+                array[j + 1] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+}
+```
+```
+#PYTHON
+def bubble_sort(numbers):
+    # 每轮把未排序区间中最大的元素移到末尾
+    for end in range(len(numbers) - 1, 0, -1):
+        swapped = False  # 记录本轮是否发生交换
+
+        # 比较相邻元素，范围到当前未排序区间的末尾
+        for index in range(end):
+            # 左侧元素较大时交换，保证较大值逐步向右移动
+            if numbers[index] > numbers[index + 1]:
+                numbers[index], numbers[index + 1] = numbers[index + 1], numbers[index]
+                swapped = True
+
+        # 本轮没有交换，说明序列已有序，提前结束
+        if not swapped:
+            break
+
+    return numbers  # 返回升序排列后的列表
+
+```
+时间复杂度为 O(N²)
+4.2 选择排序
+-
+什么是选择排序？
+
+重点在**选择**，每次在剩余数组中，**选择最大或者最小**的一个，放在数组的一端。
+
+1.利用两个变量，一个存储当前**最大值**，一个存储当前**最大值所在的索引**
+
+2.依次比较后面的元素，如果发现比**当前最大值大**，则更新最大值，并且更新最大值所在的索引。
+
+3.直到遍历结束，将最大值放在数组的最右边，也就是**交换最右边元素和当前最大值元素**
+
+4.重复上面的步骤
+
+第一次
+
+![image.png](https://img.xobear.cn/file/JAVA/1786235302933_image.png)
+
+第二次
+
+![image.png](https://img.xobear.cn/file/JAVA/1786235344678_image.png)
+
+时间复杂度为 O(N²)
+```
+#PYTHON
+def selection_sort(numbers):
+    # 依次确定每个位置应放置的最小值
+    for start in range(len(numbers) - 1):
+        min_index = start  # 假设当前位置最小
+
+        # 在未排序区间中查找真正的最小值
+        for index in range(start + 1, len(numbers)):
+            if numbers[index] < numbers[min_index]:
+                min_index = index
+
+        # 将最小值交换到未排序区间的开头
+        if min_index != start:
+            numbers[start], numbers[min_index] = numbers[min_index], numbers[start]
+
+    return numbers  # 返回升序排列后的列表
+```
+```
+#JAVA
+public static void selectionSort(int[] numbers) {
+    // 依次确定每个位置应放置的最小值
+    for (int start = 0; start < numbers.length - 1; start++) {
+        int minIndex = start; // 假设当前位置最小
+
+        // 在未排序区间中查找真正的最小值
+        for (int index = start + 1; index < numbers.length; index++) {
+            if (numbers[index] < numbers[minIndex]) {
+                minIndex = index;
+            }
+        }
+
+        // 将最小值交换到未排序区间的开头
+        if (minIndex != start) {
+            int temporary = numbers[start];
+            numbers[start] = numbers[minIndex];
+            numbers[minIndex] = temporary;
+        }
+    }
+}
+```
+
+冒泡需要**频繁的交换相邻两个元素**，而选择排序**每次遍历只需要交换一次**，所以选择排序真实情况速度比冒泡排序**快一倍**
+
+4.3 插入排序
+-
+什么是插入排序？
+
+重点在**插入**，每次抽离一个元素当做临时元素，依次比较和移动之后的其他元素，最终将这个临时元素插入对应的位置。
+
+1.在第一轮，抽离数组末尾倒数第二个元素，作为临时元素。
+
+2.用临时元素与数组后面的元素进行对比：如果 **后面的元素** 值小于临时元素，则 **后面的元素** 左移。
+
+3.如果后面的元素大于临时元素，或者已经移动到数组末尾，则将临时元素插入当前的空隙中。
+
+4.重复上面步骤，完成排序。
+
+有点难懂
+
+第一次，抽取倒数第二个数字`5`与后面的数字`3`比较。 `5`>`3` `3`左移
+
+![image.png](https://img.xobear.cn/file/JAVA/1786236119660_image.png)
+
+第二次，抽取倒数第三个数字`7`.依次与后面的数字比较. `7`>`3` ，`3`左移 。 `7`>`5`，  `5`左移。到达末尾直接插入`7`
+
+![image.png](https://img.xobear.cn/file/JAVA/1786236180681_image.png)
+
+第三次,抽取倒数第四个数字`4`.依次与后面的数字比较.`4`>`3` ，`3`左移 。`4`<`5`。`4`直接插入
+
+![image.png](https://img.xobear.cn/file/JAVA/1786236213275_image.png)
+
+时间复杂度：
+最好的情况：如果所有的数组元素本身就是升序排列，我们**每次迭代不需要进行移动**，所以时间复杂度是 O（N）
+
+最坏的情况：如果所以的数组元素都是按降序排列，我们**每次迭代每次比较都需要移动**，在这种情况下。
+
+比较的步数为 **O((N^2 - N) / 2)** ，移动的步数为**O((N^2 - N) / 2)**
+
+因此最差的情况为 **O(N^2 - N)** ，忽略常数为 **O(N^2)**
+
+```
+#PYTHON
+def insertion_sort(numbers):
+    # 从第二个元素开始，逐个插入已排序区间
+    for current_index in range(1, len(numbers)):
+        current_value = numbers[current_index]
+        previous_index = current_index - 1
+
+        # 将比当前值大的元素向右移动，为插入腾出位置
+        while previous_index >= 0 and numbers[previous_index] > current_value:
+            numbers[previous_index + 1] = numbers[previous_index]
+            previous_index -= 1
+
+        # 将当前值插入到正确位置
+        numbers[previous_index + 1] = current_value
+
+    return numbers  # 返回升序排列后的列表
+```
+```
+#JAVA
+public static void insertionSort(int[] numbers) {
+    // 从第二个元素开始，逐个插入已排序区间
+    for (int currentIndex = 1; currentIndex < numbers.length; currentIndex++) {
+        int currentValue = numbers[currentIndex];
+        int previousIndex = currentIndex - 1;
+
+        // 将比当前值大的元素向右移动，为插入腾出位置
+        while (previousIndex >= 0 && numbers[previousIndex] > currentValue) {
+            numbers[previousIndex + 1] = numbers[previousIndex];
+            previousIndex--;
+        }
+
+        // 将当前值插入到正确位置
+        numbers[previousIndex + 1] = currentValue;
+    }
+}
+```
 
 
 
 
 
+冒泡排序 vs 选择排序 vs 插入排序
+
+冒泡排序相比较而言肯定是较差的。但是冒泡、选择、插入排序的平均和最坏时间复杂度均为 O(n²)；冒泡通常较慢主要是交换次数较多，并非复杂度更高。
+
+但实际使用时优先选插入排序，尤其是数据量小或基本有序时；选择排序只在交换、写入成本很高时更合适；冒泡排序通常只用于教学演示，不建议用于实际业务代码。
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+4.4 插入排序的进阶-二分插入排序
+-
 
 
 

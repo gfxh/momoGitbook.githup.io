@@ -64,15 +64,23 @@ if (md) {
   };
 }
 
-// 链接路径修复（PHP/PY/JS/TXT 等代码文件）
+// 链接路径修复（代码文件与 PDF）
 if (md) {
   md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
     const token = tokens[idx];
     const hrefIndex = token.attrIndex('href');
     if (hrefIndex >= 0) {
       const href = token.attrs[hrefIndex][1];
+      const isPdfLink = /\.pdf(?:[?#].*)?$/i.test(href);
       if (href && !href.startsWith('http') && !href.startsWith('#') &&
-          (href.endsWith('.php') || href.endsWith('.py') || href.endsWith('.js') || href.endsWith('.txt'))) {
+          (href.endsWith('.php') || href.endsWith('.py') || href.endsWith('.js') || href.endsWith('.txt') || isPdfLink)) {
+        if (isPdfLink && href.startsWith('/')) {
+          token.attrs[hrefIndex][1] = href;
+          token.attrSet('target', '_blank');
+          token.attrSet('rel', 'noopener');
+          return self.renderToken(tokens, idx, options, env, self);
+        }
+
         const rawBaseUrl = 'https://raw.githubusercontent.com/gfxh/momoGitbook.githup.io/main/';
         let directoryPath = '';
         if (window.currentMarkdownPath) {
@@ -88,7 +96,13 @@ if (md) {
           directoryPath = pathParts.join('/') + (pathParts.length > 0 ? '/' : '');
           relativePath = relativePath.replace(/^(\.\.\/)+/, '');
         }
-        token.attrs[hrefIndex][1] = rawBaseUrl + directoryPath + relativePath;
+        token.attrs[hrefIndex][1] = isPdfLink
+          ? '/' + directoryPath + relativePath
+          : rawBaseUrl + directoryPath + relativePath;
+        if (isPdfLink) {
+          token.attrSet('target', '_blank');
+          token.attrSet('rel', 'noopener');
+        }
       }
     }
     return self.renderToken(tokens, idx, options, env, self);
