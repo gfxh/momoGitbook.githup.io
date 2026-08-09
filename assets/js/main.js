@@ -772,10 +772,42 @@ function initTocSearch() {
 // ========================================
 
 document.addEventListener('DOMContentLoaded', function () {
+  initThemeToggle();
   initActiveNavLink();
   initBlogInteractions();
   initFriendsPage();
 });
+
+/** 主题切换：默认跟随系统，用户选择持久化到本地 */
+function initThemeToggle() {
+  var root = document.documentElement;
+  var button = document.querySelector('.theme-toggle');
+  if (!button) return;
+
+  function isLight() { return root.getAttribute('data-theme') === 'light'; }
+  function render() {
+    var light = isLight();
+    var highlightTheme = document.getElementById('highlight-theme');
+    document.body.classList.toggle('light-mode', light);
+    if (highlightTheme) {
+      highlightTheme.href = light
+        ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css'
+        : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css';
+    }
+    button.textContent = light ? '\u263e' : '\u2600';
+    button.setAttribute('aria-pressed', String(light));
+    button.setAttribute('aria-label', light ? '切换深色模式' : '切换浅色模式');
+    button.title = light ? '切换深色模式' : '切换浅色模式';
+  }
+
+  render();
+  button.addEventListener('click', function () {
+    var next = isLight() ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('bear-theme', next); } catch (e) { /* storage disabled */ }
+    render();
+  });
+}
 
 /** 导航栏当前页高亮 */
 function initActiveNavLink() {

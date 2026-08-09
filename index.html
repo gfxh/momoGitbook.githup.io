@@ -10,6 +10,14 @@
   <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" type="image/png">
 
   <link rel="stylesheet" href="assets/css/main.css?v=20260804-mobile">
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('bear-theme'); } catch (e) {}
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 
   <style>
     html, body {
@@ -355,6 +363,7 @@
       <a href="Blog.html">Blog</a>
       <a href="Friends.html">Friends</a>
       <a href="About.html">About</a>
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="切换浅色模式" title="切换浅色模式">☀</button>
     </nav>
   </header>
 
@@ -397,6 +406,8 @@
   <footer class="home-footer">
     <p>&copy; 2026 XoBear. All rights reserved.</p>
   </footer>
+
+  <script src="assets/js/main.js?v=20260617g"></script>
 
   <script>
 
