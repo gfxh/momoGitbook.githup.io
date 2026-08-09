@@ -9,7 +9,7 @@
   <title>Bear随笔 | 个人博客</title>
   <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20avatar%20of%20a%20white%20haired%20girl%20with%20blue%20eyes%20drawing%20on%20a%20notebook&image_size=square" type="image/png">
 
-  <link rel="stylesheet" href="assets/css/main.css?v=20260804-mobile">
+  <link rel="stylesheet" href="assets/css/main.css?v=20260810-photo-v2">
   <script>
     (function () {
       var saved = null;
@@ -407,7 +407,7 @@
     <p>&copy; 2026 XoBear. All rights reserved.</p>
   </footer>
 
-  <script src="assets/js/main.js?v=20260617g"></script>
+  <script src="assets/js/main.js?v=20260810-light"></script>
 
   <script>
 
@@ -497,6 +497,13 @@
       const sections = document.querySelectorAll('.scroll-text');
       if (sections.length === 0) return;
 
+      function getScrollColors() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        return isLight
+          ? { text: '#17211f', accent: '#087f73' }
+          : { text: '#f3f5f4', accent: '#5eead4' };
+      }
+
 
       sections.forEach(function (el) {
         const text = el.dataset.text || el.textContent;
@@ -526,11 +533,12 @@
           // 元素中点越靠近视口顶部，点亮越多字符
           const ratio = 1 - (rect.top + rect.height * 0.4) / winH;
           const litCount = Math.round(Math.max(0, Math.min(1, ratio)) * total);
+          const colors = getScrollColors();
 
           spans.forEach(function (span, i) {
             if (i < litCount) {
               span.style.opacity = '0.92';
-              span.style.color = i < litCount - 1 ? '#f3f5f4' : '#5eead4';
+              span.style.color = i < litCount - 1 ? colors.text : colors.accent;
             } else {
               span.style.opacity = '0.18';
               span.style.color = '';
@@ -554,6 +562,8 @@
           ticking = true;
         }
       });
+
+      window.addEventListener('bear-theme-change', update);
 
       update();
     })();

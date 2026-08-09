@@ -798,6 +798,7 @@ function initThemeToggle() {
     button.setAttribute('aria-pressed', String(light));
     button.setAttribute('aria-label', light ? '切换深色模式' : '切换浅色模式');
     button.title = light ? '切换深色模式' : '切换浅色模式';
+    window.dispatchEvent(new CustomEvent('bear-theme-change', { detail: { light: light } }));
   }
 
   render();
