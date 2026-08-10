@@ -5,13 +5,13 @@
 ----
 下面是学习数据结构的课件，主代码是C语言
 
-[第1章 绪论](/Book/数据结构/第1章%20绪论.pdf)/
-[第2章 线性表](/Book/数据结构/第2章%20线性表.pdf)/
-[第3章 栈和队列](/Book/数据结构/第3章%20栈和队列.pdf)/
-[第4章 串、数组和广义表](/Book/数据结构/第4章%20串、数组和广义表.pdf)/
-[第5章 树和二叉树](/Book/数据结构/第5章%20树和二叉树.pdf)/
-[第6章 图](/Book/数据结构/第6章%20图.pdf)/
-[第7章 查找](/Book/数据结构/第7章%20查找.pdf)/
+[第1章 绪论](/Book/数据结构/第1章%20绪论.pdf)
+[第2章 线性表](/Book/数据结构/第2章%20线性表.pdf)
+[第3章 栈和队列](/Book/数据结构/第3章%20栈和队列.pdf)
+[第4章 串、数组和广义表](/Book/数据结构/第4章%20串、数组和广义表.pdf)
+[第5章 树和二叉树](/Book/数据结构/第5章%20树和二叉树.pdf)
+[第6章 图](/Book/数据结构/第6章%20图.pdf)
+[第7章 查找](/Book/数据结构/第7章%20查找.pdf)
 [第8章 排序](/Book/数据结构/第8章%20排序.pdf)
 
 ----
@@ -485,7 +485,7 @@ public static void selectionSort(int[] numbers) {
 什么是插入排序？
 
 重点在**插入**，每次抽离一个元素当做临时元素，依次比较和移动之后的其他元素，最终将这个临时元素插入对应的位置。
-
+```
 1.在第一轮，抽离数组末尾倒数第二个元素，作为临时元素。
 
 2.用临时元素与数组后面的元素进行对比：如果 **后面的元素** 值小于临时元素，则 **后面的元素** 左移。
@@ -493,6 +493,7 @@ public static void selectionSort(int[] numbers) {
 3.如果后面的元素大于临时元素，或者已经移动到数组末尾，则将临时元素插入当前的空隙中。
 
 4.重复上面步骤，完成排序。
+```
 
 有点难懂
 
@@ -569,6 +570,347 @@ public static void insertionSort(int[] numbers) {
 
 4.4 插入排序的进阶-二分插入排序
 -
+插入排序
+查找临时元素插入的位置
+类似于在一个有序数组中查询，找到元素应该插入的位置。
+
+![image.png](https://img.xobear.cn/file/JAVA/1786319234600_image.png)
+
+二分插入法
+
+```
+// 在有序数组中查找：最后一个小于或等于 aim 的元素索引
+// array:原数组  left,right:需要插入的区间   aim:需要插入的目标元素
+public static int searchIndex(int[] array, int left, int right, int aim) {
+    // 不断缩小查找区间，直到只剩一个候选位置
+    while (left < right) {
+        // 取当前区间的中间位置
+        int middle = (left + right) / 2;
+        int value = array[middle];
+
+        // 中间值小于目标值，答案只能在 middle 的右侧
+        if (value < aim) {
+            left = middle + 1;
+        } else {
+            // 中间值大于或等于目标值，继续在左侧查找
+            right = middle - 1;
+        }
+    }
+
+    // 循环结束时，left 指向最终候选位置。
+    // 若该元素仍大于目标值，说明应插入到它左边。
+    if (array[left] > aim) {
+        return left - 1;
+    }
+
+    // 当前元素小于或等于目标值，直接返回当前位置。
+    return left;
+}
+```
+
+排序方法远不止这些，目前都是些简单的。
+
+5.1 递归？
+
+定义：
+若在一个函数、
+过程或者数据结构定义的内部直接（或间接）
+出现定义本身的应用，则称其是递归的或递归定义的。
+
+1.对象递归：若一个对象，部分地**包含它自己**，或用
+它**自己给自己定义**。
+![image.png](https://img.xobear.cn/file/JAVA/1786320308902_image.png)
+
+2.过程递归：若一个方法/函数直接或间接地调用自己。
+![image.png](https://img.xobear.cn/file/JAVA/1786320396944_image.png)
+
+有以下三种情况会用到递归
+1.递归定义的数学函数
+![image.png](https://img.xobear.cn/file/JAVA/1786320528817_image.png)
+2.具有递归性质的数据结构
+![image.png](https://img.xobear.cn/file/JAVA/1786320548532_image.png)
+3.可递归求解的问题
+![image.png](https://img.xobear.cn/file/JAVA/1786320567365_image.png)
+
+**递归如何用代码实现**
+1.基准条件：可以理解为递归的结束条件。如果没有结束条件就会出现死循环
+例如：阶乘
+```
+public static int factorial(int n) {
+    if (n < 0) {
+        throw new IllegalArgumentException("n must be non-negative");
+    }
+    if (n <= 1) {   ///基准条件
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+```
+如果将基准条件去掉， n-1 就不会出现  `factorial(n - 1)=1` -->死循环
+2.递归公式。
+
+阶乘的递归公式 ``f(n)=n*f(n-1)``
+
+5.4 归并排序
+-
+核心规则
+将大数组分解成小数组，将每个小数组排好序，再将这些有序的小数组
+合并成大数组。
+![image.png](https://img.xobear.cn/file/JAVA/1786321998978_image.png)
+
+```
+package com.youkeda; // 声明当前类所在的包
+
+import java.util.Arrays; // 导入用于打印数组的工具类
+
+public class Sort { // 定义归并排序示例类
+
+  // 对数组进行归并排序，并返回一个新的有序数组
+  public static int[] mergeSort(int[] array) {
+    if (array.length <= 1) { // 数组只剩 0 或 1 个元素时，天然有序，作为递归结束条件
+      return array; // 直接返回，不再继续拆分
+    }
+
+    int middle = array.length / 2; // 计算中间位置，用于把当前数组分成左右两部分
+
+    int[] left = mergeSort(subArray(array, 0, middle));
+    // 截取左半部分，并递归排序；最终得到一个有序的 left 数组
+
+    int[] right = mergeSort(subArray(array, middle, array.length));
+    // 截取右半部分，并递归排序；最终得到一个有序的 right 数组
+
+    int[] result = new int[array.length];
+    // 创建结果数组，用来按从小到大的顺序存放合并后的元素
+
+    int leftIndex = 0;
+    // leftIndex 指向左侧有序数组中当前还未处理的最小元素
+
+    int rightIndex = 0;
+    // rightIndex 指向右侧有序数组中当前还未处理的最小元素
+
+    int resultIndex = 0;
+    // resultIndex 指向结果数组中下一个应写入的位置
+
+    while (leftIndex < left.length && rightIndex < right.length) {
+      // 只要左右数组都还有元素，就比较两个当前元素，选择较小者放入结果数组
+
+      if (left[leftIndex] <= right[rightIndex]) {
+        // 左侧当前元素更小，或两者相等时优先选择左侧元素，保持排序稳定性
+
+        result[resultIndex] = left[leftIndex];
+        // 将左侧较小元素写入结果数组
+
+        leftIndex++;
+        // 左侧元素已经处理，指针移到下一个元素
+      } else {
+        // 右侧当前元素更小
+
+        result[resultIndex] = right[rightIndex];
+        // 将右侧较小元素写入结果数组
+
+        rightIndex++;
+        // 右侧元素已经处理，指针移到下一个元素
+      }
+
+      resultIndex++;
+      // 结果数组刚写入一个元素，位置向后移动
+    }
+
+    while (leftIndex < left.length) {
+      // 若右侧数组已处理完，将左侧剩余元素按原顺序直接放入结果数组
+
+      result[resultIndex] = left[leftIndex];
+      // 写入左侧当前剩余元素
+
+      leftIndex++;
+      // 移动左侧指针
+
+      resultIndex++;
+      // 移动结果数组写入位置
+    }
+
+    while (rightIndex < right.length) {
+      // 若左侧数组已处理完，将右侧剩余元素按原顺序直接放入结果数组
+
+      result[resultIndex] = right[rightIndex];
+      // 写入右侧当前剩余元素
+
+      rightIndex++;
+      // 移动右侧指针
+
+      resultIndex++;
+      // 移动结果数组写入位置
+    }
+
+    return result;
+    // 左右两个有序数组已经合并成一个完整的有序数组，返回给上一层递归
+  }
+
+  // 返回 source 数组下标范围 [left, right) 内的元素
+  public static int[] subArray(int[] source, int left, int right) {
+    int[] result = new int[right - left];
+    // 创建长度刚好为 right - left 的新数组，用于保存截取结果
+
+    for (int i = left; i < right; i++) {
+      // 遍历 source 中从 left 到 right - 1 的元素
+
+      result[i - left] = source[i];
+      // 复制元素；减去 left 是为了让新数组从下标 0 开始存放
+    }
+
+    return result;
+    // 返回截取出的新数组
+  }
+
+  public static void main(String[] args) {
+    int[] array = {9, 2, 4, 7, 5, 3};
+    // 准备一组待排序数据
+
+    System.out.println("raw: " + Arrays.toString(array));
+    // 打印排序前的原始数组
+
+    int[] result = mergeSort(array); 
+	// 调用归并排序，得到新的有序数组
+
+    System.out.println("result: " + Arrays.toString(result));
+    // 打印排序结果
+  }
+}
+```
+
+5.5 快速排序 5.6 快速排序应用-快速选择
+-
+很常用可以看[第8章 排序](/Book/数据结构/第8章%20排序.pdf)
+
+快速排序是现在编程语言自带排序函数中，使用的最多的算法。
+
+先按基准分区，再分别排序
+
+平均时间复杂度都是 O(n log n)，但快速排序在基准值总是偏大或偏小时会退化为 O(n²)
+
+快速选择和快速排序都使用分区，但目标不同：
+
+快速排序：轴值归位后，左右两边都继续排序。
+
+快速选择：轴值归位后，只判断它是不是目标；若不是，只进入包含目标的那一边。
+
+
+| 
+|
+|数组 | [9, |2,|4,|7,|5,|3]|
+|下标|0|1|2|3|4|5|
+
+```
+
+第一次分区：轴值 9 归位到下标 5
+目标下标是 2，所以只查左侧 [3, 2, 4, 7, 5]
+
+第二次分区：轴值 3 归位到下标 1
+目标下标 2 在右侧，所以只查 [4, 7, 5]
+
+第三次分区：轴值 4 归位到下标 2
+下标正好是目标下标，返回 4
+
+```
+```
+public class QuickSelect {
+
+  // 查找数组中第 k 小的元素；k 从 1 开始计数
+  public static int findKthSmallest(int[] array, int k) {
+    if (k < 1 || k > array.length) {
+      throw new IllegalArgumentException("k is out of range");
+    }
+
+    // 第 k 小元素对应的数组下标是 k - 1
+    return quickSelectCore(array, 0, array.length - 1, k - 1);
+  }
+
+  // 在 [left, right] 中查找 targetIndex 对应的元素
+  public static int quickSelectCore(
+      int[] array, int left, int right, int targetIndex) {
+
+    // 区间只剩一个元素，它就是目标
+    if (left == right) {
+      return array[left];
+    }
+
+    // 分区后，轴值已位于它在最终有序数组中的位置
+    int pivotIndex = partition(array, left, right);
+
+    if (pivotIndex == targetIndex) {
+      // 轴值位置就是目标位置，直接返回
+      return array[pivotIndex];
+    }
+
+    if (targetIndex < pivotIndex) {
+      // 目标在轴值左侧，只继续查左半边
+      return quickSelectCore(array, left, pivotIndex - 1, targetIndex);
+    }
+
+    // 目标在轴值右侧，只继续查右半边
+    return quickSelectCore(array, pivotIndex + 1, right, targetIndex);
+  }
+
+  // 将 pivot 左侧放较小元素，右侧放较大元素，并返回 pivot 最终下标
+  public static int partition(int[] array, int left, int right) {
+    int pivot = array[left];
+    int leftIndex = left;
+    int rightIndex = right;
+
+    while (leftIndex < rightIndex) {
+      while (leftIndex < rightIndex && array[rightIndex] >= pivot) {
+        rightIndex--;
+      }
+
+      if (leftIndex < rightIndex) {
+        swap(array, leftIndex, rightIndex);
+      }
+
+      while (leftIndex < rightIndex && array[leftIndex] <= pivot) {
+        leftIndex++;
+      }
+
+      if (leftIndex < rightIndex) {
+        swap(array, leftIndex, rightIndex);
+      }
+    }
+
+    return leftIndex;
+  }
+
+  public static void swap(int[] array, int first, int second) {
+    int temp = array[first];
+    array[first] = array[second];
+    array[second] = temp;
+  }
+
+  public static void main(String[] args) {
+    int[] array = {9, 2, 4, 7, 5, 3};
+
+    System.out.println(findKthSmallest(array, 3)); // 4
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
