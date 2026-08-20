@@ -42,6 +42,12 @@
           "url": "https://zhongweb.cn",
           "avatar": "https://zhongweb.cn/icons/icon-512.png",
           "desc": "医学生×互联网折腾爱好者"
+        },
+		{
+          "name": "海浪导航",
+          "url": "https://www.langhai.net",
+          "avatar": "https://www.langhai.net/assets/images/langhai-logo.png",
+          "desc": "收录各类博客and论坛"
         }
       ]
     }
