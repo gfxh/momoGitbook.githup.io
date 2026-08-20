@@ -69,5 +69,5 @@ git push github master    # 只推送GitHub
 # 或者
 git push origin master && git push github master  # 同时推送
 ```
-这样你就完全掌控推送目标了！🚀
+
 

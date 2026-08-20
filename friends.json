@@ -24,10 +24,12 @@
             "desc": "conquer,conquer,conquer..."}
             
 
-            
-            
+        ]},
+		
+		{"title": "网友", "friends": [
+            {"name":"Zhong Website","url":"https://zhongweb.cn","avatar":"https://zhongweb.cn/icons/icon-512.png","desc":"医学生×互联网折腾爱好者"},
 
-
+                     
         ]}
         
         ],

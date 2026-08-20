@@ -32,7 +32,7 @@ ssh-keygen -t rsa -b 4096 -C "XXXXXXXXX@XXX.com"
 输入后，如果出现 “overwrite(y/n)?” 的提示，敲一个 Y 回车即可
 其他情况一路回车，就会生成SSH
 
-![](TU/g100-2-5.12.png)
+
 
   * 查看SSH:
 
